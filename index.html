@@ -43,14 +43,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #475569;
         }
-        /* Custom Toggle Switch styling */
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #06b6d4;
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #0891b2;
-        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-white relative">
@@ -58,7 +50,7 @@
     <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             
-            <!-- Top Bar: Title, Zack Freedman Credit, Language Switcher -->
+            <!-- Top Bar: Title, Zack Freedman Credit, Controls -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
                 <div class="flex items-center justify-between w-full lg:w-auto">
                     <div class="flex items-center gap-3">
@@ -168,13 +160,13 @@
                 </button>
             </div>
 
-            <!-- Tags Quick Filter Row -->
             <div id="tagContainer" class="flex items-center gap-1.5 mt-1 overflow-x-auto pb-1 text-xs">
                 <!-- Populated dynamically -->
             </div>
         </div>
     </header>
 
+    <!-- Main Section -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
         <!-- Status Bar -->
@@ -283,7 +275,7 @@
             <!-- Modal Body (Scrollable) -->
             <div class="p-6 overflow-y-auto space-y-6 text-sm">
                 
-                <!-- Best Use Cases -->
+                <!-- 1. Best Use Cases -->
                 <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
                     <h3 id="uiBestUseLabel" class="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,7 +286,7 @@
                     <ul id="modalUseCases" class="list-disc list-inside text-slate-300 space-y-1"></ul>
                 </div>
 
-                <!-- Pros & Cons Grid -->
+                <!-- 2. Pros & Cons Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Pros -->
                     <div class="bg-emerald-950/20 border border-emerald-800/30 rounded-xl p-4">
@@ -319,6 +311,7 @@
                     </div>
                 </div>
 
+                <!-- 3. Embedded YouTube Video Segment (After Use cases & Pros/Cons) -->
                 <div class="bg-slate-950 rounded-xl p-3 border border-slate-800">
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <span class="text-xs font-semibold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
@@ -345,7 +338,7 @@
                     </div>
                 </div>
 
-                <!-- Tags -->
+                <!-- 4. Tags & Properties -->
                 <div>
                     <h3 id="uiTagsLabel" class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Tags & Properties</h3>
                     <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
@@ -581,6 +574,7 @@
                 }
             },
 
+            // A-Tier
             {
                 id: 'pla',
                 name: 'Standard PLA',
@@ -681,7 +675,7 @@
                 no: {
                     summary: 'Rekordsettende stivhet og styrke for tunge belastninger.',
                     pros: ['Ekstrem stivhet og bæreevne', 'Tåler hundrevis av kilo uten flexing', 'Relativt rimelig til supermateriale å være'],
-                    cons: ['Velsig stivt filament som kan stoppe mateverket', 'Krever høytemperatur-hotend'],
+                    cons: ['Veldig stivt filament som kan stoppe mateverket', 'Krever høytemperatur-hotend'],
                     useCases: ['Komponenter under tung mekanisk belastning'],
                     tags: ['Karbonfiber', 'Ekstrem stivhet', 'Høy styrke']
                 }
@@ -1046,6 +1040,7 @@
                 }
             },
 
+            // C-Tier
             {
                 id: 'abs',
                 name: 'ABS',
@@ -1444,7 +1439,7 @@
         let activeTag = null;
         let selectedProps = new Set();
         let searchQuery = '';
-        let autoplayEnabled = false; // Default Autoplay OFF
+        let autoplayEnabled = false;
 
         const searchInput = document.getElementById('searchInput');
         const clearSearchBtn = document.getElementById('clearSearch');
@@ -1786,7 +1781,7 @@
                 card.addEventListener('mouseleave', hideHoverTooltip);
 
                 card.addEventListener('click', () => {
-                    hideHoverTooltip();
+                    hideHoverTooltip(true); // Immediate hide on click
                     showModal(item);
                 });
             });
@@ -1831,7 +1826,15 @@
             `;
         }
 
+        let tooltipHideTimeout = null;
+
         function showHoverTooltip(e, item) {
+            // Cancel any pending hide action so hover popup stays active while over card!
+            if (tooltipHideTimeout) {
+                clearTimeout(tooltipHideTimeout);
+                tooltipHideTimeout = null;
+            }
+
             const config = tierConfig[item.tier];
             const data = item[currentLang];
             const strings = uiText[currentLang];
@@ -1850,33 +1853,55 @@
             document.getElementById('tooltipCons').innerHTML = data.cons.map(c => `<li class="flex items-center gap-1 text-rose-400"><span class="text-rose-500">•</span> <span class="text-slate-300">${c}</span></li>`).join('');
 
             hoverTooltip.classList.remove('hidden');
-            setTimeout(() => hoverTooltip.classList.remove('opacity-0'), 10);
+            void hoverTooltip.offsetWidth; // Force repaint
+            hoverTooltip.classList.remove('opacity-0');
 
             positionHoverTooltip(e);
         }
 
         function positionHoverTooltip(e) {
+            if (hoverTooltip.classList.contains('hidden')) return;
+
             const tooltipWidth = hoverTooltip.offsetWidth || 320;
             const tooltipHeight = hoverTooltip.offsetHeight || 220;
-            const padding = 15;
+            const padding = 16;
 
             let left = e.clientX + padding;
             let top = e.clientY + padding;
 
-            if (left + tooltipWidth > window.innerWidth) {
+            // Flip horizontally if mouse is near right edge
+            if (left + tooltipWidth > window.innerWidth - padding) {
                 left = e.clientX - tooltipWidth - padding;
             }
-            if (top + tooltipHeight > window.innerHeight) {
+            // Flip vertically if mouse is near bottom edge
+            if (top + tooltipHeight > window.innerHeight - padding) {
                 top = e.clientY - tooltipHeight - padding;
             }
 
-            hoverTooltip.style.left = `${Math.max(10, left)}px`;
-            hoverTooltip.style.top = `${Math.max(10, top)}px`;
+            // Viewport clamping
+            left = Math.max(padding, Math.min(left, window.innerWidth - tooltipWidth - padding));
+            top = Math.max(padding, Math.min(top, window.innerHeight - tooltipHeight - padding));
+
+            hoverTooltip.style.left = `${left}px`;
+            hoverTooltip.style.top = `${top}px`;
         }
 
-        function hideHoverTooltip() {
+        function hideHoverTooltip(immediate = false) {
+            if (tooltipHideTimeout) {
+                clearTimeout(tooltipHideTimeout);
+                tooltipHideTimeout = null;
+            }
+
+            if (immediate) {
+                hoverTooltip.classList.add('opacity-0', 'hidden');
+                return;
+            }
+
             hoverTooltip.classList.add('opacity-0');
-            setTimeout(() => hoverTooltip.classList.add('hidden'), 150);
+            tooltipHideTimeout = setTimeout(() => {
+                hoverTooltip.classList.add('hidden');
+                tooltipHideTimeout = null;
+            }, 150);
         }
 
         function showModal(item) {
