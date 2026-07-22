@@ -287,7 +287,7 @@
             <!-- Modal Body (Scrollable) -->
             <div class="p-6 overflow-y-auto space-y-6 text-sm">
                 
-                <!-- 1. Best Use Cases -->
+                <!-- Best Use Cases -->
                 <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
                     <h3 id="uiBestUseLabel" class="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,7 +298,7 @@
                     <ul id="modalUseCases" class="list-disc list-inside text-slate-300 space-y-1"></ul>
                 </div>
 
-                <!-- 2. Pros & Cons Grid -->
+                <!-- Pros & Cons Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Pros -->
                     <div class="bg-emerald-950/20 border border-emerald-800/30 rounded-xl p-4">
@@ -320,6 +320,66 @@
                             Cons
                         </h3>
                         <ul id="modalCons" class="space-y-2 text-slate-300"></ul>
+                    </div>
+                </div>
+
+                <!-- Read More / Extended Tech Specs Button & Panel -->
+                <div class="border border-cyan-900/50 bg-cyan-950/20 rounded-xl overflow-hidden">
+                    <button id="toggleReadMoreBtn" class="w-full px-4 py-3 bg-cyan-950/40 hover:bg-cyan-900/40 border-b border-cyan-900/50 text-cyan-300 font-semibold text-xs flex items-center justify-between transition group">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                            <span id="uiReadMoreLabel">Read More: Printing Specs & Deep Dive</span>
+                        </span>
+                        <svg id="readMoreChevron" class="w-4 h-4 text-cyan-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+
+                    <!-- Expandable Tech Content -->
+                    <div id="extendedTechContent" class="hidden p-4 space-y-4 text-xs bg-slate-950/50 border-t border-cyan-900/30">
+                        <div>
+                            <h4 id="uiTechSpecsHeader" class="font-bold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                Recommended Printing Parameters
+                            </h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 bg-slate-900/90 p-3 rounded-lg border border-slate-800">
+                                <div>
+                                    <span class="text-slate-400 block text-[10px]" id="uiLblNozzle">Nozzle Temp</span>
+                                    <span id="techNozzle" class="font-mono text-slate-200 font-semibold"></span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[10px]" id="uiLblBed">Bed Temp</span>
+                                    <span id="techBed" class="font-mono text-slate-200 font-semibold"></span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[10px]" id="uiLblEnclosure">Enclosure</span>
+                                    <span id="techEnclosure" class="font-semibold text-slate-200"></span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[10px]" id="uiLblHardened">Hardened Nozzle</span>
+                                    <span id="techHardened" class="font-semibold text-slate-200"></span>
+                                </div>
+                                <div class="col-span-2">
+                                    <span class="text-slate-400 block text-[10px]" id="uiLblDrying">Drying Advice</span>
+                                    <span id="techDrying" class="text-slate-200"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 id="uiDeepDiveHeader" class="font-bold text-cyan-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Technical Material Analysis
+                            </h4>
+                            <p id="techDeepDive" class="text-slate-300 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800/80"></p>
+                        </div>
                     </div>
                 </div>
 
@@ -1452,276 +1512,276 @@
         let selectedProps = new Set();
         let searchQuery = '';
         let autoplayEnabled = false;
+    <!-- Data and Application Script -->
+    <script>
+        const uiText = {
+            en: {
+                title: "3D Filament Tier List",
+                subtitle: "Interactive guide based on testing by Zack Freedman",
+                credit: "Original video & testing by Zack Freedman",
+                watchFull: "Watch full video on YouTube",
+                searchPlaceholder: "Search name, property (e.g. UV, heat, stiff, flex)...",
+                filterPropsBtn: "Filter Properties",
+                propFilterModalTitle: "Filter by Material Properties",
+                propFilterDesc: "Select properties to show only filaments that match your requirements:",
+                autoplayLabel: "Autoplay Video:",
+                tierLabel: "Tier:",
+                allLabel: "All",
+                clickInfo: "Hover to preview details • Click to view video segment",
+                showingCount: (count, total) => `Showing ${count} of ${total} filaments`,
+                emptyTitle: "No filaments found",
+                emptyDesc: "Try a different search query or reset filters.",
+                resetBtn: "Reset all filters",
+                bestUseLabel: "Best Use Cases",
+                prosLabel: "Pros",
+                consLabel: "Cons",
+                tagsLabel: "Tags & Properties",
+                videoClipTitle: "Zack Freedman's Test Segment",
+                openInYt: "Open on YouTube at timestamp",
+                closeBtn: "Close",
+                readMore: "Read More: Printing Specs & Deep Dive",
+                showLess: "Hide Technical Details",
+                techSpecsHeader: "Recommended Printing Parameters",
+                deepDiveHeader: "Technical Material Analysis",
+                lblNozzle: "Nozzle Temp",
+                lblBed: "Bed Temp",
+                lblEnclosure: "Enclosure",
+                lblHardened: "Hardened Nozzle",
+                lblDrying: "Drying Advice",
+                tierLabels: {
+                    'S': 'S-Tier (Top Choices)',
+                    'A': 'A-Tier (Excellent Options)',
+                    'B': 'B-Tier (Good for Specific Needs)',
+                    'C': 'C-Tier (Niche / Difficult)',
+                    'F': 'F-Tier (Not Recommended)',
+                    'Special': 'Special Category'
+                }
+            },
+            no: {
+                title: "3D Filament Tier List",
+                subtitle: "Interaktiv materialguide basert på Zack Freedmans testing",
+                credit: "Opprinnelig video og testing av Zack Freedman",
+                watchFull: "Se hele videoen på YouTube",
+                searchPlaceholder: "Søk på navn, egenskap (f.eks. UV, varme, stiv, fleksibel)...",
+                filterPropsBtn: "Filtrer egenskaper",
+                propFilterModalTitle: "Filtrer på nøkkelegenskaper",
+                propFilterDesc: "Velg egenskaper for å kun vise filamenter som matcher dine krav:",
+                autoplayLabel: "Autoplay video:",
+                tierLabel: "Nivå:",
+                allLabel: "Alle",
+                clickInfo: "Svev over for forhåndsvisning • Klikk for videoklipp",
+                showingCount: (count, total) => `Viser ${count} av ${total} filamenter`,
+                emptyTitle: "Ingen filamenter funnet",
+                emptyDesc: "Prøv et annet søkeord eller tilbakestill filtrene.",
+                resetBtn: "Tilbakestill alle filter",
+                bestUseLabel: "Beste bruksområder",
+                prosLabel: "Fordeler",
+                consLabel: "Ulemper",
+                tagsLabel: "Tagger og nøkkelegenskaper",
+                videoClipTitle: "Zack Freedmans testsegment",
+                openInYt: "Åpne på YouTube ved tidsstempel",
+                closeBtn: "Lukk",
+                readMore: "Les mer: Tekniske data & utskriftsguide",
+                showLess: "Skjul tekniske detaljer",
+                techSpecsHeader: "Anbefalte utskriftsinnstillinger",
+                deepDiveHeader: "Teknisk dybdeanalyse & materiallære",
+                lblNozzle: "Dysetemperatur",
+                lblBed: "Byggeplatetemp",
+                lblEnclosure: "Kabinett/Kammer",
+                lblHardened: "Herdet dyse",
+                lblDrying: "Tørking",
+                tierLabels: {
+                    'S': 'S-Tier (Beste valg)',
+                    'A': 'A-Tier (Fremragende valgalternativer)',
+                    'B': 'B-Tier (Gode til sine bruksområder)',
+                    'C': 'C-Tier (Krevende / Nisje)',
+                    'F': 'F-Tier (Frarådes)',
+                    'Special': 'Spesialkategori'
+                }
+            }
+        };
 
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearch');
-        const tagContainer = document.getElementById('tagContainer');
-        const tierContainer = document.getElementById('tierContainer');
-        const emptyState = document.getElementById('emptyState');
-        const resultsCount = document.getElementById('resultsCount');
-        const resetSearchBtn = document.getElementById('resetSearchBtn');
+        const filaments = [
+            // S-Tier
+            {
+                id: 'pctg',
+                name: 'PCTG',
+                tier: 'S',
+                timecode: '11:59',
+                seconds: 719,
+                en: {
+                    summary: 'Extremely durable alternative to PETG with incredible layer adhesion and low warping.',
+                    pros: ['Extremely tough and impact resistant', 'Fantastic layer adhesion in all orientations', 'Minimal warping during printing', 'Absorbs water 3x slower than PETG'],
+                    cons: ['Expensive', 'Hard to source on the market', 'Supports can be difficult to remove'],
+                    useCases: ['Functional prototypes taking heavy abuse', 'High-stress mechanical parts'],
+                    tags: ['Durable', 'Easy to print', 'Chemical resistant', 'High strength'],
+                    tech: {
+                        nozzle: '230°C - 260°C',
+                        bed: '70°C - 80°C',
+                        enclosure: 'Not required',
+                        hardened: 'No',
+                        drying: '65°C for 4 hours',
+                        deepDive: 'PCTG (Poly Cyclohexylenedimethylene Terephthalate Glycol) modified polymer replaces PETG’s ethylene glycol with CHDM. This chemical modification yields significantly superior impact resistance, optical clarity, and isotropic Z-axis strength while maintaining effortless printability.'
+                    }
+                },
+                no: {
+                    summary: 'Ekstremt slitesterkt alternativ til PETG med ekstrem lagvedheft og lite warping.',
+                    pros: ['Ekstremt slitesterkt og slagfast', 'Fantastisk lagvedheft i alle retninger', 'Minimal vridning (warping) under print', 'Absorberer fukt fjerdeparten så raskt som PETG'],
+                    cons: ['Dyrere enn PETG', 'Vanskelig å få tak i på markedet', 'Støttestrukturer sitter godt fast'],
+                    useCases: ['Funksjonelle prototyper som tåler hard behandling', 'Mekaniske deler med høye styrkekrav'],
+                    tags: ['Slitesterk', 'Enkel å printe', 'Kjemikalier', 'Høy styrke'],
+                    tech: {
+                        nozzle: '230°C - 260°C',
+                        bed: '70°C - 80°C',
+                        enclosure: 'Ikke påkrevd',
+                        hardened: 'Nei',
+                        drying: '65°C i 4 timer',
+                        deepDive: 'PCTG erstatter etylenglykolen i PETG med CHDM-molekyler. Denne kjemiske tilpasningen gir vesentlig høyere slagfasthet, bedre optisk klarhet og overlegen Z-akse stivhet uten at det blir vanskeligere å printe.'
+                    }
+                }
+            },
+            {
+                id: 'gf-pa',
+                name: 'Glass-Filled Nylon (GF-PA)',
+                tier: 'S',
+                timecode: '19:42',
+                seconds: 1182,
+                en: {
+                    summary: 'Industrial nylon reinforced with glass fibers. Viable alternative to machined metal.',
+                    pros: ['Massively stiffer and tougher than neat nylon', 'High temperature resistance', 'Drastically reduced warping', 'Excellent wear and impact resistance'],
+                    cons: ['Highly abrasive on brass nozzles (requires hardened tip)', 'Expensive', 'Requires high print temperatures'],
+                    useCases: ['Heavy-duty tool housings', 'Alternative to machined aluminum'],
+                    tags: ['Glass fiber', 'Stiff', 'Heat resistant', 'Durable'],
+                    tech: {
+                        nozzle: '260°C - 300°C',
+                        bed: '80°C - 100°C',
+                        enclosure: 'Recommended',
+                        hardened: 'Yes (Mandatory)',
+                        drying: '80°C for 8-12 hours',
+                        deepDive: 'Microscopic glass fibers (typically 10-30% volume) act as internal structural reinforcement within the polyamide matrix. This eliminates nylon’s notorious thermal shrinkage and creep while increasing flexural modulus drastically.'
+                    }
+                },
+                no: {
+                    summary: 'Industriell nylon forsterket med glassfiber. Et alternativ til metall.',
+                    pros: ['Massivt stivere og tøffere enn ren nylon', 'Høy temperaturbestandighet', 'Mye mindre vridning enn ren nylon', 'God slitasjestyrke'],
+                    cons: ['Sliter kraftig på vanlige dyser (krever herdet dyse)', 'Høy pris', 'Krever høye utskriftstemperaturer'],
+                    useCases: ['Heavy-duty verktøy og hus', 'Erstatning for maskinert aluminium'],
+                    tags: ['Glassfiber', 'Stiv', 'Varmebestandig', 'Slitesterk'],
+                    tech: {
+                        nozzle: '260°C - 300°C',
+                        bed: '80°C - 100°C',
+                        enclosure: 'Anbefalt',
+                        hardened: 'Ja (Påkrevd)',
+                        drying: '80°C i 8-12 timer',
+                        deepDive: 'Mikroskopiske glassfibre (10-30%) fungerer som et innvendig skjelett i nylonmatrisen. Dette fjerner nesten all vridning og krymping under utskrift og gir enorm mekanisk stivhet.'
+                    }
+                }
+            },
+            {
+                id: 'pla',
+                name: 'Standard PLA',
+                tier: 'A',
+                timecode: '02:51',
+                seconds: 171,
+                en: {
+                    summary: 'The king of 3D printing. Inexpensive, stiff, and easy to print anywhere.',
+                    pros: ['Extremely easy to print', 'Cheap and widely available in countless colors', 'High tensile strength and stiffness', 'Great bridging and overhangs'],
+                    cons: ['Poor heat tolerance (softens in cars or hot days)', 'Degrades under UV sunlight', 'Shatters on hard impact'],
+                    useCases: ['Decorative models', 'Concept models', 'Indoor visual prototypes'],
+                    tags: ['Easy to print', 'Cheap', 'Stiff'],
+                    tech: {
+                        nozzle: '190°C - 220°C',
+                        bed: '50°C - 60°C',
+                        enclosure: 'Not required',
+                        hardened: 'No',
+                        drying: '45°C for 4 hours',
+                        deepDive: 'Polylactic Acid (PLA) is derived from renewable starches like corn or sugarcane. It features high tensile modulus (~3.5 GPa) but low glass transition temperature (~55°C), making it rigid yet brittle.'
+                    }
+                },
+                no: {
+                    summary: 'Kongen av 3D-printing. Billig, enkelt og tilgjengelig overalt.',
+                    pros: ['Ekstremt enkelt å printe', 'Billig og finnes i uendelige farger', 'Stivt med høy strekkfasthet', 'God på overheng og bruer'],
+                    cons: ['Dårlig varmebestandighet (mykner i sol/bil)', 'Tåler ikke UV-lys over tid', 'Sprøtt ved harde støt'],
+                    useCases: ['Dekorasjoner', 'Konseptmodeller', 'Prototyper for innendørs bruk'],
+                    tags: ['Enkel å printe', 'Billig', 'Stiv'],
+                    tech: {
+                        nozzle: '190°C - 220°C',
+                        bed: '50°C - 60°C',
+                        enclosure: 'Ikke påkrevd',
+                        hardened: 'Nei',
+                        drying: '45°C i 4 timer',
+                        deepDive: 'Polylaktid (PLA) fremstilles fra fornybare råvarer som maisstivelse. Det har høy stivhet og strekkfasthet, men lav glassovergangstemperatur (~55°C) som gjør at det mykner fort i varme.'
+                    }
+                }
+            }
+            // ... existing code for remaining filaments
+        ];
 
-        const hoverTooltip = document.getElementById('hoverTooltip');
-        const globalAutoplayToggle = document.getElementById('globalAutoplayToggle');
+        let isReadMoreExpanded = false;
 
-        const propFilterModal = document.getElementById('propFilterModal');
-        const propFilterCard = document.getElementById('propFilterCard');
-        const openPropFilterBtn = document.getElementById('openPropFilterBtn');
-        const closePropFilterModal = document.getElementById('closePropFilterModal');
-        const propCheckboxGrid = document.getElementById('propCheckboxGrid');
-        const applyPropFilterBtn = document.getElementById('applyPropFilterBtn');
-        const clearPropSelection = document.getElementById('clearPropSelection');
-        const activePropBadge = document.getElementById('activePropBadge');
+        function updateUIStrings() {
+            const strings = uiText[currentLang];
+            document.getElementById('uiReadMoreLabel').innerText = isReadMoreExpanded ? strings.showLess : strings.readMore;
+            document.getElementById('uiTechSpecsHeader').innerText = strings.techSpecsHeader;
+            document.getElementById('uiDeepDiveHeader').innerText = strings.deepDiveHeader;
+            document.getElementById('uiLblNozzle').innerText = strings.lblNozzle;
+            document.getElementById('uiLblBed').innerText = strings.lblBed;
+            document.getElementById('uiLblEnclosure').innerText = strings.lblEnclosure;
+            document.getElementById('uiLblHardened').innerText = strings.lblHardened;
+            document.getElementById('uiLblDrying').innerText = strings.lblDrying;
+        }
 
-        const detailModal = document.getElementById('detailModal');
-        const modalCard = document.getElementById('modalCard');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const closeModal = document.getElementById('closeModal');
-        const modalYtIframe = document.getElementById('modalYtIframe');
-        const modalExternalYtLink = document.getElementById('modalExternalYtLink');
+        function setupReadMoreToggle() {
+            const btn = document.getElementById('toggleReadMoreBtn');
+            const content = document.getElementById('extendedTechContent');
+            const chevron = document.getElementById('readMoreChevron');
+
+            btn.addEventListener('click', () => {
+                isReadMoreExpanded = !isReadMoreExpanded;
+                const strings = uiText[currentLang];
+
+                if (isReadMoreExpanded) {
+                    content.classList.remove('hidden');
+                    chevron.classList.add('rotate-180');
+                    document.getElementById('uiReadMoreLabel').innerText = strings.showLess;
+                } else {
+                    content.classList.add('hidden');
+                    chevron.classList.remove('rotate-180');
+                    document.getElementById('uiReadMoreLabel').innerText = strings.readMore;
+                }
+            });
+        }
+
+        function showModal(item) {
+            const config = tierConfig[item.tier];
+            const data = item[currentLang];
+
+            // Reset Read More accordion state to collapsed when opening modal
+            isReadMoreExpanded = false;
+            document.getElementById('extendedTechContent').classList.add('hidden');
+            document.getElementById('readMoreChevron').classList.remove('rotate-180');
+            document.getElementById('uiReadMoreLabel').innerText = uiText[currentLang].readMore;
+
+            /* ... existing modal populating code ... */
+
+            // Populate Tech Specs
+            if (data.tech) {
+                document.getElementById('techNozzle').innerText = data.tech.nozzle || 'N/A';
+                document.getElementById('techBed').innerText = data.tech.bed || 'N/A';
+                document.getElementById('techEnclosure').innerText = data.tech.enclosure || 'N/A';
+                document.getElementById('techHardened').innerText = data.tech.hardened || 'N/A';
+                document.getElementById('techDrying').innerText = data.tech.drying || 'N/A';
+                document.getElementById('techDeepDive').innerText = data.tech.deepDive || data.summary;
+            }
+
+            /* ... existing showModal animation code ... */
+        }
 
         function init() {
             setupLanguageSwitchers();
             setupAutoplayToggle();
             setupPropFilterModal();
-            updateUIStrings();
-            renderTags();
-            updateCounts();
-            renderFilaments();
-
-            searchInput.addEventListener('input', (e) => {
-                searchQuery = e.target.value.trim().toLowerCase();
-                clearSearchBtn.classList.toggle('hidden', searchQuery === '');
-                renderFilaments();
-            });
-
-            clearSearchBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                searchQuery = '';
-                clearSearchBtn.classList.add('hidden');
-                renderFilaments();
-            });
-
-            resetSearchBtn.addEventListener('click', resetFilters);
-
-            document.querySelectorAll('.tier-filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-500'));
-                    btn.classList.add('ring-2', 'ring-cyan-500');
-                    activeTier = btn.dataset.tier;
-                    renderFilaments();
-                });
-            });
-
-            closeModalBtn.addEventListener('click', hideModal);
-            closeModal.addEventListener('click', hideModal);
-            detailModal.addEventListener('click', (e) => {
-                if (e.target === detailModal) hideModal();
-            });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    hideModal();
-                    hidePropFilterModal();
-                }
-            });
-        }
-
-        function setupAutoplayToggle() {
-            const mobileAutoplayToggle = document.getElementById('mobileAutoplayToggle');
-            const mobileAutoplayDot = document.getElementById('mobileAutoplayDot');
-
-            const updateAutoplayUI = () => {
-                if (autoplayEnabled) {
-                    globalAutoplayToggle.innerText = 'ON';
-                    globalAutoplayToggle.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-cyan-600 text-white border border-cyan-500 shadow';
-                    if (mobileAutoplayToggle) {
-                        mobileAutoplayToggle.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-cyan-600 text-white border border-cyan-500 flex items-center gap-1';
-                        mobileAutoplayDot.className = 'w-1.5 h-1.5 rounded-full bg-white animate-pulse';
-                    }
-                } else {
-                    globalAutoplayToggle.innerText = 'OFF';
-                    globalAutoplayToggle.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700';
-                    if (mobileAutoplayToggle) {
-                        mobileAutoplayToggle.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1';
-                        mobileAutoplayDot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
-                    }
-                }
-            };
-
-            globalAutoplayToggle.addEventListener('click', () => {
-                autoplayEnabled = !autoplayEnabled;
-                updateAutoplayUI();
-            });
-
-            if (mobileAutoplayToggle) {
-                mobileAutoplayToggle.addEventListener('click', () => {
-                    autoplayEnabled = !autoplayEnabled;
-                    updateAutoplayUI();
-                });
-            }
-
-            updateAutoplayUI();
-        }
-
-        function setupLanguageSwitchers() {
-            const btnEnMob = document.getElementById('langEnMobile');
-            const btnNoMob = document.getElementById('langNoMobile');
-            const btnEnDesk = document.getElementById('langEnDesktop');
-            const btnNoDesk = document.getElementById('langNoDesktop');
-
-            const setLang = (lang) => {
-                currentLang = lang;
-                if (lang === 'en') {
-                    btnEnMob.className = 'px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white';
-                    btnNoMob.className = 'px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
-                    btnEnDesk.className = 'px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white';
-                    btnNoDesk.className = 'px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
-                } else {
-                    btnEnMob.className = 'px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
-                    btnNoMob.className = 'px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white';
-                    btnEnDesk.className = 'px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
-                    btnNoDesk.className = 'px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white';
-                }
-                updateUIStrings();
-                renderTags();
-                renderPropCheckboxes();
-                renderFilaments();
-            };
-
-            btnEnMob.addEventListener('click', () => setLang('en'));
-            btnNoMob.addEventListener('click', () => setLang('no'));
-            btnEnDesk.addEventListener('click', () => setLang('en'));
-            btnNoDesk.addEventListener('click', () => setLang('no'));
-        }
-
-        function setupPropFilterModal() {
-            openPropFilterBtn.addEventListener('click', () => {
-                renderPropCheckboxes();
-                propFilterModal.classList.remove('opacity-0', 'pointer-events-none');
-                propFilterCard.classList.remove('scale-95');
-                propFilterCard.classList.add('scale-100');
-            });
-
-            closePropFilterModal.addEventListener('click', hidePropFilterModal);
-            propFilterModal.addEventListener('click', (e) => {
-                if (e.target === propFilterModal) hidePropFilterModal();
-            });
-
-            applyPropFilterBtn.addEventListener('click', () => {
-                hidePropFilterModal();
-                updateActivePropBadge();
-                renderFilaments();
-            });
-
-            clearPropSelection.addEventListener('click', () => {
-                selectedProps.clear();
-                renderPropCheckboxes();
-                updateActivePropBadge();
-                renderFilaments();
-            });
-        }
-
-        function hidePropFilterModal() {
-            propFilterModal.classList.add('opacity-0', 'pointer-events-none');
-            propFilterCard.classList.remove('scale-100');
-            propFilterCard.classList.add('scale-95');
-        }
-
-        function renderPropCheckboxes() {
-            const tags = getAllTags();
-            propCheckboxGrid.innerHTML = tags.map(tag => `
-                <label class="flex items-center gap-2 p-1.5 rounded hover:bg-slate-800 cursor-pointer text-slate-300">
-                    <input type="checkbox" value="${tag}" ${selectedProps.has(tag) ? 'checked' : ''} class="prop-checkbox rounded border-slate-700 bg-slate-950 text-cyan-600 focus:ring-cyan-500">
-                    <span>${tag}</span>
-                </label>
-            `).join('');
-
-            document.querySelectorAll('.prop-checkbox').forEach(cb => {
-                cb.addEventListener('change', (e) => {
-                    if (e.target.checked) {
-                        selectedProps.add(e.target.value);
-                    } else {
-                        selectedProps.delete(e.target.value);
-                    }
-                });
-            });
-        }
-
-        function updateActivePropBadge() {
-            if (selectedProps.size > 0) {
-                activePropBadge.innerText = selectedProps.size;
-                activePropBadge.classList.remove('hidden');
-                openPropFilterBtn.classList.add('border-cyan-500', 'bg-cyan-950/30');
-            } else {
-                activePropBadge.classList.add('hidden');
-                openPropFilterBtn.classList.remove('border-cyan-500', 'bg-cyan-950/30');
-            }
-        }
-
-        function updateUIStrings() {
-            const strings = uiText[currentLang];
-            document.getElementById('uiTitle').innerText = strings.title;
-            document.getElementById('uiSubtitle').innerText = strings.subtitle;
-            document.getElementById('uiCredit').innerText = strings.credit;
-            document.getElementById('uiWatchFull').innerText = strings.watchFull;
-            document.getElementById('searchInput').placeholder = strings.searchPlaceholder;
-            document.getElementById('uiFilterPropsBtn').innerText = strings.filterPropsBtn;
-            document.getElementById('uiPropFilterModalTitle').innerText = strings.propFilterModalTitle;
-            document.getElementById('uiPropFilterDesc').innerText = strings.propFilterDesc;
-            document.getElementById('uiAutoplayLabel').innerText = strings.autoplayLabel;
-            document.getElementById('uiTierLabel').innerText = strings.tierLabel;
-            document.getElementById('uiAllLabel').innerText = strings.allLabel;
-            document.getElementById('uiClickInfo').innerText = strings.clickInfo;
-            document.getElementById('uiEmptyTitle').innerText = strings.emptyTitle;
-            document.getElementById('uiEmptyDesc').innerText = strings.emptyDesc;
-            document.getElementById('resetSearchBtn').innerText = strings.resetBtn;
-
-            document.getElementById('uiBestUseLabel').innerText = strings.bestUseLabel;
-            document.getElementById('uiProsLabel').innerText = strings.prosLabel;
-            document.getElementById('uiConsLabel').innerText = strings.consLabel;
-            document.getElementById('uiTagsLabel').innerText = strings.tagsLabel;
-            document.getElementById('uiVideoClipTitle').innerText = strings.videoClipTitle;
-            document.getElementById('uiOpenInYt').innerText = strings.openInYt;
-            document.getElementById('closeModalBtn').innerText = strings.closeBtn;
-        }
-
-        function getAllTags() {
-            const tagsSet = new Set();
-            filaments.forEach(f => f[currentLang].tags.forEach(t => tagsSet.add(t)));
-            return Array.from(tagsSet).sort();
-        }
-
-        function renderTags() {
-            const tags = getAllTags();
-            tagContainer.innerHTML = tags.map(tag => `
-                <button class="tag-pill shrink-0 px-2.5 py-1 rounded-full border border-slate-800 bg-slate-900 text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition whitespace-nowrap ${activeTag === tag ? 'border-cyan-500 text-cyan-400 bg-cyan-950/40' : ''}" data-tag="${tag}">
-                    #${tag}
-                </button>
-            `).join('');
-
-            document.querySelectorAll('.tag-pill').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tag = btn.dataset.tag;
-                    activeTag = activeTag === tag ? null : tag;
-                    renderTags();
-                    renderFilaments();
-                });
-            });
-        }
-
-        function updateCounts() {
-            document.getElementById('countAll').innerText = filaments.length;
-        }
-
-        function resetFilters() {
-            activeTier = 'all';
-            activeTag = null;
-            selectedProps.clear();
-            searchQuery = '';
-            searchInput.value = '';
-            clearSearchBtn.classList.add('hidden');
-            
+            setupReadMoreToggle();
             document.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-500'));
             document.querySelector('[data-tier="all"]').classList.add('ring-2', 'ring-cyan-500');
 
