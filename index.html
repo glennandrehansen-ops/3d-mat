@@ -48,46 +48,56 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-white relative">
 
     <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4">
             
             <!-- Top Bar: Title, Zack Freedman Credit, Controls -->
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
-                <div class="flex items-center justify-between w-full lg:w-auto">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 bg-gradient-to-br from-amber-500 to-red-600 rounded-xl shadow-lg shadow-amber-500/10 shrink-0">
-                            <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 mb-2.5 sm:mb-4">
+                <div class="flex items-center justify-between w-full sm:w-auto">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 sm:p-2.5 bg-gradient-to-br from-amber-500 to-red-600 rounded-xl shadow-lg shadow-amber-500/10 shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="9" stroke-width="2"/>
                                 <circle cx="12" cy="12" r="3" stroke-width="2"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v6m0 6v6m9-9h-6m-6 0H3"/>
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold tracking-tight text-white" id="uiTitle">3D Filament Tier List</h1>
-                            <p class="text-xs text-slate-400" id="uiSubtitle">Interactive guide based on testing by Zack Freedman</p>
+                            <h1 class="text-base sm:text-xl font-bold tracking-tight text-white" id="uiTitle">3D Filament Tier List</h1>
+                            <p class="text-[11px] sm:text-xs text-slate-400" id="uiSubtitle">Interactive guide based on testing by Zack Freedman</p>
                         </div>
                     </div>
 
-                    <!-- Mobile Language Switcher -->
-                    <div class="flex lg:hidden items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs shrink-0">
-                        <button id="langEnMobile" class="px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white">EN</button>
-                        <button id="langNoMobile" class="px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white">NO</button>
+                    <!-- Mobile Controls (Autoplay & Language) -->
+                    <div class="flex sm:hidden items-center gap-1.5 shrink-0">
+                        <!-- Mobile Autoplay Toggle -->
+                        <button id="mobileAutoplayToggle" class="px-2 py-1 rounded text-[10px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500" id="mobileAutoplayDot"></span>
+                            <span>AUTO</span>
+                        </button>
+
+                        <!-- Mobile Language Switcher -->
+                        <div class="flex items-center gap-0.5 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px]">
+                            <button id="langEnMobile" class="px-1.5 py-0.5 rounded font-semibold transition bg-cyan-600 text-white">EN</button>
+                            <button id="langNoMobile" class="px-1.5 py-0.5 rounded font-semibold transition text-slate-400 hover:text-white">NO</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Center Credit & Link to Video -->
-                <div class="flex flex-wrap items-center gap-3 text-xs bg-slate-950/80 px-3.5 py-2 rounded-xl border border-slate-800">
-                    <span class="text-slate-400" id="uiCredit">Original video & testing by Zack Freedman</span>
+                <div class="flex items-center justify-between sm:justify-start gap-2 text-[11px] sm:text-xs bg-slate-950/80 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-slate-800">
+                    <span class="text-slate-400 truncate max-w-[180px] sm:max-w-none" id="uiCredit">Original testing by Zack Freedman</span>
                     <a href="https://youtu.be/weeG9yOp3i4" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center gap-1.5 text-red-400 hover:text-red-300 font-semibold transition bg-red-950/40 hover:bg-red-900/50 px-2.5 py-1 rounded-md border border-red-800/40">
-                        <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center gap-1 text-red-400 hover:text-red-300 font-semibold transition bg-red-950/40 hover:bg-red-900/50 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border border-red-800/40 shrink-0">
+                        <svg class="w-3.5 h-3.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                         </svg>
-                        <span id="uiWatchFull">Watch full video on YouTube</span>
+                        <span id="uiWatchFull" class="hidden sm:inline">Watch full video on YouTube</span>
+                        <span class="sm:hidden">YouTube</span>
                     </a>
                 </div>
 
                 <!-- Desktop Controls: Language & Autoplay Toggle -->
-                <div class="hidden lg:flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-3">
                     <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-xs">
                         <span class="text-slate-300 font-medium flex items-center gap-1.5" id="uiAutoplayLabel">
                             <svg class="w-3.5 h-3.5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
@@ -108,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row md:items-center gap-3">
+            <div class="flex items-center gap-2">
                 <div class="relative flex-1">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,8 +127,8 @@
                     </div>
                     <input type="text" id="searchInput" 
                         placeholder="Search name, property (e.g. UV, heat, stiff, flex)..." 
-                        class="w-full pl-10 pr-10 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
-                    <button id="clearSearch" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-200">
+                        class="w-full pl-9 pr-8 py-1.5 sm:py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                    <button id="clearSearch" class="hidden absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-200">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -126,41 +136,43 @@
                 </div>
 
                 <!-- Property Filter Modal Button -->
-                <button id="openPropFilterBtn" class="px-3.5 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center gap-2 transition shrink-0">
-                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button id="openPropFilterBtn" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition shrink-0">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                     </svg>
-                    <span id="uiFilterPropsBtn">Filter Properties</span>
+                    <span id="uiFilterPropsBtn" class="hidden sm:inline">Filter Properties</span>
+                    <span class="sm:hidden">Filter</span>
                     <span id="activePropBadge" class="hidden px-1.5 py-0.2 bg-cyan-500 text-slate-950 text-[10px] font-bold rounded-full">0</span>
                 </button>
             </div>
 
-            <div class="flex items-center gap-2 mt-4 overflow-x-auto py-2.5 px-1 text-xs">
+            <div class="flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 overflow-x-auto py-1 text-xs">
                 <span class="text-slate-400 font-medium mr-1 hidden sm:inline shrink-0" id="uiTierLabel">Tier:</span>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition ring-2 ring-cyan-500" data-tier="all">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition ring-2 ring-cyan-500" data-tier="all">
                     <span id="uiAllLabel">All</span> (<span id="countAll">0</span>)
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition" data-tier="S">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition" data-tier="S">
                     S-Tier
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-purple-500/30 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 transition" data-tier="A">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-purple-500/30 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 transition" data-tier="A">
                     A-Tier
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition" data-tier="B">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition" data-tier="B">
                     B-Tier
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition" data-tier="C">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition" data-tier="C">
                     C-Tier
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-rose-500/30 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition" data-tier="F">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-rose-500/30 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition" data-tier="F">
                     F-Tier
                 </button>
-                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-pink-500/30 text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 transition" data-tier="Special">
+                <button class="tier-filter-btn shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md font-medium border border-pink-500/30 text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 transition" data-tier="Special">
                     Special
                 </button>
             </div>
 
-            <div id="tagContainer" class="flex items-center gap-1.5 mt-1 overflow-x-auto pb-1 text-xs">
+            <!-- Tags Container (Hidden on mobile to save vertical height) -->
+            <div id="tagContainer" class="hidden md:flex items-center gap-1.5 mt-1 overflow-x-auto pb-1 text-xs">
                 <!-- Populated dynamically -->
             </div>
         </div>
@@ -1516,13 +1528,24 @@
         }
 
         function setupAutoplayToggle() {
+            const mobileAutoplayToggle = document.getElementById('mobileAutoplayToggle');
+            const mobileAutoplayDot = document.getElementById('mobileAutoplayDot');
+
             const updateAutoplayUI = () => {
                 if (autoplayEnabled) {
                     globalAutoplayToggle.innerText = 'ON';
                     globalAutoplayToggle.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-cyan-600 text-white border border-cyan-500 shadow';
+                    if (mobileAutoplayToggle) {
+                        mobileAutoplayToggle.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-cyan-600 text-white border border-cyan-500 flex items-center gap-1';
+                        mobileAutoplayDot.className = 'w-1.5 h-1.5 rounded-full bg-white animate-pulse';
+                    }
                 } else {
                     globalAutoplayToggle.innerText = 'OFF';
                     globalAutoplayToggle.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700';
+                    if (mobileAutoplayToggle) {
+                        mobileAutoplayToggle.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1';
+                        mobileAutoplayDot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
+                    }
                 }
             };
 
@@ -1530,6 +1553,13 @@
                 autoplayEnabled = !autoplayEnabled;
                 updateAutoplayUI();
             });
+
+            if (mobileAutoplayToggle) {
+                mobileAutoplayToggle.addEventListener('click', () => {
+                    autoplayEnabled = !autoplayEnabled;
+                    updateAutoplayUI();
+                });
+            }
 
             updateAutoplayUI();
         }
