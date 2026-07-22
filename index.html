@@ -72,6 +72,11 @@
 
                     <!-- Mobile Controls -->
                     <div class="flex md:hidden items-center gap-1.5">
+                        <button id="openExportBtnMobile" class="p-1.5 bg-slate-800 border border-slate-700 rounded text-slate-300 hover:text-white" title="Export Data">
+                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                        </button>
                         <button id="mobileAutoplayBtn" class="px-2 py-1 bg-slate-800 border border-slate-700 text-[10px] font-semibold rounded text-slate-300">
                             AUTO: <span id="mobileAutoplayState">OFF</span>
                         </button>
@@ -519,7 +524,7 @@
             'Durable', 'Cheap', 'Lightweight', 'Low temp', 'Superpolymer'
         ];
 
-        // All 48 Materials Dataset
+        // Complete 48 Materials Database
         const filaments = [
             // S-Tier (7)
             {
@@ -998,7 +1003,6 @@
             const closeBtn = document.getElementById('closeFilterModal');
             const clearBtn = document.getElementById('clearPropertyFiltersBtn');
             const applyBtn = document.getElementById('applyPropertyFiltersBtn');
-            const container = document.getElementById('propertyChipsContainer');
 
             openBtn.addEventListener('click', () => {
                 renderPropertyChips();
@@ -1050,17 +1054,26 @@
         }
 
         function setupExport() {
-            const openBtn = document.getElementById('openExportBtn');
+            const openBtnDesk = document.getElementById('openExportBtn');
+            const openBtnMob = document.getElementById('openExportBtnMobile');
             const closeBtn = document.getElementById('closeExportModal');
             const scopeFiltered = document.getElementById('exportScopeFiltered');
             const scopeAll = document.getElementById('exportScopeAll');
 
-            openBtn.addEventListener('click', () => {
+            const openModal = () => {
                 exportModal.classList.remove('opacity-0', 'pointer-events-none');
-            });
+            };
 
-            closeBtn.addEventListener('click', () => {
+            const closeModalFunc = () => {
                 exportModal.classList.add('opacity-0', 'pointer-events-none');
+            };
+
+            if (openBtnDesk) openBtnDesk.addEventListener('click', openModal);
+            if (openBtnMob) openBtnMob.addEventListener('click', openModal);
+            if (closeBtn) closeBtn.addEventListener('click', closeModalFunc);
+
+            exportModal.addEventListener('click', (e) => {
+                if (e.target === exportModal) closeModalFunc();
             });
 
             scopeFiltered.addEventListener('click', () => {
@@ -1075,9 +1088,9 @@
                 scopeFiltered.className = 'flex-1 py-1.5 px-3 bg-slate-950 border border-slate-800 text-slate-400 rounded-lg text-xs font-medium';
             });
 
-            document.getElementById('exportCsvBtn').addEventListener('click', () => generateExport('csv'));
-            document.getElementById('exportMdBtn').addEventListener('click', () => generateExport('md'));
-            document.getElementById('exportJsonBtn').addEventListener('click', () => generateExport('json'));
+            document.getElementById('exportCsvBtn').addEventListener('click', () => { generateExport('csv'); closeModalFunc(); });
+            document.getElementById('exportMdBtn').addEventListener('click', () => { generateExport('md'); closeModalFunc(); });
+            document.getElementById('exportJsonBtn').addEventListener('click', () => { generateExport('json'); closeModalFunc(); });
         }
 
         function updateUIStrings() {
@@ -1140,7 +1153,6 @@
                 const langData = f[currentLang] || f['en'];
                 const enTags = f['en'].tags;
 
-                // Check selected properties filter
                 if (selectedProperties.length > 0) {
                     const hasAllProperties = selectedProperties.every(prop => enTags.includes(prop) || langData.tags.includes(prop));
                     if (!hasAllProperties) return false;
@@ -1338,7 +1350,7 @@
                 const str = JSON.stringify(dataToExport, null, 2);
                 downloadFile(str, '3d_filaments_tierlist.json', 'application/json');
             } else if (format === 'csv') {
-                let csv = '\uFEFFID,Name,Tier,Timecode,Summary,BestUseCases,Pros,Cons,NozzleTemp,BedTemp\n';
+                let csv = '\uFEFF"ID","Name","Tier","Timecode","Summary","BestUseCases","Pros","Cons","NozzleTemp","BedTemp"\n';
                 dataToExport.forEach(item => {
                     const lang = item[currentLang] || item['en'];
                     csv += `"${item.id}","${item.name}","${item.tier}","${item.timecode}","${lang.summary.replace(/"/g, '""')}","${lang.useCases.join('; ')}","${lang.pros.join('; ')}","${lang.cons.join('; ')}","${item.tech.nozzleTemp}","${item.tech.bedTemp}"\n`;
@@ -1360,12 +1372,17 @@
         }
 
         function downloadFile(content, fileName, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const file = new Blob([content], { type: contentType });
-            a.href = URL.createObjectURL(file);
+            a.href = url;
             a.download = fileName;
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(a.href);
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
         }
 
         window.addEventListener('DOMContentLoaded', init);
