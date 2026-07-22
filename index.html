@@ -151,6 +151,13 @@
                     <span class="sm:hidden">Filter</span>
                     <span id="activePropBadge" class="hidden px-1.5 py-0.2 bg-cyan-500 text-slate-950 text-[10px] font-bold rounded-full">0</span>
                 </button>
+
+                <button id="openExportModalBtn" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition shrink-0">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span id="uiExportBtn" class="hidden sm:inline">Export</span>
+                </button>
             </div>
 
             <!-- Tier Filter Buttons -->
@@ -265,6 +272,101 @@
                 <button id="applyPropFilterBtn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs rounded-lg transition">
                     Apply Filter
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Data Modal -->
+    <div id="exportModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-transform duration-200" id="exportCard">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span id="uiExportModalTitle">Export Filament Data</span>
+                </h3>
+                <button id="closeExportModal" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-400 mb-4" id="uiExportDesc">Download key information for 3D printing filaments in your preferred format:</p>
+
+            <div class="space-y-4 text-xs">
+                <!-- Scope selection -->
+                <div>
+                    <span class="block text-slate-400 font-semibold mb-1.5 uppercase tracking-wider text-[10px]" id="uiExportScopeLabel">Export Scope</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2.5 bg-slate-950 border border-slate-800 rounded-lg cursor-pointer text-slate-300 hover:border-slate-700">
+                            <input type="radio" name="exportScope" value="all" checked class="text-cyan-500 focus:ring-cyan-500 bg-slate-900 border-slate-700">
+                            <span id="uiExportScopeAll">All Filaments</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2.5 bg-slate-950 border border-slate-800 rounded-lg cursor-pointer text-slate-300 hover:border-slate-700">
+                            <input type="radio" name="exportScope" value="filtered" class="text-cyan-500 focus:ring-cyan-500 bg-slate-900 border-slate-700">
+                            <span id="uiExportScopeFiltered">Filtered Results</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Format Selection -->
+                <div>
+                    <span class="block text-slate-400 font-semibold mb-1.5 uppercase tracking-wider text-[10px]" id="uiExportFormatLabel">Choose Format</span>
+                    <div class="space-y-2">
+                        <button id="exportCsvBtn" class="w-full p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 rounded-xl text-left flex items-center justify-between transition group">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-white block text-xs" id="uiExportCsvTitle">CSV Spreadsheet (.csv)</span>
+                                    <span class="text-[10px] text-slate-400">Best for Excel, Google Sheets, or data analysis</span>
+                                </div>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+
+                        <button id="exportMdBtn" class="w-full p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 rounded-xl text-left flex items-center justify-between transition group">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-white block text-xs" id="uiExportMdTitle">Markdown Document (.md)</span>
+                                    <span class="text-[10px] text-slate-400">Readable formatted guide for notes or documentation</span>
+                                </div>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+
+                        <button id="exportJsonBtn" class="w-full p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 rounded-xl text-left flex items-center justify-between transition group">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-purple-500/10 text-purple-400 rounded-lg border border-purple-500/20">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-white block text-xs" id="uiExportJsonTitle">JSON Raw Data (.json)</span>
+                                    <span class="text-[10px] text-slate-400">Structured data format for developers</span>
+                                </div>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -445,6 +547,16 @@
                 watchFull: "Watch full video on YouTube",
                 searchPlaceholder: "Search name, property (e.g. UV, heat, stiff, flex)...",
                 filterPropsBtn: "Filter Properties",
+                exportBtn: "Export Data",
+                exportModalTitle: "Export Filament Data",
+                exportDesc: "Download key information for 3D printing filaments in your preferred format:",
+                exportScopeLabel: "Export Scope",
+                exportScopeAll: "All Filaments",
+                exportScopeFiltered: "Filtered Results",
+                exportFormatLabel: "Choose Format",
+                exportCsvTitle: "CSV Spreadsheet (.csv)",
+                exportMdTitle: "Markdown Document (.md)",
+                exportJsonTitle: "JSON Raw Data (.json)",
                 propFilterModalTitle: "Filter by Material Properties",
                 propFilterDesc: "Select properties to show only filaments that match your requirements:",
                 autoplayLabel: "Autoplay Video:",
@@ -487,6 +599,16 @@
                 watchFull: "Se hele videoen på YouTube",
                 searchPlaceholder: "Søk på navn, egenskap (f.eks. UV, varme, stiv, fleksibel)...",
                 filterPropsBtn: "Filtrer egenskaper",
+                exportBtn: "Eksporter data",
+                exportModalTitle: "Eksporter filamentdata",
+                exportDesc: "Last ned nøkkelinformasjon for 3D-filamenter i ønsket format:",
+                exportScopeLabel: "Omfang",
+                exportScopeAll: "Alle filamenter",
+                exportScopeFiltered: "Filtrerte resultater",
+                exportFormatLabel: "Velg format",
+                exportCsvTitle: "CSV-regneark (.csv)",
+                exportMdTitle: "Markdown-dokument (.md)",
+                exportJsonTitle: "Rådata i JSON (.json)",
                 propFilterModalTitle: "Filtrer på nøkkelegenskaper",
                 propFilterDesc: "Velg egenskaper for å kun vise filamenter som matcher dine krav:",
                 autoplayLabel: "Autoplay video:",
@@ -529,8 +651,18 @@
                 watchFull: "Vollständiges Video auf YouTube ansehen",
                 searchPlaceholder: "Name oder Eigenschaft suchen (z. B. UV, Hitze, steif)...",
                 filterPropsBtn: "Eigenschaften filtern",
+                exportBtn: "Daten exportieren",
+                exportModalTitle: "Filamentdaten exportieren",
+                exportDesc: "Laden Sie Schlüsselinformationen zu 3D-Druck-Filamenten herunter:",
+                exportScopeLabel: "Umfang",
+                exportScopeAll: "Alle Filamente",
+                exportScopeFiltered: "Gefilterte Ergebnisse",
+                exportFormatLabel: "Format wählen",
+                exportCsvTitle: "CSV-Tabelle (.csv)",
+                exportMdTitle: "Markdown-Dokument (.md)",
+                exportJsonTitle: "JSON-Rohdaten (.json)",
                 propFilterModalTitle: "Nach Materialeigenschaften filtern",
-                propFilterDesc: "Wählen Sie Eigenschaften aus, um nur passende Filamente anzuzeigen:",
+                propFilterDesc: "Wählen Sie Eigenschaften aus, um passende Filamente anzuzeigen:",
                 autoplayLabel: "Autoplay Video:",
                 tierLabel: "Rang:",
                 allLabel: "Alle",
@@ -571,6 +703,16 @@
                 watchFull: "Ver video completo en YouTube",
                 searchPlaceholder: "Buscar nombre, propiedad (p. ej. UV, calor, rígido)...",
                 filterPropsBtn: "Filtrar propiedades",
+                exportBtn: "Exportar datos",
+                exportModalTitle: "Exportar datos de filamentos",
+                exportDesc: "Descargue información clave de filamentos 3D en el formato deseado:",
+                exportScopeLabel: "Alcance",
+                exportScopeAll: "Todos los filamentos",
+                exportScopeFiltered: "Resultados filtrados",
+                exportFormatLabel: "Seleccionar formato",
+                exportCsvTitle: "Hoja de cálculo CSV (.csv)",
+                exportMdTitle: "Documento Markdown (.md)",
+                exportJsonTitle: "Datos en bruto JSON (.json)",
                 propFilterModalTitle: "Filtrar por propiedades del material",
                 propFilterDesc: "Seleccione propiedades para mostrar solo filamentos compatibles:",
                 autoplayLabel: "Autoreproducir:",
@@ -613,6 +755,16 @@
                 watchFull: "Regarder la vidéo complète sur YouTube",
                 searchPlaceholder: "Rechercher nom, propriété (ex: UV, chaleur, rigide)...",
                 filterPropsBtn: "Filtrer propriétés",
+                exportBtn: "Exporter données",
+                exportModalTitle: "Exporter les données de filaments",
+                exportDesc: "Téléchargez les informations clés sur les filaments 3D dans le format souhaité :",
+                exportScopeLabel: "Portée",
+                exportScopeAll: "Tous les filaments",
+                exportScopeFiltered: "Résultats filtrés",
+                exportFormatLabel: "Choisir le format",
+                exportCsvTitle: "Tableur CSV (.csv)",
+                exportMdTitle: "Document Markdown (.md)",
+                exportJsonTitle: "Données brutes JSON (.json)",
                 propFilterModalTitle: "Filtrer par propriétés de matériau",
                 propFilterDesc: "Sélectionnez des propriétés pour afficher les filaments correspondants :",
                 autoplayLabel: "Autoplay Vidéo :",
@@ -1100,6 +1252,7 @@
             setupLanguageSwitchers();
             setupAutoplayToggle();
             setupPropFilterModal();
+            setupExportModal();
             setupReadMoreToggle();
             setupModalEvents();
 
@@ -1148,89 +1301,19 @@
         }
 
         function setupLanguageSwitchers() {
-            const selectMob = document.getElementById('langSelectMobile');
-            const selectDesk = document.getElementById('langSelectDesktop');
+        function setupExportModal() {
+            const modal = document.getElementById('exportModal');
+            const card = document.getElementById('exportCard');
+            const openBtn = document.getElementById('openExportModalBtn');
+            const closeBtn = document.getElementById('closeExportModal');
 
-            const setLang = (lang) => {
-                currentLang = lang;
-                if (selectMob) selectMob.value = lang;
-                if (selectDesk) selectDesk.value = lang;
-
-                updateUIStrings();
-                renderTags();
-                renderFilaments();
-            };
-
-            if (selectMob) selectMob.addEventListener('change', (e) => setLang(e.target.value));
-            if (selectDesk) selectDesk.addEventListener('change', (e) => setLang(e.target.value));
-        }
-
-        function setupAutoplayToggle() {
-            const btnDesk = document.getElementById('globalAutoplayToggle');
-            const btnMob = document.getElementById('mobileAutoplayToggle');
-            const dotMob = document.getElementById('mobileAutoplayDot');
-
-            const toggleAutoplay = () => {
-                autoplayEnabled = !autoplayEnabled;
-                const statusText = autoplayEnabled ? 'ON' : 'OFF';
-
-                if (btnDesk) {
-                    btnDesk.innerText = statusText;
-                    btnDesk.className = autoplayEnabled 
-                        ? 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' 
-                        : 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700';
-                }
-
-                if (btnMob) {
-                    btnMob.className = autoplayEnabled
-                        ? 'px-2 py-1 rounded text-[10px] font-bold transition bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 flex items-center gap-1'
-                        : 'px-2 py-1 rounded text-[10px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1';
-                }
-
-                if (dotMob) {
-                    dotMob.className = autoplayEnabled ? 'w-1.5 h-1.5 rounded-full bg-emerald-400' : 'w-1.5 h-1.5 rounded-full bg-slate-500';
-                }
-            };
-
-            if (btnDesk) btnDesk.addEventListener('click', toggleAutoplay);
-            if (btnMob) btnMob.addEventListener('click', toggleAutoplay);
-        }
-
-        function setupReadMoreToggle() {
-            const btn = document.getElementById('toggleReadMoreBtn');
-            const content = document.getElementById('extendedTechContent');
-            const chevron = document.getElementById('readMoreChevron');
-
-            if (!btn || !content) return;
-
-            btn.addEventListener('click', () => {
-                isReadMoreExpanded = !isReadMoreExpanded;
-                const strings = uiText[currentLang] || uiText.en;
-
-                if (isReadMoreExpanded) {
-                    content.classList.remove('hidden');
-                    if (chevron) chevron.classList.add('rotate-180');
-                    document.getElementById('uiReadMoreLabel').innerText = strings.showLess;
-                } else {
-                    content.classList.add('hidden');
-                    if (chevron) chevron.classList.remove('rotate-180');
-                    document.getElementById('uiReadMoreLabel').innerText = strings.readMore;
-                }
-            });
-        }
-
-        function setupPropFilterModal() {
-            const modal = document.getElementById('propFilterModal');
-            const card = document.getElementById('propFilterCard');
-            const openBtn = document.getElementById('openPropFilterBtn');
-            const closeBtn = document.getElementById('closePropFilterModal');
-            const clearBtn = document.getElementById('clearPropSelection');
-            const applyBtn = document.getElementById('applyPropFilterBtn');
+            const csvBtn = document.getElementById('exportCsvBtn');
+            const mdBtn = document.getElementById('exportMdBtn');
+            const jsonBtn = document.getElementById('exportJsonBtn');
 
             if (!modal) return;
 
             const openModal = () => {
-                populatePropCheckboxes();
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 if (card) {
                     card.classList.remove('scale-95');
@@ -1250,65 +1333,130 @@
             if (closeBtn) closeBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-            if (clearBtn) {
-                clearBtn.addEventListener('click', () => {
-                    selectedProps.clear();
-                    populatePropCheckboxes();
-                    updateActivePropBadge();
-                    renderFilaments();
+            const getSelectedDataset = () => {
+                const scopeEl = document.querySelector('input[name="exportScope"]:checked');
+                const scope = scopeEl ? scopeEl.value : 'all';
+                return scope === 'filtered' ? filterFilaments() : filaments;
+            };
+
+            if (csvBtn) {
+                csvBtn.addEventListener('click', () => {
+                    exportToCSV(getSelectedDataset(), currentLang);
+                    closeModal();
                 });
             }
 
-            if (applyBtn) {
-                applyBtn.addEventListener('click', () => {
-                    updateActivePropBadge();
-                    renderFilaments();
+            if (mdBtn) {
+                mdBtn.addEventListener('click', () => {
+                    exportToMarkdown(getSelectedDataset(), currentLang);
+                    closeModal();
+                });
+            }
+
+            if (jsonBtn) {
+                jsonBtn.addEventListener('click', () => {
+                    exportToJSON(getSelectedDataset(), currentLang);
                     closeModal();
                 });
             }
         }
 
-        function populatePropCheckboxes() {
-            const grid = document.getElementById('propCheckboxGrid');
-            if (!grid) return;
-
-            const tagsSet = new Set();
-            filaments.forEach(f => {
-                const data = f[currentLang] || f.en;
-                data.tags.forEach(t => tagsSet.add(t));
+        function exportToCSV(dataset, lang) {
+            const headers = ["Tier", "Name", "Timecode", "Summary", "Best Use Cases", "Pros", "Cons", "Tags", "Nozzle Temp", "Bed Temp", "Enclosure", "Hardened Nozzle", "Drying", "YouTube Link"];
+            
+            const rows = dataset.map(item => {
+                const data = item[lang] || item.en;
+                const tech = data.tech || {};
+                const ytLink = `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`;
+                
+                return [
+                    item.tier,
+                    item.name,
+                    item.timecode,
+                    data.summary,
+                    (data.useCases || []).join('; '),
+                    (data.pros || []).join('; '),
+                    (data.cons || []).join('; '),
+                    (data.tags || []).join('; '),
+                    tech.nozzle || '',
+                    tech.bed || '',
+                    tech.enclosure || '',
+                    tech.hardened || '',
+                    tech.drying || '',
+                    ytLink
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`);
             });
 
-            const allTags = Array.from(tagsSet).sort();
-
-            grid.innerHTML = allTags.map(tag => {
-                const checked = selectedProps.has(tag) ? 'checked' : '';
-                return `
-                    <label class="flex items-center gap-2 p-2 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-lg cursor-pointer transition select-none text-slate-300">
-                        <input type="checkbox" class="prop-checkbox rounded border-slate-700 text-cyan-500 focus:ring-cyan-500 bg-slate-900" data-tag="${tag}" ${checked}>
-                        <span class="truncate">#${tag}</span>
-                    </label>
-                `;
-            }).join('');
-
-            grid.querySelectorAll('.prop-checkbox').forEach(cb => {
-                cb.addEventListener('change', (e) => {
-                    const tag = e.target.dataset.tag;
-                    if (e.target.checked) selectedProps.add(tag);
-                    else selectedProps.delete(tag);
-                });
-            });
+            // Include UTF-8 BOM so Excel properly opens non-ASCII characters
+            const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+            triggerDownload(csvContent, `3d-filaments-${lang}.csv`, "text/csv;charset=utf-8;");
         }
 
-        function updateActivePropBadge() {
-            const badge = document.getElementById('activePropBadge');
-            if (!badge) return;
+        function exportToMarkdown(dataset, lang) {
+            let md = `# 3D Filament Tier List & Material Guide\n\n`;
+            md += `*Based on testing by Zack Freedman*\n\n`;
+            
+            dataset.forEach(item => {
+                const data = item[lang] || item.en;
+                const tech = data.tech || {};
+                const ytLink = `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`;
+                
+                md += `## [Tier ${item.tier}] ${item.name}\n`;
+                md += `- **Summary:** ${data.summary}\n`;
+                md += `- **Timestamp:** [Watch Video @ ${item.timecode}](${ytLink})\n`;
+                if (data.useCases && data.useCases.length) {
+                    md += `- **Best Use Cases:** ${data.useCases.join(', ')}\n`;
+                }
+                if (data.pros && data.pros.length) {
+                    md += `- **Pros:** ${data.pros.join(', ')}\n`;
+                }
+                if (data.cons && data.cons.length) {
+                    md += `- **Cons:** ${data.cons.join(', ')}\n`;
+                }
+                if (tech.nozzle) {
+                    md += `- **Print Specs:** Nozzle: ${tech.nozzle} | Bed: ${tech.bed} | Enclosure: ${tech.enclosure} | Hardened Nozzle: ${tech.hardened} | Drying: ${tech.drying}\n`;
+                }
+                if (data.tags && data.tags.length) {
+                    md += `- **Tags:** #${data.tags.join(' #')}\n`;
+                }
+                md += `\n---\n\n`;
+            });
+            
+            triggerDownload(md, `3d-filaments-${lang}.md`, "text/markdown;charset=utf-8;");
+        }
 
-            if (selectedProps.size > 0) {
-                badge.innerText = selectedProps.size;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+        function exportToJSON(dataset, lang) {
+            const formatted = dataset.map(item => {
+                const data = item[lang] || item.en;
+                return {
+                    id: item.id,
+                    name: item.name,
+                    tier: item.tier,
+                    timecode: item.timecode,
+                    youtubeUrl: `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`,
+                    summary: data.summary,
+                    useCases: data.useCases,
+                    pros: data.pros,
+                    cons: data.cons,
+                    tags: data.tags,
+                    printSpecs: data.tech || {}
+                };
+            });
+            
+            const jsonStr = JSON.stringify(formatted, null, 2);
+            triggerDownload(jsonStr, `3d-filaments-${lang}.json`, "application/json;charset=utf-8;");
+        }
+
+        function triggerDownload(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function updateUIStrings() {
@@ -1319,6 +1467,16 @@
             document.getElementById('uiWatchFull').innerText = strings.watchFull;
             document.getElementById('searchInput').placeholder = strings.searchPlaceholder;
             document.getElementById('uiFilterPropsBtn').innerText = strings.filterPropsBtn;
+            document.getElementById('uiExportBtn').innerText = strings.exportBtn;
+            document.getElementById('uiExportModalTitle').innerText = strings.exportModalTitle;
+            document.getElementById('uiExportDesc').innerText = strings.exportDesc;
+            document.getElementById('uiExportScopeLabel').innerText = strings.exportScopeLabel;
+            document.getElementById('uiExportScopeAll').innerText = strings.exportScopeAll;
+            document.getElementById('uiExportScopeFiltered').innerText = strings.exportScopeFiltered;
+            document.getElementById('uiExportFormatLabel').innerText = strings.exportFormatLabel;
+            document.getElementById('uiExportCsvTitle').innerText = strings.exportCsvTitle;
+            document.getElementById('uiExportMdTitle').innerText = strings.exportMdTitle;
+            document.getElementById('uiExportJsonTitle').innerText = strings.exportJsonTitle;
             document.getElementById('uiPropFilterModalTitle').innerText = strings.propFilterModalTitle;
             document.getElementById('uiPropFilterDesc').innerText = strings.propFilterDesc;
             document.getElementById('uiTierLabel').innerText = strings.tierLabel;
