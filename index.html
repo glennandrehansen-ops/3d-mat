@@ -75,11 +75,14 @@
                             <span>AUTO</span>
                         </button>
 
-                        <!-- Mobile Language Switcher -->
-                        <div class="flex items-center gap-0.5 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px]">
-                            <button id="langEnMobile" class="px-1.5 py-0.5 rounded font-semibold transition bg-cyan-600 text-white">EN</button>
-                            <button id="langNoMobile" class="px-1.5 py-0.5 rounded font-semibold transition text-slate-400 hover:text-white">NO</button>
-                        </div>
+                        <!-- Mobile Language Switcher Dropdown -->
+                        <select id="langSelectMobile" class="bg-slate-950 text-slate-200 text-[11px] font-semibold py-1 px-1.5 rounded-lg border border-slate-800 focus:outline-none focus:border-cyan-500 cursor-pointer">
+                            <option value="en">🇬🇧 EN</option>
+                            <option value="no">🇳🇴 NO</option>
+                            <option value="de">🇩🇪 DE</option>
+                            <option value="es">🇪🇸 ES</option>
+                            <option value="fr">🇫🇷 FR</option>
+                        </select>
                     </div>
                 </div>
 
@@ -110,10 +113,18 @@
                         </button>
                     </div>
 
-                    <!-- Desktop Language Switcher -->
-                    <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
-                        <button id="langEnDesktop" class="px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white">English</button>
-                        <button id="langNoDesktop" class="px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white">Norsk</button>
+                    <!-- Desktop Language Switcher Dropdown -->
+                    <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800 text-xs">
+                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        <select id="langSelectDesktop" class="bg-transparent text-slate-200 text-xs font-medium focus:outline-none cursor-pointer">
+                            <option value="en" class="bg-slate-900 text-slate-200">English</option>
+                            <option value="no" class="bg-slate-900 text-slate-200">Norsk</option>
+                            <option value="de" class="bg-slate-900 text-slate-200">Deutsch</option>
+                            <option value="es" class="bg-slate-900 text-slate-200">Español</option>
+                            <option value="fr" class="bg-slate-900 text-slate-200">Français</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -1598,137 +1609,151 @@
                     'F': 'F-Tier (Frarådes)',
                     'Special': 'Spesialkategori'
                 }
+            },
+            de: {
+                title: "3D Filament Tier List",
+                subtitle: "Interaktiver Leitfaden basierend auf Tests von Zack Freedman",
+                credit: "Originalvideo & Tests von Zack Freedman",
+                watchFull: "Vollständiges Video auf YouTube ansehen",
+                searchPlaceholder: "Name oder Eigenschaft suchen (z. B. UV, Hitze, steif)...",
+                filterPropsBtn: "Eigenschaften filtern",
+                propFilterModalTitle: "Nach Materialeigenschaften filtern",
+                propFilterDesc: "Wählen Sie Eigenschaften aus, um nur passende Filamente anzuzeigen:",
+                autoplayLabel: "Autoplay Video:",
+                tierLabel: "Rang:",
+                allLabel: "Alle",
+                clickInfo: "Bewegen Sie die Maus für Details • Klicken für Videoclip",
+                showingCount: (count, total) => `Zeige ${count} von ${total} Filamenten`,
+                emptyTitle: "Keine Filamente gefunden",
+                emptyDesc: "Versuchen Sie eine andere Suche oder setzen Sie Filter zurück.",
+                resetBtn: "Alle Filter zurücksetzen",
+                bestUseLabel: "Beste Anwendungsfälle",
+                prosLabel: "Vorteile",
+                consLabel: "Nachteile",
+                tagsLabel: "Tags & Eigenschaften",
+                videoClipTitle: "Zack Freedmans Testclip",
+                openInYt: "Auf YouTube mit Zeitstempel öffnen",
+                closeBtn: "Schließen",
+                readMore: "Mehr lesen: Druckdaten & Materialkunde",
+                showLess: "Technische Details ausblenden",
+                techSpecsHeader: "Empfohlene Druckparameter",
+                deepDiveHeader: "Technische Materialanalyse",
+                lblNozzle: "Düsentemperatur",
+                lblBed: "Druckbetttemp.",
+                lblEnclosure: "Gehäuse",
+                lblHardened: "Gehärtete Düse",
+                lblDrying: "Trocknung",
+                tierLabels: {
+                    'S': 'S-Tier (Top-Auswahl)',
+                    'A': 'A-Tier (Hervorragend)',
+                    'B': 'B-Tier (Gut für spezielle Zwecke)',
+                    'C': 'C-Tier (Nische / Schwierig)',
+                    'F': 'F-Tier (Nicht empfohlen)',
+                    'Special': 'Sonderkategorie'
+                }
+            },
+            es: {
+                title: "3D Filament Tier List",
+                subtitle: "Guía interactiva basada en pruebas de Zack Freedman",
+                credit: "Video original y pruebas por Zack Freedman",
+                watchFull: "Ver video completo en YouTube",
+                searchPlaceholder: "Buscar nombre, propiedad (p. ej. UV, calor, rígido)...",
+                filterPropsBtn: "Filtrar propiedades",
+                propFilterModalTitle: "Filtrar por propiedades del material",
+                propFilterDesc: "Seleccione propiedades para mostrar solo filamentos compatibles:",
+                autoplayLabel: "Autoreproducir:",
+                tierLabel: "Nivel:",
+                allLabel: "Todos",
+                clickInfo: "Pase el cursor para detalles • Clic para ver clip",
+                showingCount: (count, total) => `Mostrando ${count} de ${total} filamentos`,
+                emptyTitle: "No se encontraron filamentos",
+                emptyDesc: "Intente otra búsqueda o reinicie los filtros.",
+                resetBtn: "Reiniciar filtros",
+                bestUseLabel: "Mejores casos de uso",
+                prosLabel: "Ventajas",
+                consLabel: "Desventajas",
+                tagsLabel: "Etiquetas y propiedades",
+                videoClipTitle: "Fragmento de prueba de Zack Freedman",
+                openInYt: "Abrir en YouTube con marca de tiempo",
+                closeBtn: "Cerrar",
+                readMore: "Leer más: Especificaciones técnicas y guía",
+                showLess: "Ocultar detalles técnicos",
+                techSpecsHeader: "Parámetros de impresión recomendados",
+                deepDiveHeader: "Análisis técnico del material",
+                lblNozzle: "Temp. boquilla",
+                lblBed: "Temp. cama",
+                lblEnclosure: "Cabina/Cámara",
+                lblHardened: "Boquilla endurecida",
+                lblDrying: "Secado",
+                tierLabels: {
+                    'S': 'S-Tier (Mejores opciones)',
+                    'A': 'A-Tier (Excelentes alternativas)',
+                    'B': 'B-Tier (Bueno para usos específicos)',
+                    'C': 'C-Tier (Nicho / Difícil)',
+                    'F': 'F-Tier (No recomendado)',
+                    'Special': 'Categoría Especial'
+                }
+            },
+            fr: {
+                title: "3D Filament Tier List",
+                subtitle: "Guide interactif basé sur les tests de Zack Freedman",
+                credit: "Vidéo originale et tests par Zack Freedman",
+                watchFull: "Regarder la vidéo complète sur YouTube",
+                searchPlaceholder: "Rechercher nom, propriété (ex: UV, chaleur, rigide)...",
+                filterPropsBtn: "Filtrer propriétés",
+                propFilterModalTitle: "Filtrer par propriétés de matériau",
+                propFilterDesc: "Sélectionnez des propriétés pour afficher les filaments correspondants :",
+                autoplayLabel: "Autoplay Vidéo :",
+                tierLabel: "Niveau :",
+                allLabel: "Tous",
+                clickInfo: "Survolez pour les détails • Cliquez pour la vidéo",
+                showingCount: (count, total) => `Affichage de ${count} sur ${total} filaments`,
+                emptyTitle: "Aucun filament trouvé",
+                emptyDesc: "Essayez une autre recherche ou réinitialisez les filtres.",
+                resetBtn: "Réinitialiser les filtres",
+                bestUseLabel: "Meilleurs cas d'usage",
+                prosLabel: "Avantages",
+                consLabel: "Inconvénients",
+                tagsLabel: "Tags & Propriétés",
+                videoClipTitle: "Extrait de test de Zack Freedman",
+                openInYt: "Ouvrir sur YouTube au minutage",
+                closeBtn: "Fermer",
+                readMore: "En savoir plus : Fiche technique & Analyse",
+                showLess: "Masquer les détails techniques",
+                techSpecsHeader: "Paramètres d'impression recommandés",
+                deepDiveHeader: "Analyse technique du matériau",
+                lblNozzle: "Temp. buse",
+                lblBed: "Temp. plateau",
+                lblEnclosure: "Enceinte fermée",
+                lblHardened: "Buse renforcée",
+                lblDrying: "Séchage",
+                tierLabels: {
+                    'S': 'S-Tier (Meilleurs choix)',
+                    'A': 'A-Tier (Excellentes options)',
+                    'B': 'B-Tier (Bon pour besoins spécifiques)',
+                    'C': 'C-Tier (Niche / Difficile)',
+                    'F': 'F-Tier (Non recommandé)',
+                    'Special': 'Catégorie Spéciale'
+                }
             }
         };
 
-        const filaments = [
-            // S-Tier
-            {
-                id: 'pctg',
-                name: 'PCTG',
-                tier: 'S',
-                timecode: '11:59',
-                seconds: 719,
-                en: {
-                    summary: 'Extremely durable alternative to PETG with incredible layer adhesion and low warping.',
-                    pros: ['Extremely tough and impact resistant', 'Fantastic layer adhesion in all orientations', 'Minimal warping during printing', 'Absorbs water 3x slower than PETG'],
-                    cons: ['Expensive', 'Hard to source on the market', 'Supports can be difficult to remove'],
-                    useCases: ['Functional prototypes taking heavy abuse', 'High-stress mechanical parts'],
-                    tags: ['Durable', 'Easy to print', 'Chemical resistant', 'High strength'],
-                    tech: {
-                        nozzle: '230°C - 260°C',
-                        bed: '70°C - 80°C',
-                        enclosure: 'Not required',
-                        hardened: 'No',
-                        drying: '65°C for 4 hours',
-                        deepDive: 'PCTG (Poly Cyclohexylenedimethylene Terephthalate Glycol) modified polymer replaces PETG’s ethylene glycol with CHDM. This chemical modification yields significantly superior impact resistance, optical clarity, and isotropic Z-axis strength while maintaining effortless printability.'
-                    }
-                },
-                no: {
-                    summary: 'Ekstremt slitesterkt alternativ til PETG med ekstrem lagvedheft og lite warping.',
-                    pros: ['Ekstremt slitesterkt og slagfast', 'Fantastisk lagvedheft i alle retninger', 'Minimal vridning (warping) under print', 'Absorberer fukt fjerdeparten så raskt som PETG'],
-                    cons: ['Dyrere enn PETG', 'Vanskelig å få tak i på markedet', 'Støttestrukturer sitter godt fast'],
-                    useCases: ['Funksjonelle prototyper som tåler hard behandling', 'Mekaniske deler med høye styrkekrav'],
-                    tags: ['Slitesterk', 'Enkel å printe', 'Kjemikalier', 'Høy styrke'],
-                    tech: {
-                        nozzle: '230°C - 260°C',
-                        bed: '70°C - 80°C',
-                        enclosure: 'Ikke påkrevd',
-                        hardened: 'Nei',
-                        drying: '65°C i 4 timer',
-                        deepDive: 'PCTG erstatter etylenglykolen i PETG med CHDM-molekyler. Denne kjemiske tilpasningen gir vesentlig høyere slagfasthet, bedre optisk klarhet og overlegen Z-akse stivhet uten at det blir vanskeligere å printe.'
-                    }
-                }
-            },
-            {
-                id: 'gf-pa',
-                name: 'Glass-Filled Nylon (GF-PA)',
-                tier: 'S',
-                timecode: '19:42',
-                seconds: 1182,
-                en: {
-                    summary: 'Industrial nylon reinforced with glass fibers. Viable alternative to machined metal.',
-                    pros: ['Massively stiffer and tougher than neat nylon', 'High temperature resistance', 'Drastically reduced warping', 'Excellent wear and impact resistance'],
-                    cons: ['Highly abrasive on brass nozzles (requires hardened tip)', 'Expensive', 'Requires high print temperatures'],
-                    useCases: ['Heavy-duty tool housings', 'Alternative to machined aluminum'],
-                    tags: ['Glass fiber', 'Stiff', 'Heat resistant', 'Durable'],
-                    tech: {
-                        nozzle: '260°C - 300°C',
-                        bed: '80°C - 100°C',
-                        enclosure: 'Recommended',
-                        hardened: 'Yes (Mandatory)',
-                        drying: '80°C for 8-12 hours',
-                        deepDive: 'Microscopic glass fibers (typically 10-30% volume) act as internal structural reinforcement within the polyamide matrix. This eliminates nylon’s notorious thermal shrinkage and creep while increasing flexural modulus drastically.'
-                    }
-                },
-                no: {
-                    summary: 'Industriell nylon forsterket med glassfiber. Et alternativ til metall.',
-                    pros: ['Massivt stivere og tøffere enn ren nylon', 'Høy temperaturbestandighet', 'Mye mindre vridning enn ren nylon', 'God slitasjestyrke'],
-                    cons: ['Sliter kraftig på vanlige dyser (krever herdet dyse)', 'Høy pris', 'Krever høye utskriftstemperaturer'],
-                    useCases: ['Heavy-duty verktøy og hus', 'Erstatning for maskinert aluminium'],
-                    tags: ['Glassfiber', 'Stiv', 'Varmebestandig', 'Slitesterk'],
-                    tech: {
-                        nozzle: '260°C - 300°C',
-                        bed: '80°C - 100°C',
-                        enclosure: 'Anbefalt',
-                        hardened: 'Ja (Påkrevd)',
-                        drying: '80°C i 8-12 timer',
-                        deepDive: 'Mikroskopiske glassfibre (10-30%) fungerer som et innvendig skjelett i nylonmatrisen. Dette fjerner nesten all vridning og krymping under utskrift og gir enorm mekanisk stivhet.'
-                    }
-                }
-            },
-            {
-                id: 'pla',
-                name: 'Standard PLA',
-                tier: 'A',
-                timecode: '02:51',
-                seconds: 171,
-                en: {
-                    summary: 'The king of 3D printing. Inexpensive, stiff, and easy to print anywhere.',
-                    pros: ['Extremely easy to print', 'Cheap and widely available in countless colors', 'High tensile strength and stiffness', 'Great bridging and overhangs'],
-                    cons: ['Poor heat tolerance (softens in cars or hot days)', 'Degrades under UV sunlight', 'Shatters on hard impact'],
-                    useCases: ['Decorative models', 'Concept models', 'Indoor visual prototypes'],
-                    tags: ['Easy to print', 'Cheap', 'Stiff'],
-                    tech: {
-                        nozzle: '190°C - 220°C',
-                        bed: '50°C - 60°C',
-                        enclosure: 'Not required',
-                        hardened: 'No',
-                        drying: '45°C for 4 hours',
-                        deepDive: 'Polylactic Acid (PLA) is derived from renewable starches like corn or sugarcane. It features high tensile modulus (~3.5 GPa) but low glass transition temperature (~55°C), making it rigid yet brittle.'
-                    }
-                },
-                no: {
-                    summary: 'Kongen av 3D-printing. Billig, enkelt og tilgjengelig overalt.',
-                    pros: ['Ekstremt enkelt å printe', 'Billig og finnes i uendelige farger', 'Stivt med høy strekkfasthet', 'God på overheng og bruer'],
-                    cons: ['Dårlig varmebestandighet (mykner i sol/bil)', 'Tåler ikke UV-lys over tid', 'Sprøtt ved harde støt'],
-                    useCases: ['Dekorasjoner', 'Konseptmodeller', 'Prototyper for innendørs bruk'],
-                    tags: ['Enkel å printe', 'Billig', 'Stiv'],
-                    tech: {
-                        nozzle: '190°C - 220°C',
-                        bed: '50°C - 60°C',
-                        enclosure: 'Ikke påkrevd',
-                        hardened: 'Nei',
-                        drying: '45°C i 4 timer',
-                        deepDive: 'Polylaktid (PLA) fremstilles fra fornybare råvarer som maisstivelse. Det har høy stivhet og strekkfasthet, men lav glassovergangstemperatur (~55°C) som gjør at det mykner fort i varme.'
-                    }
-                }
-            }
-            // ... existing code for remaining filaments
-        ];
+        function setupLanguageSwitchers() {
+            const selectMob = document.getElementById('langSelectMobile');
+            const selectDesk = document.getElementById('langSelectDesktop');
 
-        let isReadMoreExpanded = false;
+            const setLang = (lang) => {
+                currentLang = lang;
+                selectMob.value = lang;
+                selectDesk.value = lang;
 
-        function updateUIStrings() {
-            const strings = uiText[currentLang];
-            document.getElementById('uiReadMoreLabel').innerText = isReadMoreExpanded ? strings.showLess : strings.readMore;
-            document.getElementById('uiTechSpecsHeader').innerText = strings.techSpecsHeader;
-            document.getElementById('uiDeepDiveHeader').innerText = strings.deepDiveHeader;
-            document.getElementById('uiLblNozzle').innerText = strings.lblNozzle;
-            document.getElementById('uiLblBed').innerText = strings.lblBed;
-            document.getElementById('uiLblEnclosure').innerText = strings.lblEnclosure;
-            document.getElementById('uiLblHardened').innerText = strings.lblHardened;
-            document.getElementById('uiLblDrying').innerText = strings.lblDrying;
+                updateUIStrings();
+                renderTags();
+                renderFilaments();
+            };
+
+            selectMob.addEventListener('change', (e) => setLang(e.target.value));
+            selectDesk.addEventListener('change', (e) => setLang(e.target.value));
         }
 
         function setupReadMoreToggle() {
