@@ -1690,6 +1690,609 @@
         }
 
         window.addEventListener('DOMContentLoaded', init);
-    </script>
+            <!-- Desktop Language Switcher -->
+            <div class="hidden lg:flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+                <button id="langEnDesktop" class="px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white">English</button>
+                <button id="langNoDesktop" class="px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white">Norsk</button>
+            </div>
+        </div>
+
+        <!-- Search Bar & Property Filter Button -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <input type="text" id="searchInput" 
+                    placeholder="Search name, property (e.g. UV, heat, stiff, flex)..." 
+                    class="w-full pl-10 pr-10 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                <button id="clearSearch" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dedicated Multi-Property Filter Button -->
+            <button id="openFilterModalBtn" class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-950 border border-slate-800 hover:border-cyan-500/60 rounded-lg text-sm text-slate-200 font-medium transition shrink-0 group">
+                <svg class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                </svg>
+                <span id="uiFilterBtnLabel">Property Filter</span>
+                <span id="activeFilterBadge" class="hidden px-1.5 py-0.5 text-[10px] bg-cyan-500 text-slate-950 font-bold rounded-full">0</span>
+            </button>
+        </div>
+
+        <!-- Tier Filter Buttons (Fixed Chrome top clip by adding py-2 container padding & border active states) -->
+        <div class="flex items-center gap-2 mt-4 overflow-x-auto py-2 px-1 text-xs">
+            <span class="text-slate-400 font-medium mr-1 hidden sm:inline shrink-0" id="uiTierLabel">Tier:</span>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition" data-tier="all">
+                <span id="uiAllLabel">All</span> (<span id="countAll">0</span>)
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition" data-tier="S">
+                S-Tier
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-purple-500/30 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 transition" data-tier="A">
+                A-Tier
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition" data-tier="B">
+                B-Tier
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition" data-tier="C">
+                C-Tier
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-rose-500/30 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition" data-tier="F">
+                F-Tier
+            </button>
+            <button class="tier-filter-btn shrink-0 px-3.5 py-1.5 rounded-md font-medium border border-pink-500/30 text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 transition" data-tier="Special">
+                Special
+            </button>
+        </div>
+
+        <!-- Tags Filter Container -->
+        <div id="tagContainer" class="flex items-center gap-1.5 mt-2 overflow-x-auto pb-1 text-xs">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+</header>
+<!-- ... existing code ... -->
+            <!-- Video Player Container with exact timestamp embed & Autoplay toggle -->
+            <div class="bg-slate-950 rounded-xl p-3 border border-slate-800">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                        <span id="uiVideoClipTitle">Zack Freedman's Test Segment</span>
+                    </span>
+                    
+                    <div class="flex items-center gap-3">
+                        <!-- Autoplay Toggle Switch -->
+                        <button id="toggleAutoplayBtn" class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-md text-[11px] font-medium transition text-slate-300">
+                            <span id="autoplayDot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            <span id="uiAutoplayLabel">Autoplay: OFF</span>
+                        </button>
+
+                        <a id="modalExternalYtLink" href="#" target="_blank" rel="noopener noreferrer" 
+                           class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition">
+                            <span id="uiOpenInYt">Open on YouTube</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-slate-900 border border-slate-800">
+                    <iframe id="modalYtIframe" class="w-full h-full" src="" title="YouTube Video Player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div>
+                <h3 id="uiTagsLabel" class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Tags & Properties</h3>
+                <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+            <button id="closeModalBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg transition">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Dedicated Property Filtering -->
+<div id="propertyFilterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-200" id="filterModalCard">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                </svg>
+                <h2 id="uiFilterModalTitle" class="text-base font-bold text-white">Filter by Properties</h2>
+            </div>
+            <button id="closeFilterModal" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <div id="propertyFilterList" class="p-5 overflow-y-auto space-y-4 text-xs">
+            <!-- Checkboxes generated dynamically -->
+        </div>
+
+        <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
+            <button id="resetPropertyFiltersBtn" class="text-xs text-slate-400 hover:text-slate-200 underline transition">
+                Reset properties
+            </button>
+            <button id="applyPropertyFiltersBtn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs rounded-lg transition">
+                Apply Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Data and Application Script -->
+<script>
+    const uiText = {
+        en: {
+            title: "3D Filament Tier List",
+            subtitle: "Interactive guide based on testing by Zack Freedman",
+            credit: "Original video & testing by Zack Freedman",
+            watchFull: "Watch full video on YouTube",
+            searchPlaceholder: "Search name, property (e.g. UV, heat, stiff, flex)...",
+            tierLabel: "Tier:",
+            allLabel: "All",
+            clickInfo: "Click any spool to view details and watch video segment",
+            showingCount: (count, total) => `Showing ${count} of ${total} filaments`,
+            emptyTitle: "No filaments found",
+            emptyDesc: "Try a different search query or reset filters.",
+            resetBtn: "Reset all filters",
+            bestUseLabel: "Best Use Cases",
+            prosLabel: "Pros",
+            consLabel: "Cons",
+            tagsLabel: "Tags & Properties",
+            videoClipTitle: "Zack Freedman's Test Segment",
+            openInYt: "Open on YouTube",
+            closeBtn: "Close",
+            filterBtnLabel: "Property Filter",
+            filterModalTitle: "Filter by Properties",
+            resetProps: "Reset properties",
+            applyProps: "Apply Filters",
+            hoverUses: "Best Uses",
+            hoverPros: "Pros",
+            hoverCons: "Cons",
+            autoplayOn: "Autoplay: ON",
+            autoplayOff: "Autoplay: OFF",
+            tierLabels: {
+                'S': 'S-Tier (Top Choices)',
+                'A': 'A-Tier (Excellent Options)',
+                'B': 'B-Tier (Good for Specific Needs)',
+                'C': 'C-Tier (Niche / Difficult)',
+                'F': 'F-Tier (Not Recommended)',
+                'Special': 'Special Category'
+            }
+        },
+        no: {
+            title: "3D Filament Tier List",
+            subtitle: "Interaktiv materialguide basert på Zack Freedmans testing",
+            credit: "Opprinnelig video og testing av Zack Freedman",
+            watchFull: "Se hele videoen på YouTube",
+            searchPlaceholder: "Søk på navn, egenskap (f.eks. UV, varme, stiv, fleksibel)...",
+            tierLabel: "Nivå:",
+            allLabel: "Alle",
+            clickInfo: "Klikk på en spole for detaljer og videoklipp fra testen",
+            showingCount: (count, total) => `Viser ${count} av ${total} filamenter`,
+            emptyTitle: "Ingen filamenter funnet",
+            emptyDesc: "Prøv et annet søkeord eller tilbakestill filtrene.",
+            resetBtn: "Tilbakestill alle filter",
+            bestUseLabel: "Beste bruksområder",
+            prosLabel: "Fordeler",
+            consLabel: "Ulemper",
+            tagsLabel: "Tagger og nøkkelegenskaper",
+            videoClipTitle: "Zack Freedmans testsegment",
+            openInYt: "Åpne på YouTube",
+            closeBtn: "Lukk",
+            filterBtnLabel: "Egenskapsfilter",
+            filterModalTitle: "Filtrer etter egenskaper",
+            resetProps: "Nullstill egenskaper",
+            applyProps: "Bruk filter",
+            hoverUses: "Beste bruksområder",
+            hoverPros: "Fordeler",
+            hoverCons: "Ulemper",
+            autoplayOn: "Autonavspilling: PÅ",
+            autoplayOff: "Autonavspilling: AV",
+            tierLabels: {
+                'S': 'S-Tier (Beste valg)',
+                'A': 'A-Tier (Fremragende valgalternativer)',
+                'B': 'B-Tier (Gode til sine bruksområder)',
+                'C': 'C-Tier (Krevende / Nisje)',
+                'F': 'F-Tier (Frarådes)',
+                'Special': 'Spesialkategori'
+            }
+        }
+    };
+
+    // ... existing filaments and tierConfig objects ...
+
+    let currentLang = 'en';
+    let activeTier = 'all';
+    let activeTag = null;
+    let searchQuery = '';
+    let selectedProperties = [];
+    let isAutoplayEnabled = false; // Default autoplay set to false
+
+    const openFilterModalBtn = document.getElementById('openFilterModalBtn');
+    const propertyFilterModal = document.getElementById('propertyFilterModal');
+    const filterModalCard = document.getElementById('filterModalCard');
+    const closeFilterModal = document.getElementById('closeFilterModal');
+    const resetPropertyFiltersBtn = document.getElementById('resetPropertyFiltersBtn');
+    const applyPropertyFiltersBtn = document.getElementById('applyPropertyFiltersBtn');
+    const toggleAutoplayBtn = document.getElementById('toggleAutoplayBtn');
+    const autoplayDot = document.getElementById('autoplayDot');
+    const activeFilterBadge = document.getElementById('activeFilterBadge');
+
+    function init() {
+        setupLanguageSwitchers();
+        updateUIStrings();
+        renderTags();
+        renderPropertyFilterModalList();
+        updateCounts();
+        renderFilaments();
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim().toLowerCase();
+            clearSearchBtn.classList.toggle('hidden', searchQuery === '');
+            renderFilaments();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderFilaments();
+        });
+
+        resetSearchBtn.addEventListener('click', resetFilters);
+
+        // Tier Filter buttons logic with fixed CSS border classes to prevent Chrome top cut-off
+        document.querySelectorAll('.tier-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tier-filter-btn').forEach(b => {
+                    b.classList.remove('border-cyan-400', 'bg-cyan-950/60', 'font-bold', 'text-cyan-300');
+                });
+                btn.classList.add('border-cyan-400', 'bg-cyan-950/60', 'font-bold', 'text-cyan-300');
+                activeTier = btn.dataset.tier;
+                renderFilaments();
+            });
+        });
+
+        // Set default active tier button border styling
+        document.querySelector('[data-tier="all"]').classList.add('border-cyan-400', 'bg-cyan-950/60', 'font-bold', 'text-cyan-300');
+
+        // Modal controls
+        closeModalBtn.addEventListener('click', hideModal);
+        closeModal.addEventListener('click', hideModal);
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) hideModal();
+        });
+
+        // Property Filter Modal controls
+        openFilterModalBtn.addEventListener('click', showFilterModal);
+        closeFilterModal.addEventListener('click', hideFilterModal);
+        propertyFilterModal.addEventListener('click', (e) => {
+            if (e.target === propertyFilterModal) hideFilterModal();
+        });
+
+        resetPropertyFiltersBtn.addEventListener('click', () => {
+            selectedProperties = [];
+            renderPropertyFilterModalList();
+            updateFilterBadge();
+            renderFilaments();
+        });
+
+        applyPropertyFiltersBtn.addEventListener('click', () => {
+            hideFilterModal();
+            renderFilaments();
+        });
+
+        // Autoplay toggle button handler
+        toggleAutoplayBtn.addEventListener('click', () => {
+            isAutoplayEnabled = !isAutoplayEnabled;
+            updateAutoplayUI();
+            
+            // Reload video iframe parameter dynamically if modal is currently open
+            const currentItem = filaments.find(f => f.name === document.getElementById('modalTitle').innerText);
+            if (currentItem && !detailModal.classList.contains('opacity-0')) {
+                const autoParam = isAutoplayEnabled ? 1 : 0;
+                modalYtIframe.src = `https://www.youtube-nocookie.com/embed/weeG9yOp3i4?start=${currentItem.seconds}&autoplay=${autoParam}`;
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideModal();
+                hideFilterModal();
+            }
+        });
+    }
+
+    function updateAutoplayUI() {
+        const strings = uiText[currentLang];
+        if (isAutoplayEnabled) {
+            autoplayDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+            document.getElementById('uiAutoplayLabel').innerText = strings.autoplayOn;
+            toggleAutoplayBtn.classList.add('border-emerald-500/50', 'text-emerald-300');
+        } else {
+            autoplayDot.className = "w-2 h-2 rounded-full bg-slate-500";
+            document.getElementById('uiAutoplayLabel').innerText = strings.autoplayOff;
+            toggleAutoplayBtn.classList.remove('border-emerald-500/50', 'text-emerald-300');
+        }
+    }
+
+    function updateUIStrings() {
+        const strings = uiText[currentLang];
+        document.getElementById('uiTitle').innerText = strings.title;
+        document.getElementById('uiSubtitle').innerText = strings.subtitle;
+        document.getElementById('uiCredit').innerText = strings.credit;
+        document.getElementById('uiWatchFull').innerText = strings.watchFull;
+        document.getElementById('searchInput').placeholder = strings.searchPlaceholder;
+        document.getElementById('uiTierLabel').innerText = strings.tierLabel;
+        document.getElementById('uiAllLabel').innerText = strings.allLabel;
+        document.getElementById('uiClickInfo').innerText = strings.clickInfo;
+        document.getElementById('uiEmptyTitle').innerText = strings.emptyTitle;
+        document.getElementById('uiEmptyDesc').innerText = strings.emptyDesc;
+        document.getElementById('resetSearchBtn').innerText = strings.resetBtn;
+
+        document.getElementById('uiFilterBtnLabel').innerText = strings.filterBtnLabel;
+        document.getElementById('uiFilterModalTitle').innerText = strings.filterModalTitle;
+        document.getElementById('resetPropertyFiltersBtn').innerText = strings.resetProps;
+        document.getElementById('applyPropertyFiltersBtn').innerText = strings.applyProps;
+
+        document.getElementById('uiBestUseLabel').innerText = strings.bestUseLabel;
+        document.getElementById('uiProsLabel').innerText = strings.prosLabel;
+        document.getElementById('uiConsLabel').innerText = strings.consLabel;
+        document.getElementById('uiTagsLabel').innerText = strings.tagsLabel;
+        document.getElementById('uiVideoClipTitle').innerText = strings.videoClipTitle;
+        document.getElementById('uiOpenInYt').innerText = strings.openInYt;
+        document.getElementById('closeModalBtn').innerText = strings.closeBtn;
+
+        updateAutoplayUI();
+    }
+
+    function showFilterModal() {
+        propertyFilterModal.classList.remove('opacity-0', 'pointer-events-none');
+        filterModalCard.classList.remove('scale-95');
+        filterModalCard.classList.add('scale-100');
+    }
+
+    function hideFilterModal() {
+        propertyFilterModal.classList.add('opacity-0', 'pointer-events-none');
+        filterModalCard.classList.remove('scale-100');
+        filterModalCard.classList.add('scale-95');
+    }
+
+    function renderPropertyFilterModalList() {
+        const tags = getAllTags();
+        const container = document.getElementById('propertyFilterList');
+        
+        container.innerHTML = `
+            <div class="grid grid-cols-2 gap-2.5">
+                ${tags.map(tag => {
+                    const checked = selectedProperties.includes(tag);
+                    return `
+                        <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-800 bg-slate-950 hover:border-slate-700 cursor-pointer transition select-none">
+                            <input type="checkbox" class="property-checkbox rounded border-slate-700 bg-slate-900 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-950" value="${tag}" ${checked ? 'checked' : ''}>
+                            <span class="text-slate-300 font-medium">#${tag}</span>
+                        </label>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        document.querySelectorAll('.property-checkbox').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (e.target.checked) {
+                    if (!selectedProperties.includes(val)) selectedProperties.push(val);
+                } else {
+                    selectedProperties = selectedProperties.filter(p => p !== val);
+                }
+                updateFilterBadge();
+                renderFilaments();
+            });
+        });
+    }
+
+    function updateFilterBadge() {
+        if (selectedProperties.length > 0) {
+            activeFilterBadge.innerText = selectedProperties.length;
+            activeFilterBadge.classList.remove('hidden');
+        } else {
+            activeFilterBadge.classList.add('hidden');
+        }
+    }
+
+    function filterFilaments() {
+        return filaments.filter(f => {
+            if (activeTier !== 'all' && f.tier !== activeTier) return false;
+
+            const data = f[currentLang];
+
+            if (activeTag && !data.tags.includes(activeTag)) return false;
+
+            // Check selected properties from Modal filter
+            if (selectedProperties.length > 0) {
+                const hasAllProperties = selectedProperties.every(prop => data.tags.includes(prop));
+                if (!hasAllProperties) return false;
+            }
+
+            if (searchQuery) {
+                const matchName = f.name.toLowerCase().includes(searchQuery);
+                const matchSummary = data.summary.toLowerCase().includes(searchQuery);
+                const matchTags = data.tags.some(t => t.toLowerCase().includes(searchQuery));
+                const matchPros = data.pros.some(p => p.toLowerCase().includes(searchQuery));
+                const matchCons = data.cons.some(c => c.toLowerCase().includes(searchQuery));
+                const matchUse = data.useCases.some(u => u.toLowerCase().includes(searchQuery));
+                return matchName || matchSummary || matchTags || matchPros || matchCons || matchUse;
+            }
+
+            return true;
+        });
+    }
+
+    function createCardHTML(item, config) {
+        const data = item[currentLang];
+        const strings = uiText[currentLang];
+
+        return `
+            <div class="spool-card group cursor-pointer bg-slate-900/60 hover:bg-slate-900 border ${config.border} rounded-xl p-4 flex flex-col justify-between shadow-lg relative overflow-hidden" data-id="${item.id}">
+                <!-- Light Corner Effect -->
+                <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full pointer-events-none"></div>
+
+                <!-- Card Default Content -->
+                <div>
+                    <div class="flex items-start justify-between gap-2 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-slate-950 flex items-center justify-center border border-slate-800 group-hover:border-slate-700 transition shrink-0">
+                            <svg class="w-6 h-6 ${config.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="8" stroke-width="1.5"/>
+                                <circle cx="12" cy="12" r="3" stroke-width="1.5"/>
+                                <path stroke-linecap="round" stroke-width="1.5" d="M12 4v4m0 8v4"/>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1">
+                            <svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                            </svg>
+                            ${item.timecode}
+                        </span>
+                    </div>
+
+                    <h3 class="font-bold text-white group-hover:${config.color} transition text-base mb-1">${item.name}</h3>
+                    <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">${data.summary}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-1 pt-2 border-t border-slate-800/60">
+                    ${data.tags.slice(0, 2).map(tag => `
+                        <span class="text-[10px] bg-slate-950 text-slate-400 px-2 py-0.5 rounded border border-slate-800">
+                            #${tag}
+                        </span>
+                    `).join('')}
+                    ${data.tags.length > 2 ? `<span class="text-[10px] text-slate-500 self-center">+${data.tags.length - 2}</span>` : ''}
+                </div>
+
+                <!-- Hover Overlay Card showing Best Uses, Pros & Cons -->
+                <div class="absolute inset-0 bg-slate-950/95 backdrop-blur-md p-3.5 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto z-20 border ${config.border} rounded-xl text-[11px]">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
+                            <span class="font-bold text-white">${item.name}</span>
+                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${config.badgeBg}">Tier ${item.tier}</span>
+                        </div>
+
+                        <!-- Best Uses -->
+                        <div class="mb-2">
+                            <span class="text-[10px] uppercase font-bold text-cyan-400 block mb-0.5">${strings.hoverUses}</span>
+                            <p class="text-slate-300 line-clamp-2 leading-tight">${data.useCases.join(', ')}</p>
+                        </div>
+
+                        <!-- Pros snippet -->
+                        <div class="mb-2">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 block mb-0.5">${strings.hoverPros}</span>
+                            <p class="text-slate-300 line-clamp-2 leading-tight">+ ${data.pros.slice(0, 2).join(' • ')}</p>
+                        </div>
+
+                        <!-- Cons snippet -->
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-rose-400 block mb-0.5">${strings.hoverCons}</span>
+                            <p class="text-slate-300 line-clamp-2 leading-tight">- ${data.cons.slice(0, 2).join(' • ')}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] text-cyan-400 font-semibold text-right pt-1 border-t border-slate-800">
+                        Click for full video clip & details &rarr;
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function showModal(item) {
+        const config = tierConfig[item.tier];
+        const data = item[currentLang];
+
+        document.getElementById('modalTitle').innerText = item.name;
+        document.getElementById('modalTimecode').innerText = `@ ${item.timecode}`;
+        
+        const badge = document.getElementById('modalTierBadge');
+        badge.innerText = `Tier ${item.tier}`;
+        badge.className = `px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${config.badgeBg}`;
+
+        const spoolIcon = document.getElementById('modalSpoolIcon');
+        spoolIcon.className = `w-12 h-12 rounded-xl flex items-center justify-center border ${config.border} bg-slate-950 shadow-inner`;
+        spoolIcon.innerHTML = `
+            <svg class="w-8 h-8 ${config.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="3" stroke-width="1.5"/>
+                <path stroke-linecap="round" stroke-width="1.5" d="M12 4v4m0 8v4"/>
+            </svg>
+        `;
+
+        // Check user setting for video autoplay
+        const autoParam = isAutoplayEnabled ? 1 : 0;
+        const embedUrl = `https://www.youtube-nocookie.com/embed/weeG9yOp3i4?start=${item.seconds}&autoplay=${autoParam}`;
+        const directYtUrl = `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`;
+        
+        modalYtIframe.src = embedUrl;
+        modalExternalYtLink.href = directYtUrl;
+
+        document.getElementById('modalUseCases').innerHTML = data.useCases.map(u => `<li>${u}</li>`).join('');
+
+        document.getElementById('modalPros').innerHTML = data.pros.map(p => `
+            <li class="flex items-start gap-2 text-xs">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>${p}</span>
+            </li>
+        `).join('');
+
+        document.getElementById('modalCons').innerHTML = data.cons.map(c => `
+            <li class="flex items-start gap-2 text-xs">
+                <svg class="w-4 h-4 text-rose-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span>${c}</span>
+            </li>
+        `).join('');
+
+        document.getElementById('modalTags').innerHTML = data.tags.map(t => `
+            <span class="px-2.5 py-1 bg-slate-950 border border-slate-800 text-slate-300 rounded-lg text-xs">
+                #${t}
+            </span>
+        `).join('');
+
+        detailModal.classList.remove('opacity-0', 'pointer-events-none');
+        modalCard.classList.remove('scale-95');
+        modalCard.classList.add('scale-100');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideModal() {
+        detailModal.classList.add('opacity-0', 'pointer-events-none');
+        modalCard.classList.remove('scale-100');
+        modalCard.classList.add('scale-95');
+        document.body.style.overflow = '';
+        modalYtIframe.src = '';
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
