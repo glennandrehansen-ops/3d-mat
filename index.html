@@ -1301,6 +1301,160 @@
         }
 
         function setupLanguageSwitchers() {
+            const mobileSelect = document.getElementById('langSelectMobile');
+            const desktopSelect = document.getElementById('langSelectDesktop');
+            
+            const handleLangChange = (e) => {
+                currentLang = e.target.value;
+                if (mobileSelect) mobileSelect.value = currentLang;
+                if (desktopSelect) desktopSelect.value = currentLang;
+                updateUIStrings();
+                renderTags();
+                renderFilaments();
+                renderPropCheckboxGrid();
+            };
+
+            if (mobileSelect) mobileSelect.addEventListener('change', handleLangChange);
+            if (desktopSelect) desktopSelect.addEventListener('change', handleLangChange);
+        }
+
+        function setupAutoplayToggle() {
+            const globalBtn = document.getElementById('globalAutoplayToggle');
+            const mobileBtn = document.getElementById('mobileAutoplayToggle');
+            const mobileDot = document.getElementById('mobileAutoplayDot');
+
+            const toggleAutoplay = () => {
+                autoplayEnabled = !autoplayEnabled;
+                if (globalBtn) {
+                    globalBtn.innerText = autoplayEnabled ? 'ON' : 'OFF';
+                    if (autoplayEnabled) {
+                        globalBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                    } else {
+                        globalBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700';
+                    }
+                }
+                if (mobileDot && mobileBtn) {
+                    if (autoplayEnabled) {
+                        mobileDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
+                        mobileBtn.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-emerald-950/60 text-emerald-400 border border-emerald-800 flex items-center gap-1';
+                    } else {
+                        mobileDot.className = 'w-1.5 h-1.5 rounded-full bg-slate-500';
+                        mobileBtn.className = 'px-2 py-1 rounded text-[10px] font-bold transition bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1';
+                    }
+                }
+            };
+
+            if (globalBtn) globalBtn.addEventListener('click', toggleAutoplay);
+            if (mobileBtn) mobileBtn.addEventListener('click', toggleAutoplay);
+        }
+
+        function setupPropFilterModal() {
+            const modal = document.getElementById('propFilterModal');
+            const card = document.getElementById('propFilterCard');
+            const openBtn = document.getElementById('openPropFilterBtn');
+            const closeBtn = document.getElementById('closePropFilterModal');
+            const clearBtn = document.getElementById('clearPropSelection');
+            const applyBtn = document.getElementById('applyPropFilterBtn');
+
+            if (!modal) return;
+
+            const openModal = () => {
+                renderPropCheckboxGrid();
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                if (card) {
+                    card.classList.remove('scale-95');
+                    card.classList.add('scale-100');
+                }
+            };
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                if (card) {
+                    card.classList.remove('scale-100');
+                    card.classList.add('scale-95');
+                }
+            };
+
+            if (openBtn) openBtn.addEventListener('click', openModal);
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    selectedProps.clear();
+                    renderPropCheckboxGrid();
+                });
+            }
+
+            if (applyBtn) {
+                applyBtn.addEventListener('click', () => {
+                    updateActivePropBadge();
+                    renderFilaments();
+                    closeModal();
+                });
+            }
+        }
+
+        function renderPropCheckboxGrid() {
+            const grid = document.getElementById('propCheckboxGrid');
+            if (!grid) return;
+
+            const allTags = getAllTags();
+            grid.innerHTML = allTags.map(tag => {
+                const isChecked = selectedProps.has(tag);
+                return `
+                    <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition text-slate-300">
+                        <input type="checkbox" value="${tag}" ${isChecked ? 'checked' : ''} class="prop-checkbox text-cyan-500 focus:ring-cyan-500 bg-slate-900 border-slate-700 rounded">
+                        <span class="truncate">#${tag}</span>
+                    </label>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('.prop-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedProps.add(e.target.value);
+                    } else {
+                        selectedProps.delete(e.target.value);
+                    }
+                });
+            });
+        }
+
+        function updateActivePropBadge() {
+            const badge = document.getElementById('activePropBadge');
+            if (!badge) return;
+            if (selectedProps.size > 0) {
+                badge.innerText = selectedProps.size;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function setupReadMoreToggle() {
+            const btn = document.getElementById('toggleReadMoreBtn');
+            const content = document.getElementById('extendedTechContent');
+            const chevron = document.getElementById('readMoreChevron');
+            const label = document.getElementById('uiReadMoreLabel');
+
+            if (!btn || !content) return;
+
+            btn.addEventListener('click', () => {
+                isReadMoreExpanded = !isReadMoreExpanded;
+                const strings = uiText[currentLang] || uiText.en;
+                if (isReadMoreExpanded) {
+                    content.classList.remove('hidden');
+                    if (chevron) chevron.classList.add('rotate-180');
+                    if (label) label.innerText = strings.showLess;
+                } else {
+                    content.classList.add('hidden');
+                    if (chevron) chevron.classList.remove('rotate-180');
+                    if (label) label.innerText = strings.readMore;
+                }
+            });
+        }
+
         function setupExportModal() {
             const modal = document.getElementById('exportModal');
             const card = document.getElementById('exportCard');
@@ -1387,7 +1541,6 @@
                 ].map(field => `"${String(field).replace(/"/g, '""')}"`);
             });
 
-            // Include UTF-8 BOM so Excel properly opens non-ASCII characters
             const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
             triggerDownload(csvContent, `3d-filaments-${lang}.csv`, "text/csv;charset=utf-8;");
         }
