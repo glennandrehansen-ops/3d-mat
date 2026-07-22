@@ -47,11 +47,11 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- Sticky Header -->
+    <!-- Header -->
     <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4">
             
-            <!-- Top Row: Logo, Zack Credit, Actions -->
+            <!-- Top Row -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-4 mb-2.5 sm:mb-4">
                 
                 <!-- Logo & Title -->
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Controls (Language & Autoplay) -->
+                    <!-- Mobile Controls -->
                     <div class="flex md:hidden items-center gap-1.5">
                         <button id="mobileAutoplayBtn" class="px-2 py-1 bg-slate-800 border border-slate-700 text-[10px] font-semibold rounded text-slate-300">
                             AUTO: <span id="mobileAutoplayState">OFF</span>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
 
-                <!-- Credit & YouTube Link -->
+                <!-- Credit & Link -->
                 <div class="flex items-center justify-between sm:justify-start gap-2 text-[11px] sm:text-xs bg-slate-950/80 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg sm:rounded-xl border border-slate-800">
                     <span class="text-slate-400 truncate max-w-[180px] sm:max-w-none" id="uiCredit">Original testing by Zack Freedman</span>
                     <a href="https://youtu.be/weeG9yOp3i4" target="_blank" rel="noopener noreferrer" 
@@ -98,7 +98,7 @@
                     </a>
                 </div>
 
-                <!-- Desktop Settings (Autoplay, Export, Language) -->
+                <!-- Desktop Controls -->
                 <div class="hidden md:flex items-center gap-3">
                     <button id="desktopAutoplayToggle" class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-xs text-slate-300 hover:bg-slate-800 transition">
                         <span id="uiAutoplayLabel">Autoplay Clips:</span>
@@ -122,7 +122,7 @@
                 </div>
             </div>
 
-            <!-- Search & Property Filter Row -->
+            <!-- Search & Property Filter Bar -->
             <div class="flex items-center gap-2">
                 <div class="relative flex-1">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -140,11 +140,12 @@
                     </button>
                 </div>
 
-                <button id="openFilterModalBtn" class="flex items-center gap-1.5 px-3 py-1.5 sm:py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800 rounded-lg text-xs font-medium transition shrink-0">
+                <button id="openFilterModalBtn" class="flex items-center gap-1.5 px-3 py-1.5 sm:py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800 rounded-lg text-xs font-medium transition shrink-0 relative">
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                     </svg>
-                    <span id="uiFilterBtn">Filter</span>
+                    <span id="uiFilterBtn">Property Filter</span>
+                    <span id="filterActiveBadge" class="hidden w-2 h-2 rounded-full bg-cyan-400 absolute top-1 right-1"></span>
                 </button>
             </div>
 
@@ -191,7 +192,7 @@
         </div>
     </main>
 
-    <!-- Persistent Hover Popover Card -->
+    <!-- Floating Hover Tooltip -->
     <div id="hoverTooltip" class="fixed z-40 w-80 bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-2xl opacity-0 pointer-events-none transition-opacity duration-150 text-xs space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <span id="tooltipName" class="font-bold text-white text-sm"></span>
@@ -215,7 +216,32 @@
         </div>
     </div>
 
-    <!-- Detailed Modal -->
+    <!-- Property Filter Modal -->
+    <div id="filterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="text-base font-bold text-white" id="uiPropertyFilterTitle">Property Filter</h3>
+                <button id="closeFilterModal" class="text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-400" id="uiPropertyFilterDesc">Select specific material characteristics to filter the tier list.</p>
+
+            <div id="propertyChipsContainer" class="flex flex-wrap gap-2 py-2">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+                <button id="clearPropertyFiltersBtn" class="text-slate-400 hover:text-white transition">Clear Selected</button>
+                <button id="applyPropertyFiltersBtn" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-medium transition">Apply Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Filament Modal -->
     <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
             
@@ -238,7 +264,7 @@
                 </button>
             </div>
 
-            <!-- Modal Content Body -->
+            <!-- Modal Body -->
             <div class="p-4 sm:p-6 overflow-y-auto space-y-5 text-xs sm:text-sm">
                 
                 <!-- 1. Best Use Cases -->
@@ -275,7 +301,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Video Segment Clip Embed -->
+                <!-- 3. Video Segment Embed -->
                 <div class="bg-slate-950 rounded-xl p-3 border border-slate-800">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs font-semibold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
@@ -357,7 +383,7 @@
         </div>
     </div>
 
-    <!-- Export Dialog Modal -->
+    <!-- Export Modal -->
     <div id="exportModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -412,7 +438,7 @@
                 emptyTitle: "No filaments found",
                 emptyDesc: "Try a different search query or reset filters.",
                 resetBtn: "Reset all filters",
-                filterBtn: "Filter",
+                filterBtn: "Property Filter",
                 exportBtn: "Export",
                 autoplayLabel: "Autoplay Clips:",
                 bestUseLabel: "Best Use Cases",
@@ -431,6 +457,8 @@
                 exportModalTitle: "Export Filament Data",
                 exportModalDesc: "Choose your preferred file format and dataset scope.",
                 exportScopeLabel: "Scope:",
+                propertyFilterTitle: "Property Filter",
+                propertyFilterDesc: "Select material properties to refine your search.",
                 tierLabels: {
                     'S': 'S-Tier (Top Choices)',
                     'A': 'A-Tier (Excellent Options)',
@@ -453,7 +481,7 @@
                 emptyTitle: "Ingen filamenter funnet",
                 emptyDesc: "Prøv et annet søkeord eller tilbakestill filtrene.",
                 resetBtn: "Tilbakestill alle filter",
-                filterBtn: "Filter",
+                filterBtn: "Egenskaper",
                 exportBtn: "Eksporter",
                 autoplayLabel: "Autoplay-klipp:",
                 bestUseLabel: "Beste bruksområder",
@@ -472,6 +500,8 @@
                 exportModalTitle: "Eksporter filamentdata",
                 exportModalDesc: "Velg filformat og datagrunnlag for eksport.",
                 exportScopeLabel: "Omfang:",
+                propertyFilterTitle: "Filtrer på egenskaper",
+                propertyFilterDesc: "Velg spesifikke egenskaper du ønsker å filtrere på.",
                 tierLabels: {
                     'S': 'S-Tier (Beste valg)',
                     'A': 'A-Tier (Fremragende valgalternativer)',
@@ -483,22 +513,28 @@
             }
         };
 
-        // Complete Dataset of All 48 Materials
+        const availableProperties = [
+            'Easy to print', 'Stiff', 'Flexible', 'Heat resistant', 'UV resistant', 
+            'Carbon fiber', 'Glass fiber', 'Chemical resistant', 'Impact resistant', 
+            'Durable', 'Cheap', 'Lightweight', 'Low temp', 'Superpolymer'
+        ];
+
+        // All 48 Materials Dataset
         const filaments = [
             // S-Tier (7)
             {
                 id: 'pctg', name: 'PCTG', tier: 'S', timecode: '11:59', seconds: 719,
                 tech: { nozzleTemp: '250-270 °C', bedTemp: '70-80 °C', enclosure: 'Recommended', hardenedNozzle: 'No', drying: '60 °C for 4-6 hours',
                     deepDive: 'PCTG improves upon standard PETG by offering much higher impact resistance and supreme optical clarity. It handles tough mechanical loads while remaining easy to print.' },
-                en: { summary: 'Extremely durable alternative to PETG with incredible layer adhesion.', pros: ['Extremely tough and impact resistant', 'Fantastic layer adhesion', 'Minimal warping'], cons: ['Expensive', 'Hard to source'], useCases: ['Functional prototypes taking abuse', 'High-stress mechanical parts'], tags: ['Durable', 'Easy to print', 'Chemical resistant'] },
-                no: { summary: 'Ekstremt slitesterkt alternativ til PETG med ekstrem lagvedheft.', pros: ['Ekstremt slitesterkt og slagfast', 'Fantastisk lagvedheft', 'Minimal vridning'], cons: ['Dyrere enn PETG', 'Vanskelig å få tak i'], useCases: ['Funksjonelle prototyper', 'Mekaniske deler'], tags: ['Slitesterk', 'Enkel å printe', 'Kjemikalier'] }
+                en: { summary: 'Extremely durable alternative to PETG with incredible layer adhesion.', pros: ['Extremely tough and impact resistant', 'Fantastic layer adhesion', 'Minimal warping'], cons: ['Expensive', 'Hard to source'], useCases: ['Functional prototypes taking abuse', 'High-stress mechanical parts'], tags: ['Durable', 'Easy to print', 'Chemical resistant', 'Impact resistant'] },
+                no: { summary: 'Ekstremt slitesterkt alternativ til PETG med ekstrem lagvedheft.', pros: ['Ekstremt slitesterkt og slagfast', 'Fantastisk lagvedheft', 'Minimal vridning'], cons: ['Dyrere enn PETG', 'Vanskelig å få tak i'], useCases: ['Funksjonelle prototyper', 'Mekaniske deler'], tags: ['Slitesterk', 'Enkel å printe', 'Kjemikalier', 'Slagfast'] }
             },
             {
                 id: 'gf-pa', name: 'Glass-Filled Nylon (GF-PA)', tier: 'S', timecode: '19:42', seconds: 1182,
                 tech: { nozzleTemp: '260-290 °C', bedTemp: '80-100 °C', enclosure: 'Required', hardenedNozzle: 'Yes (Hardened Steel / Carbide)', drying: '80 °C for 8-12 hours',
                     deepDive: 'Reinforced with short glass fibers, GF-PA provides massive stiffness, thermal stability, and dramatically reduces nylon warping.' },
-                en: { summary: 'Industrial nylon reinforced with glass fibers. Alternative to metal.', pros: ['Massively stiffer than neat nylon', 'High heat resistance', 'Reduced warping'], cons: ['Highly abrasive on nozzles', 'Expensive'], useCases: ['Heavy-duty tool housings', 'Alternative to aluminum'], tags: ['Glass fiber', 'Stiff', 'Heat resistant'] },
-                no: { summary: 'Industriell nylon forsterket med glassfiber. Alternativ til metall.', pros: ['Stivere enn ren nylon', 'Høy temperaturbestandighet', 'Mindre vridning'], cons: ['Sliter på vanlige dyser', 'Høy pris'], useCases: ['Verktøyhus', 'Erstatning for aluminium'], tags: ['Glassfiber', 'Stiv', 'Varmebestandig'] }
+                en: { summary: 'Industrial nylon reinforced with glass fibers. Alternative to metal.', pros: ['Massively stiffer than neat nylon', 'High heat resistance', 'Reduced warping'], cons: ['Highly abrasive on nozzles', 'Expensive'], useCases: ['Heavy-duty tool housings', 'Alternative to aluminum'], tags: ['Glass fiber', 'Stiff', 'Heat resistant', 'Durable'] },
+                no: { summary: 'Industriell nylon forsterket med glassfiber. Alternativ til metall.', pros: ['Stivere enn ren nylon', 'Høy temperaturbestandighet', 'Mindre vridning'], cons: ['Sliter på vanlige dyser', 'Høy pris'], useCases: ['Verktøyhus', 'Erstatning for aluminium'], tags: ['Glassfiber', 'Stiv', 'Varmebestandig', 'Slitesterk'] }
             },
             {
                 id: 'tough-pla', name: 'Tough PLA / PLA+', tier: 'S', timecode: '07:35', seconds: 455,
@@ -511,15 +547,15 @@
                 id: 'cf-pla', name: 'Carbon Fiber PLA (CF-PLA)', tier: 'S', timecode: '04:50', seconds: 290,
                 tech: { nozzleTemp: '215-235 °C', bedTemp: '55-65 °C', enclosure: 'No', hardenedNozzle: 'Yes', drying: '50 °C for 4 hours',
                     deepDive: 'Blended with short carbon fiber strands for incredible rigidity, minimal thermal expansion, and a sleek matte finish.' },
-                en: { summary: 'PLA blended with carbon fibers for crisp detail and matte finish.', pros: ['Extremely stiff', 'Gorgeous matte finish', 'Tight dimensional accuracy'], cons: ['More brittle than neat PLA', 'Requires hardened nozzle'], useCases: ['Precision models', 'Stiffened visual prototypes'], tags: ['Carbon fiber', 'Stiff', 'Matte finish'] },
-                no: { summary: 'PLA med karbonfiber for presise detaljer og matt overflate.', pros: ['Ekstremt stivt', 'Flott matt overflate', 'Presise dimensjoner'], cons: ['Mer sprøtt ved støt', 'Krever herdet dyse'], useCases: ['Presisjonsmodeller', 'Stivede utstillingsmodeller'], tags: ['Karbonfiber', 'Stiv', 'Matt overflate'] }
+                en: { summary: 'PLA blended with carbon fibers for crisp detail and matte finish.', pros: ['Extremely stiff', 'Gorgeous matte finish', 'Tight dimensional accuracy'], cons: ['More brittle than neat PLA', 'Requires hardened nozzle'], useCases: ['Precision models', 'Stiffened visual prototypes'], tags: ['Carbon fiber', 'Stiff', 'Matte finish', 'Easy to print'] },
+                no: { summary: 'PLA med karbonfiber for presise detaljer og matt overflate.', pros: ['Ekstremt stivt', 'Flott matt overflate', 'Presise dimensjoner'], cons: ['Mer sprøtt ved støt', 'Krever herdet dyse'], useCases: ['Presisjonsmodeller', 'Stivede utstillingsmodeller'], tags: ['Karbonfiber', 'Stiv', 'Matt overflate', 'Enkel å printe'] }
             },
             {
                 id: 'hs-pla', name: 'High-Speed PLA', tier: 'S', timecode: '08:47', seconds: 527,
                 tech: { nozzleTemp: '220-240 °C', bedTemp: '50-60 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '50 °C for 4 hours',
                     deepDive: 'Formulated with low viscosity and higher melt fluidity for printing speeds above 300 mm/s.' },
-                en: { summary: 'Low-viscosity PLA designed for ultra-fast printing speeds.', pros: ['Melts quickly', 'Allows extreme print speeds', 'Saves print time'], cons: ['Low softening temperature'], useCases: ['Rapid prototyping', 'Time-sensitive prints'], tags: ['High speed', 'Easy to print'] },
-                no: { summary: 'Lavviskositets-PLA for ekstremt raske utskrifter.', pros: ['Smelter raskt', 'Tillater over 300 mm/s', 'Sparer tid'], cons: ['Liten varmebestandighet'], useCases: ['Hurtig prototyping', 'Raske utskrifter'], tags: ['Høy hastighet', 'Enkel å printe'] }
+                en: { summary: 'Low-viscosity PLA designed for ultra-fast printing speeds.', pros: ['Melts quickly', 'Allows extreme print speeds', 'Saves print time'], cons: ['Low softening temperature'], useCases: ['Rapid prototyping', 'Time-sensitive prints'], tags: ['High speed', 'Easy to print', 'Cheap'] },
+                no: { summary: 'Lavviskositets-PLA for ekstremt raske utskrifter.', pros: ['Smelter raskt', 'Tillater over 300 mm/s', 'Sparer tid'], cons: ['Liten varmebestandighet'], useCases: ['Hurtig prototyping', 'Raske utskrifter'], tags: ['Høy hastighet', 'Enkel å printe', 'Billig'] }
             },
             {
                 id: 'cf-petg', name: 'Carbon Fiber PETG (CF-PETG)', tier: 'S', timecode: '11:24', seconds: 684,
@@ -532,8 +568,8 @@
                 id: 'tpu-99d', name: 'Hard TPU (99D)', tier: 'S', timecode: '25:34', seconds: 1534,
                 tech: { nozzleTemp: '230-250 °C', bedTemp: '50-70 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '65 °C for 6 hours',
                     deepDive: 'Hardest variant of flexible polyurethane. Almost completely immune to impact, tearing, and shattering.' },
-                en: { summary: 'Indestructible hard flexible polymer for maximum abuse.', pros: ['Virtually impossible to break', 'Perfect layer bonding', 'Chemical resistant'], cons: ['Inflexible for a TPU', 'Requires dry box'], useCases: ['Combat robots', 'Tactical gear', 'High-impact parts'], tags: ['Durable', 'Indestructible', 'Impact resistant'] },
-                no: { summary: 'Ekstremt hard fleksibel plast. Nesten uødeleggelig.', pros: ['Umulig å knekke', 'Perfekt lagvedheft', 'Kjemikaliebestandig'], cons: ['Lite fleksibel til TPU å være', 'Må tørkes'], useCases: ['Kamproboter', 'Taktisk utstyr', 'Harde støtabelastninger'], tags: ['Slitesterk', 'Uødeleggelig', 'Slagfast'] }
+                en: { summary: 'Indestructible hard flexible polymer for maximum abuse.', pros: ['Virtually impossible to break', 'Perfect layer bonding', 'Chemical resistant'], cons: ['Inflexible for a TPU', 'Requires dry box'], useCases: ['Combat robots', 'Tactical gear', 'High-impact parts'], tags: ['Durable', 'Indestructible', 'Impact resistant', 'Chemical resistant'] },
+                no: { summary: 'Ekstremt hard fleksibel plast. Nesten uødeleggelig.', pros: ['Umulig å knekke', 'Perfekt lagvedheft', 'Kjemikaliebestandig'], cons: ['Lite fleksibel til TPU å være', 'Må tørkes'], useCases: ['Kamproboter', 'Taktisk utstyr', 'Harde støtabelastninger'], tags: ['Slitesterk', 'Uødeleggelig', 'Slagfast', 'Kjemikalier'] }
             },
 
             // A-Tier (9)
@@ -548,8 +584,8 @@
                 id: 'petg', name: 'PETG', tier: 'A', timecode: '10:29', seconds: 629,
                 tech: { nozzleTemp: '230-250 °C', bedTemp: '70-80 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '60 °C for 6 hours',
                     deepDive: 'Glycol-modified polyethylene terephthalate. Tough, impact resistant, and chemically resistant.' },
-                en: { summary: 'Versatile workhorse material with better impact resistance than PLA.', pros: ['Tougher than PLA', 'Chemical resistant', 'Slight flex'], cons: ['Prone to stringing', 'Sags on overhangs', 'Difficult support removal'], useCases: ['Functional indoor/outdoor parts', 'Enclosures'], tags: ['Durable', 'Chemical resistant', 'Versatile'] },
-                no: { summary: 'Allsidig arbeidshest som tåler mer bank enn PLA.', pros: ['Tøffere enn PLA', 'Kjemikaliebestandig', 'Liten fleksibilitet'], cons: ['Strenger lett', 'Siger på overheng', 'Vanskelige supports'], useCases: ['Funksjonelle deler', 'Kasser og deksler'], tags: ['Slitesterk', 'Kjemikalier', 'Allsidig'] }
+                en: { summary: 'Versatile workhorse material with better impact resistance than PLA.', pros: ['Tougher than PLA', 'Chemical resistant', 'Slight flex'], cons: ['Prone to stringing', 'Sags on overhangs', 'Difficult support removal'], useCases: ['Functional indoor/outdoor parts', 'Enclosures'], tags: ['Durable', 'Chemical resistant', 'Impact resistant'] },
+                no: { summary: 'Allsidig arbeidshest som tåler mer bank enn PLA.', pros: ['Tøffere enn PLA', 'Kjemikaliebestandig', 'Liten fleksibilitet'], cons: ['Strenger lett', 'Siger på overheng', 'Vanskelige supports'], useCases: ['Funksjonelle deler', 'Kasser og deksler'], tags: ['Slitesterk', 'Kjemikalier', 'Slagfast'] }
             },
             {
                 id: 'cf-pet', name: 'Carbon Fiber PET (CF-PET)', tier: 'A', timecode: '13:35', seconds: 815,
@@ -563,35 +599,35 @@
                 tech: { nozzleTemp: '240-260 °C', bedTemp: '90-110 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '70 °C for 4 hours',
                     deepDive: 'Acrylonitrile styrene acrylate. Formulated specifically to match ABS strength while offering complete UV weather resistance.' },
                 en: { summary: 'Superior alternative to ABS with outstanding UV and weather resistance.', pros: ['Full UV weather resistance', 'High heat tolerance', 'Handsome matte finish'], cons: ['Prone to warping', 'Emits fumes'], useCases: ['Outdoor fixtures', 'Automotive parts', 'Solar exposure items'], tags: ['UV resistant', 'Heat resistant', 'Durable'] },
-                no: { summary: 'Overlegent alternativ til ABS for utendørs bruk.', pros: ['Full UV-bestandighet', 'Tåler opp mot 100°C', 'Matt finish'], cons: ['Kan vri seg', 'Avgir gasser'], useCases: ['Utendørsutstyr', 'Bildeler', 'Sollagrede gjenstander'], tags: ['UV-resistent', 'Varmebestandig', 'Slitesterk'] }
+                no: { summary: 'Overlegent alternativ til ABS for utendørs bruk.', pros: ['Full UV-bestandighet', 'Tåler opp mot 100°C', 'Matt finish'], cons: ['Kan vri seg', 'Avgir gasser'], useCases: ['Utendørsutstyr', 'Bildeler', 'Sollagrede gjenstander'], tags: ['UV resistant', 'Varmebestandig', 'Slitesterk'] }
             },
             {
                 id: 'cf-pc', name: 'Carbon Fiber Polycarbonate (CF-PC)', tier: 'A', timecode: '21:54', seconds: 1314,
                 tech: { nozzleTemp: '280-310 °C', bedTemp: '110-120 °C', enclosure: 'Required', hardenedNozzle: 'Yes', drying: '80 °C for 8 hours',
                     deepDive: 'Super stiff engineering composite designed for heavy structural loads with minimal deflection.' },
-                en: { summary: 'Record-setting stiffness for heavy structural loads.', pros: ['Extreme stiffness', 'Resists heavy loads without flex', 'Affordable for super-composite'], cons: ['Can stall extruder drives', 'High temp required'], useCases: ['Heavy load structural components'], tags: ['Carbon fiber', 'Extreme stiffness', 'High strength'] },
-                no: { summary: 'Rekordsettende stivhet for tunge belastninger.', pros: ['Ekstrem stivhet', 'Tåler enorm vekt', 'Rimelig super-kompositt'], cons: ['Kan stoppe ekstruder', 'Krever høy temp'], useCases: ['Tunge mekaniske konstruksjoner'], tags: ['Karbonfiber', 'Ekstrem stivhet', 'Høy styrke'] }
+                en: { summary: 'Record-setting stiffness for heavy structural loads.', pros: ['Extreme stiffness', 'Resists heavy loads without flex', 'Affordable for super-composite'], cons: ['Can stall extruder drives', 'High temp required'], useCases: ['Heavy load structural components'], tags: ['Carbon fiber', 'Stiff', 'Heat resistant', 'Impact resistant'] },
+                no: { summary: 'Rekordsettende stivhet for tunge belastninger.', pros: ['Ekstrem stivhet', 'Tåler enorm vekt', 'Rimelig super-kompositt'], cons: ['Kan stoppe ekstruder', 'Krever høy temp'], useCases: ['Tunge mekaniske konstruksjoner'], tags: ['Karbonfiber', 'Stiv', 'Varmebestandig', 'Slagfast'] }
             },
             {
                 id: 'pc-pbt', name: 'PC-PBT', tier: 'A', timecode: '23:41', seconds: 1421,
                 tech: { nozzleTemp: '250-270 °C', bedTemp: '80-100 °C', enclosure: 'Recommended', hardenedNozzle: 'No', drying: '70 °C for 6 hours',
                     deepDive: 'Polycarbonate alloyed with PBT to prevent brittle glass transition under freezing temperatures.' },
-                en: { summary: 'Polycarbonate alloy that maintains toughness far below freezing.', pros: ['Does not turn brittle in sub-zero cold', 'Low warping', 'Clean surface finish'], cons: ['Limited market availability'], useCases: ['Arctic gear', 'Impact resistant housings'], tags: ['Cold resistant', 'Impact resistant', 'Durable'] },
-                no: { summary: 'Polykarbonat-legering som tåler ekstrem kulde.', pros: ['Knekker ikke i minusgrader', 'Liten vridning', 'Flott overflate'], cons: ['Vanskelig tilgjengelig'], useCases: ['Arktisk utstyr', 'Støtsikre deksler'], tags: ['Kuldebestandig', 'Slagfast', 'Slitesterk'] }
+                en: { summary: 'Polycarbonate alloy that maintains toughness far below freezing.', pros: ['Does not turn brittle in sub-zero cold', 'Low warping', 'Clean surface finish'], cons: ['Limited market availability'], useCases: ['Arctic gear', 'Impact resistant housings'], tags: ['Impact resistant', 'Durable', 'Easy to print'] },
+                no: { summary: 'Polykarbonat-legering som tåler ekstrem kulde.', pros: ['Knekker ikke i minusgrader', 'Liten vridning', 'Flott overflate'], cons: ['Vanskelig tilgjengelig'], useCases: ['Arktisk utstyr', 'Støtsikre deksler'], tags: ['Slagfast', 'Slitesterk', 'Enkel å printe'] }
             },
             {
                 id: 'sebs', name: 'SEBS', tier: 'A', timecode: '27:35', seconds: 1655,
                 tech: { nozzleTemp: '210-230 °C', bedTemp: '60-80 °C', enclosure: 'Optional', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'Styrene-ethylene-butylene-styrene. Highly flexible TPE enhanced with styrene for smoother extrusion.' },
-                en: { summary: 'Styrene-enhanced TPE offering smooth prints and stretchy flex.', pros: ['Flexible and stretchy', 'Smooth surface quality', 'Prints cleaner than TPE'], cons: ['Hygroscopic', 'Emits fumes'], useCases: ['Grips, seals, soft ergonomic parts'], tags: ['Flexible', 'Stretchy', 'Smooth finish'] },
-                no: { summary: 'Styren-forbedret TPE for myke og tøyelige prints.', pros: ['Fleksibel og tøyelig', 'Flott myk overflate', 'Printes renere enn TPE'], cons: ['Suger fuktighet', 'Avgir gass'], useCases: ['Grep, pakninger, myke deler'], tags: ['Fleksibel', 'Tøyelig', 'Myk overflate'] }
+                en: { summary: 'Styrene-enhanced TPE offering smooth prints and stretchy flex.', pros: ['Flexible and stretchy', 'Smooth surface quality', 'Prints cleaner than TPE'], cons: ['Hygroscopic', 'Emits fumes'], useCases: ['Grips', 'Seals', 'Soft ergonomic parts'], tags: ['Flexible'] },
+                no: { summary: 'Styren-forbedret TPE for myke og tøyelige prints.', pros: ['Fleksibel og tøyelig', 'Flott myk overflate', 'Printes renere enn TPE'], cons: ['Suger fuktighet', 'Avgir gass'], useCases: ['Grep', 'Pakninger', 'Myke deler'], tags: ['Fleksibel'] }
             },
             {
                 id: 'pec', name: 'PEC', tier: 'A', timecode: '35:02', seconds: 2102,
                 tech: { nozzleTemp: '360-390 °C', bedTemp: '120-140 °C', enclosure: 'Required (Actively Heated)', hardenedNozzle: 'No', drying: '120 °C for 6 hours',
                     deepDive: 'Polyether ketone family material offering near-PEEK strength with much friendlier processing parameters.' },
-                en: { summary: 'Sister material to PEEK. Nearly as strong, but easier to print.', pros: ['Extreme strength', 'High heat resistance', 'Easier than PEEK'], cons: ['Expensive', 'High temp setup required'], useCases: ['Demanding industrial environments'], tags: ['Superpolymer', 'Heat resistant', 'High strength'] },
-                no: { summary: 'Lillesøster til PEEK. Nesten like sterk, men enklere.', pros: ['Ekstrem styrke', 'Høy varmebestandighet', 'Enklere enn PEEK'], cons: ['Dyr', 'Høy temperatur påkrevd'], useCases: ['Krevende industrielle miljøer'], tags: ['Superpolymer', 'Varmebestandig', 'Høy styrke'] }
+                en: { summary: 'Sister material to PEEK. Nearly as strong, but easier to print.', pros: ['Extreme strength', 'High heat resistance', 'Easier than PEEK'], cons: ['Expensive', 'High temp setup required'], useCases: ['Demanding industrial environments'], tags: ['Superpolymer', 'Heat resistant', 'Stiff'] },
+                no: { summary: 'Lillesøster til PEEK. Nesten like sterk, men enklere.', pros: ['Ekstrem styrke', 'Høy varmebestandighet', 'Enklere enn PEEK'], cons: ['Dyr', 'Høy temperatur påkrevd'], useCases: ['Krevende industrielle miljøer'], tags: ['Superpolymer', 'Varmebestandig', 'Stiv'] }
             },
             {
                 id: 'ultem-1010', name: 'ULTEM 1010 (PEI)', tier: 'A', timecode: '38:04', seconds: 2284,
@@ -606,29 +642,29 @@
                 id: 'silk-pla', name: 'Silk PLA', tier: 'B', timecode: '03:59', seconds: 239,
                 tech: { nozzleTemp: '200-220 °C', bedTemp: '50-60 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '45 °C for 4 hours',
                     deepDive: 'PLA blended with elastomer additives for high surface gloss. Mechanically weaker along layer lines.' },
-                en: { summary: 'High-gloss metallic finish ideal for display pieces.', pros: ['Vibrant metallic shiny appearance', 'Easy support removal'], cons: ['Reduced layer adhesion', 'Swells in hotend when idle'], useCases: ['Display models', 'Figures', 'Decorative objects'], tags: ['Aesthetic', 'Shiny', 'Brittle'] },
-                no: { summary: 'Høyglanset metallisk finish for utstillingsmodeller.', pros: ['Skinnende overflate', 'Enkle supports'], cons: ['Svakere lagvedheft', 'Sveller i hotend'], useCases: ['Pynt', 'Figurer', 'Utstilling'], tags: ['Estetisk', 'Skinnende', 'Svak'] }
+                en: { summary: 'High-gloss metallic finish ideal for display pieces.', pros: ['Vibrant metallic shiny appearance', 'Easy support removal'], cons: ['Reduced layer adhesion', 'Swells in hotend when idle'], useCases: ['Display models', 'Figures', 'Decorative objects'], tags: ['Easy to print', 'Cheap'] },
+                no: { summary: 'Høyglanset metallisk finish for utstillingsmodeller.', pros: ['Skinnende overflate', 'Enkle supports'], cons: ['Svakere lagvedheft', 'Sveller i hotend'], useCases: ['Pynt', 'Figurer', 'Utstilling'], tags: ['Enkel å printe', 'Billig'] }
             },
             {
                 id: 'wood-pla', name: 'Wood PLA', tier: 'B', timecode: '06:29', seconds: 389,
                 tech: { nozzleTemp: '190-210 °C', bedTemp: '45-60 °C', enclosure: 'No', hardenedNozzle: 'No (0.5mm+ recommended)', drying: '50 °C for 4 hours',
                     deepDive: 'Contains 15-30% real wood particles. Can be sanded, stained, and painted like timber.' },
-                en: { summary: 'PLA infused with real wood fiber or sawdust.', pros: ['Authentic wood texture', 'Can be sanded and stained'], cons: ['Mechanically weak', 'Prone to clogs', 'Hygroscopic'], useCases: ['Furniture props', 'Artistic ornaments'], tags: ['Aesthetic', 'Wood finish', 'Hygroscopic'] },
-                no: { summary: 'PLA blandet med trepulver for ekte tre-følelse.', pros: ['Ekte trestruktur', 'Kan beises og pusses'], cons: ['Svakt', 'Kan tette dyser', 'Fuktfølsomt'], useCases: ['Møbelrekvisitter', 'Kunst'], tags: ['Estetisk', 'Tre-finish', 'Fuktfølsom'] }
+                en: { summary: 'PLA infused with real wood fiber or sawdust.', pros: ['Authentic wood texture', 'Can be sanded and stained'], cons: ['Mechanically weak', 'Prone to clogs', 'Hygroscopic'], useCases: ['Furniture props', 'Artistic ornaments'], tags: ['Easy to print'] },
+                no: { summary: 'PLA blandet med trepulver for ekte tre-følelse.', pros: ['Ekte trestruktur', 'Kan beises og pusses'], cons: ['Svakt', 'Kan tette dyser', 'Fuktfølsomt'], useCases: ['Møbelrekvisitter', 'Kunst'], tags: ['Enkel å printe'] }
             },
             {
                 id: 'matte-pla', name: 'Matte PLA', tier: 'B', timecode: '08:12', seconds: 492,
                 tech: { nozzleTemp: '200-220 °C', bedTemp: '50-60 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '50 °C for 4 hours',
                     deepDive: 'Blended with mineral fillers or plant fibers to scatter light and eliminate shine.' },
-                en: { summary: 'PLA blended with plant pulp for a soft satin surface.', pros: ['Soft satin finish', 'Easily sanded and carved'], cons: ['Absorbs moisture quickly', 'Higher extruder wear'], useCases: ['Prototypes for post-processing'], tags: ['Matte finish', 'Sandable'] },
-                no: { summary: 'PLA med plantemasse for myk matt overflate.', pros: ['Skjuler laglinjer', 'Lett å pusse'], cons: ['Suger fuktighet', 'Mer slitasje'], useCases: ['Prototyper for maling'], tags: ['Matt overflate', 'Kan pusses'] }
+                en: { summary: 'PLA blended with plant pulp for a soft satin surface.', pros: ['Soft satin finish', 'Easily sanded and carved'], cons: ['Absorbs moisture quickly', 'Higher extruder wear'], useCases: ['Prototypes for post-processing'], tags: ['Easy to print'] },
+                no: { summary: 'PLA med plantemasse for myk matt overflate.', pros: ['Skjuler laglinjer', 'Lett å pusse'], cons: ['Suger fuktighet', 'Mer slitasje'], useCases: ['Prototyper for maling'], tags: ['Enkel å printe'] }
             },
             {
                 id: 'flex-pla', name: 'Flex PLA / PCL', tier: 'B', timecode: '09:34', seconds: 574,
                 tech: { nozzleTemp: '100-130 °C', bedTemp: '30-40 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '35 °C for 4 hours',
                     deepDive: 'Polycaprolactone. Extremely low melting point material that softens in warm water for hand contouring.' },
-                en: { summary: 'Ultra low-temperature polymer (softens at 60C).', pros: ['Melts at 100°C', 'Can be remolded with hairdryer'], cons: ['Tricky low-temp settings', 'Low heat resistance'], useCases: ['Custom fitting prosthetics', 'Splints'], tags: ['Low temp', 'Moldable'] },
-                no: { summary: 'Lavtemperaturs plast som kan formes i varmt vann.', pros: ['Smelter ved 100°C', 'Kan formes på kroppen'], cons: ['Spesielle innstillinger', 'Tåler ikke varme'], useCases: ['Proteser', 'Skinner'], tags: ['Lav temperatur', 'Formbar'] }
+                en: { summary: 'Ultra low-temperature polymer (softens at 60C).', pros: ['Melts at 100°C', 'Can be remolded with hairdryer'], cons: ['Tricky low-temp settings', 'Low heat resistance'], useCases: ['Custom fitting prosthetics', 'Splints'], tags: ['Low temp', 'Flexible'] },
+                no: { summary: 'Lavtemperaturs plast som kan formes i varmt vann.', pros: ['Smelter ved 100°C', 'Kan formes på kroppen'], cons: ['Spesielle innstillinger', 'Tåler ikke varme'], useCases: ['Proteser', 'Skinner'], tags: ['Low temp', 'Fleksibel'] }
             },
             {
                 id: 'pet', name: 'PET / bPET', tier: 'B', timecode: '12:54', seconds: 774,
@@ -641,57 +677,57 @@
                 id: 'hips', name: 'HIPS', tier: 'B', timecode: '16:27', seconds: 987,
                 tech: { nozzleTemp: '230-250 °C', bedTemp: '90-110 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '70 °C for 4 hours',
                     deepDive: 'High impact polystyrene. Dissolves cleanly in d-limonene, making it ideal support for ABS.' },
-                en: { summary: 'High impact polystyrene. Dissolvable support for ABS.', pros: ['Dissolves in d-limonene', 'Lightweight'], cons: ['Prone to warping'], useCases: ['Support material for ABS', 'Cosplay props'], tags: ['Soluble support', 'Lightweight'] },
-                no: { summary: 'Slagfast polystyren. Oppløselig støtte for ABS.', pros: ['Løselig i limonene', 'Lav vekt'], cons: ['Vrir seg lett'], useCases: ['Støttemateriale for ABS', 'Props'], tags: ['Løselig støtte', 'Lav vekt'] }
+                en: { summary: 'High impact polystyrene. Dissolvable support for ABS.', pros: ['Dissolves in d-limonene', 'Lightweight'], cons: ['Prone to warping'], useCases: ['Support material for ABS', 'Cosplay props'], tags: ['Lightweight', 'Impact resistant'] },
+                no: { summary: 'Slagfast polystyren. Oppløselig støtte for ABS.', pros: ['Løselig i limonene', 'Lav vekt'], cons: ['Vrir seg lett'], useCases: ['Støttemateriale for ABS', 'Props'], tags: ['Lav vekt', 'Slagfast'] }
             },
             {
                 id: 'pa6-nylon', name: 'PA6 Nylon', tier: 'B', timecode: '17:06', seconds: 1026,
                 tech: { nozzleTemp: '250-270 °C', bedTemp: '70-90 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '80 °C for 8 hours',
                     deepDive: 'Polyamide 6. Extremely tough with low friction, but aggressively absorbs ambient air moisture.' },
-                en: { summary: 'Most common nylon variant. Extremely tough.', pros: ['Indestructible layer bonds', 'Low friction for gears'], cons: ['Aggressively hygroscopic', 'Severe warping'], useCases: ['Gears', 'Bushings', 'Mechanisms'], tags: ['Durable', 'Nylon', 'Low friction'] },
-                no: { summary: 'Vanligste nylon. Utrolig slitesterk og glatt.', pros: ['Uknuselige lag', 'Lav friksjon for tannhjul'], cons: ['Suger fuktighet raskt', 'Mye warping'], useCases: ['Tannhjul', 'Glidelagre'], tags: ['Slitesterk', 'Nylon', 'Lav friksjon'] }
+                en: { summary: 'Most common nylon variant. Extremely tough.', pros: ['Indestructible layer bonds', 'Low friction for gears'], cons: ['Aggressively hygroscopic', 'Severe warping'], useCases: ['Gears', 'Bushings', 'Mechanisms'], tags: ['Durable', 'Impact resistant'] },
+                no: { summary: 'Vanligste nylon. Utrolig slitesterk og glatt.', pros: ['Uknuselige lag', 'Lav friksjon for tannhjul'], cons: ['Suger fuktighet raskt', 'Mye warping'], useCases: ['Tannhjul', 'Glidelagre'], tags: ['Slitesterk', 'Slagfast'] }
             },
             {
                 id: 'pa12-nylon', name: 'PA12 Nylon', tier: 'B', timecode: '18:16', seconds: 1096,
                 tech: { nozzleTemp: '270-300 °C', bedTemp: '90-110 °C', enclosure: 'Required (Heated)', hardenedNozzle: 'No', drying: '80 °C for 8 hours',
                     deepDive: 'Polyamide 12. Lower moisture absorption and higher dimensional precision than PA6.' },
-                en: { summary: 'Stiffer nylon variant preferred for precision parts.', pros: ['Stiffer than PA6', 'Lower water absorption'], cons: ['Extreme warping force', 'Requires high temps'], useCases: ['RC vehicles', 'Machine tools'], tags: ['Nylon', 'Stiff', 'Precision'] },
-                no: { summary: 'Stivere nylon for presisjonsdeler.', pros: ['Stivere enn PA6', 'Mindre fuktopptak'], cons: ['Sterk vridningskraft', 'Høy temp påkrevd'], useCases: ['RC-biler', 'Maskinverktøy'], tags: ['Nylon', 'Stiv', 'Høy presisjon'] }
+                en: { summary: 'Stiffer nylon variant preferred for precision parts.', pros: ['Stiffer than PA6', 'Lower water absorption'], cons: ['Extreme warping force', 'Requires high temps'], useCases: ['RC vehicles', 'Machine tools'], tags: ['Stiff', 'Durable'] },
+                no: { summary: 'Stivere nylon for presisjonsdeler.', pros: ['Stivere enn PA6', 'Mindre fuktopptak'], cons: ['Sterk vridningskraft', 'Høy temp påkrevd'], useCases: ['RC-biler', 'Maskinverktøy'], tags: ['Stiv', 'Slitesterk'] }
             },
             {
                 id: 'pa6-cf', name: 'Carbon Fiber PA6 (PA6-CF)', tier: 'B', timecode: '18:58', seconds: 1138,
                 tech: { nozzleTemp: '260-290 °C', bedTemp: '80-100 °C', enclosure: 'Required', hardenedNozzle: 'Yes', drying: '80 °C for 8 hours',
                     deepDive: 'Carbon fiber reinforces PA6 to prevent ambient warping while keeping exceptional tensile strength.' },
-                en: { summary: 'Carbon reinforced nylon that warps less than neat nylon.', pros: ['Stiffer than neat nylon', 'Reduced warping'], cons: ['Requires hardened nozzle', 'Loses low friction'], useCases: ['Stiff heavy-duty mounts'], tags: ['Carbon fiber', 'Nylon', 'Stiff'] },
-                no: { summary: 'Karbonforsterket nylon med mindre vridning.', pros: ['Stivere enn ren nylon', 'Mindre warping'], cons: ['Krever herdet dyse', 'Mister glatt overflate'], useCases: ['Strukturelle fester'], tags: ['Karbonfiber', 'Nylon', 'Stiv'] }
+                en: { summary: 'Carbon reinforced nylon that warps less than neat nylon.', pros: ['Stiffer than neat nylon', 'Reduced warping'], cons: ['Requires hardened nozzle', 'Loses low friction'], useCases: ['Stiff heavy-duty mounts'], tags: ['Carbon fiber', 'Stiff', 'Durable'] },
+                no: { summary: 'Karbonforsterket nylon med mindre vridning.', pros: ['Stivere enn ren nylon', 'Mindre warping'], cons: ['Krever herdet dyse', 'Mister glatt overflate'], useCases: ['Strukturelle fester'], tags: ['Karbonfiber', 'Stiv', 'Slitesterk'] }
             },
             {
                 id: 'pc', name: 'Polycarbonate (PC)', tier: 'B', timecode: '21:10', seconds: 1270,
                 tech: { nozzleTemp: '290-320 °C', bedTemp: '110-130 °C', enclosure: 'Required (Heated)', hardenedNozzle: 'No', drying: '100 °C for 8 hours',
                     deepDive: 'Bulletproof optical polymer with exceptional heat deflection temperature.' },
-                en: { summary: 'Bulletproof toughness with high heat resistance.', pros: ['Toughest neat polymer', 'Withstands up to 150°C'], cons: ['Slow print speed', 'Hygroscopic', 'Severe warping'], useCases: ['Impact armor', 'High-stress parts'], tags: ['Impact resistant', 'Heat resistant', 'High strength'] },
-                no: { summary: 'Nesten skuddsikker seighet med høy temperaturtåling.', pros: ['Tøffeste ren plast', 'Tåler opp mot 150°C'], cons: ['Sakte utskrift', 'Suger fuktighet', 'Vrir seg voldsomt'], useCases: ['Beskyttelse', 'Høystressdeler'], tags: ['Slagfast', 'Varmebestandig', 'Høy styrke'] }
+                en: { summary: 'Bulletproof toughness with high heat resistance.', pros: ['Toughest neat polymer', 'Withstands up to 150°C'], cons: ['Slow print speed', 'Hygroscopic', 'Severe warping'], useCases: ['Impact armor', 'High-stress parts'], tags: ['Impact resistant', 'Heat resistant', 'Stiff'] },
+                no: { summary: 'Nesten skuddsikker seighet med høy temperaturtåling.', pros: ['Tøffeste ren plast', 'Tåler opp mot 150°C'], cons: ['Sakte utskrift', 'Suger fuktighet', 'Vrir seg voldsomt'], useCases: ['Beskyttelse', 'Høystressdeler'], tags: ['Slagfast', 'Varmebestandig', 'Stiv'] }
             },
             {
                 id: 'tpu-90d', name: 'Medium TPU (90D)', tier: 'B', timecode: '26:11', seconds: 1571,
                 tech: { nozzleTemp: '220-240 °C', bedTemp: '50-60 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '65 °C for 4 hours',
                     deepDive: 'Balanced shore hardness flexible polyurethane. Excellent for bumpers, tires, and hinges.' },
-                en: { summary: 'Semi-flexible TPU with balanced stiffness.', pros: ['Great balance of flex and stivness', 'Durable'], cons: ['Tricky on tall thin prints'], useCases: ['Bumpers', 'Hinges', 'Protection'], tags: ['Semi-flexible', 'Durable'] },
-                no: { summary: 'Semifleksibel TPU med god balanse.', pros: ['Balanse mellom stiv/fleksibel', 'Slitesterk'], cons: ['Vanskelig på tynne høye prints'], useCases: ['Støtfangere', 'Hengsler'], tags: ['Semifleksibel', 'Slitesterk'] }
+                en: { summary: 'Semi-flexible TPU with balanced stiffness.', pros: ['Great balance of flex and stivness', 'Durable'], cons: ['Tricky on tall thin prints'], useCases: ['Bumpers', 'Hinges', 'Protection'], tags: ['Flexible', 'Durable'] },
+                no: { summary: 'Semifleksibel TPU med god balanse.', pros: ['Balanse mellom stiv/fleksibel', 'Slitesterk'], cons: ['Vanskelig på tynne høye prints'], useCases: ['Støtfangere', 'Hengsler'], tags: ['Fleksibel', 'Slitesterk'] }
             },
             {
                 id: 'gf-pp', name: 'Glass-Filled Polypropylene (GF-PP)', tier: 'B', timecode: '29:12', seconds: 1752,
                 tech: { nozzleTemp: '240-270 °C', bedTemp: '80-100 °C', enclosure: 'Required', hardenedNozzle: 'Yes', drying: '70 °C for 4 hours',
                     deepDive: 'Lightweight glass-reinforced polyolefin. Immune to water and broad chemicals with high fatigue strength.' },
-                en: { summary: 'Lightweight glass reinforced polypropylene.', pros: ['Exceptionally tough', 'Chemical immune', 'Lightweight'], cons: ['Severe bed adhesion challenges', 'Requires hardened nozzle'], useCases: ['Machinery parts', 'Rugged housings'], tags: ['Glass fiber', 'Lightweight', 'Durable'] },
-                no: { summary: 'Eksstremt lett glassfylt polypropylen.', pros: ['Utrolig slitesterkt', 'Kjemikaliebestandig', 'Lav vekt'], cons: ['Elendig bedvedheft', 'Krever herdet dyse'], useCases: ['Maskindeler', 'Allværsutstyr'], tags: ['Glassfiber', 'Lav vekt', 'Slitesterk'] }
+                en: { summary: 'Lightweight glass reinforced polypropylene.', pros: ['Exceptionally tough', 'Chemical immune', 'Lightweight'], cons: ['Severe bed adhesion challenges', 'Requires hardened nozzle'], useCases: ['Machinery parts', 'Rugged housings'], tags: ['Glass fiber', 'Lightweight', 'Durable', 'Chemical resistant'] },
+                no: { summary: 'Eksstremt lett glassfylt polypropylen.', pros: ['Utrolig slitesterkt', 'Kjemikaliebestandig', 'Lav vekt'], cons: ['Elendig bedvedheft', 'Krever herdet dyse'], useCases: ['Maskindeler', 'Allværsutstyr'], tags: ['Glassfiber', 'Lav vekt', 'Slitesterk', 'Kjemikalier'] }
             },
             {
                 id: 'psu', name: 'PSU', tier: 'B', timecode: '36:23', seconds: 2183,
                 tech: { nozzleTemp: '360-390 °C', bedTemp: '140-160 °C', enclosure: 'Required (140 °C chamber)', hardenedNozzle: 'No', drying: '130 °C for 6 hours',
                     deepDive: 'Polysulfone. Maintains mechanical properties up to 187°C and withstands repeated steam sterilization.' },
-                en: { summary: 'High-temp superpolymer holding strength up to 187C.', pros: ['Holds strength at high temp', 'Autoclavable like steel'], cons: ['Demanding print parameters'], useCases: ['Medical tools', 'Research equipment'], tags: ['Superpolymer', 'Sterilizable', 'Heat resistant'] },
-                no: { summary: 'Superpolymer som tåler 187°C.', pros: ['Beholder styrke i varme', 'Kan dampsteriliseres'], cons: ['Ekstremt krevende'], useCases: ['Medisinsk utstyr', 'Laboratorier'], tags: ['Superpolymer', 'Steriliserbar', 'Varmebestandig'] }
+                en: { summary: 'High-temp superpolymer holding strength up to 187C.', pros: ['Holds strength at high temp', 'Autoclavable like steel'], cons: ['Demanding print parameters'], useCases: ['Medical tools', 'Research equipment'], tags: ['Superpolymer', 'Heat resistant'] },
+                no: { summary: 'Superpolymer som tåler 187°C.', pros: ['Beholder styrke i varme', 'Kan dampsteriliseres'], cons: ['Ekstremt krevende'], useCases: ['Medisinsk utstyr', 'Laboratorier'], tags: ['Superpolymer', 'Varmebestandig'] }
             },
 
             // C-Tier (9)
@@ -699,50 +735,50 @@
                 id: 'abs', name: 'ABS', tier: 'C', timecode: '14:50', seconds: 890,
                 tech: { nozzleTemp: '230-250 °C', bedTemp: '95-110 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '70 °C for 4 hours',
                     deepDive: 'Legacy consumer engineering material. Easily vapor-smoothed using acetone, but emits toxic styrene fumes.' },
-                en: { summary: 'Legacy consumer plastic largely surpassed by ASA.', pros: ['Cheap', 'Heat resistant', 'Acetone smoothable'], cons: ['Severe warping', 'Emits strong fumes'], useCases: ['Vapor-smoothed visual parts'], tags: ['Cheap', 'Heat resistant', 'Fumes'] },
-                no: { summary: 'Klassiker erstattet av ASA.', pros: ['Billig', 'Varmebestandig', 'Acetonglattes'], cons: ['Vrir seg voldsomt', 'Lukt og gasser'], useCases: ['Acetonglattededeler'], tags: ['Billig', 'Varmebestandig', 'Giftige gasser'] }
+                en: { summary: 'Legacy consumer plastic largely surpassed by ASA.', pros: ['Cheap', 'Heat resistant', 'Acetone smoothable'], cons: ['Severe warping', 'Emits strong fumes'], useCases: ['Vapor-smoothed visual parts'], tags: ['Cheap', 'Heat resistant'] },
+                no: { summary: 'Klassiker erstattet av ASA.', pros: ['Billig', 'Varmebestandig', 'Acetonglattes'], cons: ['Vrir seg voldsomt', 'Lukt og gasser'], useCases: ['Acetonglattededeler'], tags: ['Billig', 'Varmebestandig'] }
             },
             {
                 id: 'pa12-cf', name: 'Carbon Fiber PA12 (PA12-CF)', tier: 'C', timecode: '18:58', seconds: 1138,
                 tech: { nozzleTemp: '280-310 °C', bedTemp: '100-120 °C', enclosure: 'Required', hardenedNozzle: 'Yes', drying: '80 °C for 8 hours',
                     deepDive: 'Stiff carbon composite with PA12 base. Expensive with marginal improvements over PA6-CF.' },
-                en: { summary: 'Stiff carbon composite with PA12 base.', pros: ['High rigidity', 'Dimensional stability'], cons: ['Very expensive', 'Marginal benefit over PA6-CF'], useCases: ['Precision engineering mounts'], tags: ['Carbon fiber', 'Nylon', 'Expensive'] },
-                no: { summary: 'Stiv karbonkompositt på PA12.', pros: ['Høy stivhet', 'Dimensjonsstabil'], cons: ['Svindyr', 'Liten gevinst over PA6-CF'], useCases: ['Presisjonsfester'], tags: ['Karbonfiber', 'Nylon', 'Dyrt'] }
+                en: { summary: 'Stiff carbon composite with PA12 base.', pros: ['High rigidity', 'Dimensional stability'], cons: ['Very expensive', 'Marginal benefit over PA6-CF'], useCases: ['Precision engineering mounts'], tags: ['Carbon fiber', 'Stiff'] },
+                no: { summary: 'Stiv karbonkompositt på PA12.', pros: ['Høy stivhet', 'Dimensjonsstabil'], cons: ['Svindyr', 'Liten gevinst over PA6-CF'], useCases: ['Presisjonsfester'], tags: ['Karbonfiber', 'Stiv'] }
             },
             {
                 id: 'petg-nylon', name: 'PETG / Nylon Blends', tier: 'C', timecode: '20:34', seconds: 1234,
                 tech: { nozzleTemp: '245-265 °C', bedTemp: '75-90 °C', enclosure: 'Recommended', hardenedNozzle: 'No', drying: '70 °C for 6 hours',
                     deepDive: 'Attempted alloy combining PETG and Nylon properties, retaining poor bed adhesion from both polymers.' },
-                en: { summary: 'Attempted alloy combining PETG and Nylon.', pros: ['Slight boost in toughness'], cons: ['Combines bed peeling issues'], useCases: ['Rarely recommended'], tags: ['Alloy', 'Bad bed adhesion'] },
-                no: { summary: 'Legering av PETG og Nylon.', pros: ['Litt seigere'], cons: ['Dårlig feste fra begge'], useCases: ['Sjeldent anbefalt'], tags: ['Legering', 'Vanskelig vedheft'] }
+                en: { summary: 'Attempted alloy combining PETG and Nylon.', pros: ['Slight boost in toughness'], cons: ['Combines bed peeling issues'], useCases: ['Rarely recommended'], tags: ['Durable'] },
+                no: { summary: 'Legering av PETG og Nylon.', pros: ['Litt seigere'], cons: ['Dårlig feste fra begge'], useCases: ['Sjeldent anbefalt'], tags: ['Slitesterk'] }
             },
             {
                 id: 'pmma', name: 'PMMA / Acrylic', tier: 'C', timecode: '22:36', seconds: 1356,
                 tech: { nozzleTemp: '230-250 °C', bedTemp: '80-100 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '80 °C for 8 hours',
                     deepDive: 'Plexiglass filament. High optical transparency, but prone to brittleness and layer delamination.' },
-                en: { summary: 'Plexiglass in filament form with supreme optical clarity.', pros: ['Incomparable optical clarity', 'Great UV resistance'], cons: ['Extremely brittle', 'Terrible bed adhesion'], useCases: ['Lenses', 'Light pipes'], tags: ['Clear', 'Brittle'] },
-                no: { summary: 'Pleksiglass i filamentform.', pros: ['Krystallklar optikk', 'UV-bestandig'], cons: ['Ekstremt sprøtt', 'Elendig vedheft'], useCases: ['Lykter', 'Linser'], tags: ['Optisk klar', 'Sprø'] }
+                en: { summary: 'Plexiglass in filament form with supreme optical clarity.', pros: ['Incomparable optical clarity', 'Great UV resistance'], cons: ['Extremely brittle', 'Terrible bed adhesion'], useCases: ['Lenses', 'Light pipes'], tags: ['UV resistant'] },
+                no: { summary: 'Pleksiglass i filamentform.', pros: ['Krystallklar optikk', 'UV-bestandig'], cons: ['Ekstremt sprøtt', 'Elendig vedheft'], useCases: ['Lykter', 'Linser'], tags: ['UV resistant'] }
             },
             {
                 id: 'tpu-88d', name: 'Soft TPU (88D)', tier: 'C', timecode: '26:34', seconds: 1594,
                 tech: { nozzleTemp: '210-230 °C', bedTemp: '40-60 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'Soft flexible TPU. Prone to wrapping around drive gears during extrusion.' },
-                en: { summary: 'Very soft floppy flexible filament.', pros: ['Highly flexible'], cons: ['Prone to drive gear jams', 'Feels sweaty as wearable'], useCases: ['Gaskets', 'Vibration dampeners'], tags: ['Flexible', 'Drive gear jams'] },
-                no: { summary: 'Veldig myk TPU.', pros: ['Veldig fleksibel'], cons: ['Tetter mateverket', 'Svett mot hud'], useCases: ['Pakninger', 'Dempere'], tags: ['Fleksibel', 'Vanskelig mateverk'] }
+                en: { summary: 'Very soft floppy flexible filament.', pros: ['Highly flexible'], cons: ['Prone to drive gear jams', 'Feels sweaty as wearable'], useCases: ['Gaskets', 'Vibration dampeners'], tags: ['Flexible'] },
+                no: { summary: 'Veldig myk TPU.', pros: ['Veldig fleksibel'], cons: ['Tetter mateverket', 'Svett mot hud'], useCases: ['Pakninger', 'Dempere'], tags: ['Fleksibel'] }
             },
             {
                 id: 'obc', name: 'OBC', tier: 'C', timecode: '29:48', seconds: 1788,
                 tech: { nozzleTemp: '190-210 °C', bedTemp: '60-80 °C', enclosure: 'Optional', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'Olefin block copolymer. Semi-flexible with lower warping than PP, but extremely hard to glue to build plates.' },
-                en: { summary: 'Olefin block copolymer for semi-flexible parts.', pros: ['Lower warping than PP'], cons: ['Extremely difficult bed adhesion'], useCases: ['Chemical resistant dampeners'], tags: ['Semi-flexible', 'Poor bed adhesion'] },
-                no: { summary: 'Olefin blokk-kopolymer.', pros: ['Mindre warping enn PP'], cons: ['Nesten umulig å feste på plate'], useCases: ['Kjemikaliedempere'], tags: ['Semifleksibel', 'Vanskelig vedheft'] }
+                en: { summary: 'Olefin block copolymer for semi-flexible parts.', pros: ['Lower warping than PP'], cons: ['Extremely difficult bed adhesion'], useCases: ['Chemical resistant dampeners'], tags: ['Flexible', 'Chemical resistant'] },
+                no: { summary: 'Olefin blokk-kopolymer.', pros: ['Mindre warping enn PP'], cons: ['Nesten umulig å feste på plate'], useCases: ['Kjemikaliedempere'], tags: ['Fleksibel', 'Kjemikalier'] }
             },
             {
                 id: 'peek', name: 'PEEK', tier: 'C', timecode: '33:20', seconds: 2000,
                 tech: { nozzleTemp: '390-420 °C', bedTemp: '130-150 °C', enclosure: 'Required (140 °C chamber)', hardenedNozzle: 'No', drying: '120 °C for 6 hours',
                     deepDive: 'Polyether ether ketone. Unmatched tensile strength, self-extinguishing flame resistance, steel alternative.' },
-                en: { summary: 'Pinnacle superpolymer steel alternative.', pros: ['Unmatched strength and heat resistance'], cons: ['Costs $700/kg', 'Requires 400C nozzle and heated chamber'], useCases: ['Aerospace', 'Missiles', 'Extreme engineering'], tags: ['Superpolymer', 'Extreme cost', 'Heat resistant'] },
-                no: { summary: 'Kongen av superpolymerer.', pros: ['Uslåelig styrke og varmebestandighet'], cons: ['Koster $700/kg', 'Krever 400°C dyse og 140°C kammer'], useCases: ['Romfart', 'Militært utstyr'], tags: ['Superpolymer', 'Ekstrem pris', 'Varmebestandig'] }
+                en: { summary: 'Pinnacle superpolymer steel alternative.', pros: ['Unmatched strength and heat resistance'], cons: ['Costs $700/kg', 'Requires 400C nozzle and heated chamber'], useCases: ['Aerospace', 'Missiles', 'Extreme engineering'], tags: ['Superpolymer', 'Heat resistant', 'Stiff', 'Chemical resistant'] },
+                no: { summary: 'Kongen av superpolymerer.', pros: ['Uslåelig styrke og varmebestandighet'], cons: ['Koster $700/kg', 'Krever 400°C dyse og 140°C kammer'], useCases: ['Romfart', 'Militært utstyr'], tags: ['Superpolymer', 'Varmebestandig', 'Stiv', 'Kjemikalier'] }
             },
             {
                 id: 'pps', name: 'PPS', tier: 'C', timecode: '35:43', seconds: 2143,
@@ -755,8 +791,8 @@
                 id: 'super-cf', name: 'Super Polymer Composites', tier: 'C', timecode: '37:23', seconds: 2243,
                 tech: { nozzleTemp: '400-430 °C', bedTemp: '140-160 °C', enclosure: 'Required', hardenedNozzle: 'Yes (Diamond / Ruby)', drying: '130 °C for 6 hours',
                     deepDive: 'Carbon/glass filled PEEK/PEI variants designed to reduce structural warping on superpolymer parts.' },
-                en: { summary: 'Carbon/glass filled PEEK and PEI variants.', pros: ['Reduces warping on superpolymers'], cons: ['Destroys expensive high-temp nozzles'], useCases: ['Specialized ultra-grade industrial parts'], tags: ['Superpolymer', 'Carbon fiber'] },
-                no: { summary: 'Karbonfylte PEEK/PEI superpolymerer.', pros: ['Mindre warping på superpolymerer'], cons: ['Ødelegger spesialdyser lynraskt'], useCases: ['Spesialkonstruert industri'], tags: ['Superpolymer', 'Karbonfiber'] }
+                en: { summary: 'Carbon/glass filled PEEK and PEI variants.', pros: ['Reduces warping on superpolymers'], cons: ['Destroys expensive high-temp nozzles'], useCases: ['Specialized ultra-grade industrial parts'], tags: ['Superpolymer', 'Carbon fiber', 'Stiff'] },
+                no: { summary: 'Karbonfylte PEEK/PEI superpolymerer.', pros: ['Mindre warping på superpolymerer'], cons: ['Ødelegger spesialdyser lynraskt'], useCases: ['Spesialkonstruert industri'], tags: ['Superpolymer', 'Karbonfiber', 'Stiv'] }
             },
 
             // F-Tier (8)
@@ -764,57 +800,57 @@
                 id: 'metal-pla', name: 'Metal Composite PLA', tier: 'F', timecode: '05:45', seconds: 345,
                 tech: { nozzleTemp: '200-220 °C', bedTemp: '50-60 °C', enclosure: 'No', hardenedNozzle: 'Yes', drying: '50 °C for 4 hours',
                     deepDive: 'PLA filled with copper, bronze, or iron powder. Extremely dense and heavy, but mechanically weak.' },
-                en: { summary: 'PLA infused with metal powder.', pros: ['Heavy weight feel', 'Takes patina'], cons: ['Mechanically weaker than PLA', 'Crazy expensive per gram'], useCases: ['None recommended (use paint or internal weights)'], tags: ['Metal powder', 'Brittle', 'Expensive'] },
-                no: { summary: 'PLA med metallpulver.', pros: ['Tung vekt', 'Kan patineres'], cons: ['Svakere enn PLA', 'Svindyrt per gram'], useCases: ['Ingen (bruk maling eller vekter)'], tags: ['Metallpulver', 'Sprø', 'Dyr'] }
+                en: { summary: 'PLA infused with metal powder.', pros: ['Heavy weight feel', 'Takes patina'], cons: ['Mechanically weaker than PLA', 'Crazy expensive per gram'], useCases: ['None recommended (use paint or internal weights)'], tags: ['Cheap'] },
+                no: { summary: 'PLA med metallpulver.', pros: ['Tung vekt', 'Kan patineres'], cons: ['Svakere enn PLA', 'Svindyrt per gram'], useCases: ['Ingen (bruk maling eller vekter)'], tags: ['Billig'] }
             },
             {
                 id: 'tpe', name: 'Standard TPE', tier: 'F', timecode: '27:07', seconds: 1627,
                 tech: { nozzleTemp: '210-230 °C', bedTemp: '40-50 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'Legacy flexible polymer. Extremely difficult to push through extruders without buckling.' },
-                en: { summary: 'Legacy flexible elastomer.', pros: ['Stretchy'], cons: ['Squashes in drive gears', 'Yields messy prints'], useCases: ['Avoid (use SEBS)'], tags: ['Flexible', 'Unstable print'] },
-                no: { summary: 'Gammeldags fleksibelt elastomer.', pros: ['Tøyelig'], cons: ['Klemmes flat i drev', 'Stygge prints'], useCases: ['Bruk SEBS i stedet'], tags: ['Fleksibel', 'Ustabil utskrift'] }
+                en: { summary: 'Legacy flexible elastomer.', pros: ['Stretchy'], cons: ['Squashes in drive gears', 'Yields messy prints'], useCases: ['Avoid (use SEBS)'], tags: ['Flexible'] },
+                no: { summary: 'Gammeldags fleksibelt elastomer.', pros: ['Tøyelig'], cons: ['Klemmes flat i drev', 'Stygge prints'], useCases: ['Bruk SEBS i stedet'], tags: ['Fleksibel'] }
             },
             {
                 id: 'pp', name: 'Standard Polypropylene (PP)', tier: 'F', timecode: '28:15', seconds: 1695,
                 tech: { nozzleTemp: '220-250 °C', bedTemp: '80-100 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'Unfilled polypropylene. Infinite living hinge fatigue life, but virtually impossible to stick to build plates.' },
-                en: { summary: 'Neat polypropylene filament.', pros: ['High living hinge fatigue resistance'], cons: ['Worst bed adhesion imaginable', 'Warps aggressively'], useCases: ['Avoid (use Glass-Filled PP)'], tags: ['Extreme warping', 'Poor bed adhesion'] },
-                no: { summary: 'Ren polypropylen.', pros: ['Tåler uendelig bøyning'], cons: ['Elendig bedvedheft', 'Vrir seg voldsomt'], useCases: ['Bruk GF-PP i stedet'], tags: ['Ekstrem vridning', 'Dårlig vedheft'] }
+                en: { summary: 'Neat polypropylene filament.', pros: ['High living hinge fatigue resistance'], cons: ['Worst bed adhesion imaginable', 'Warps aggressively'], useCases: ['Avoid (use Glass-Filled PP)'], tags: ['Flexible', 'Lightweight'] },
+                no: { summary: 'Ren polypropylen.', pros: ['Tåler uendelig bøyning'], cons: ['Elendig bedvedheft', 'Vrir seg voldsomt'], useCases: ['Bruk GF-PP i stedet'], tags: ['Fleksibel', 'Lav vekt'] }
             },
             {
                 id: 'hdpe', name: 'HDPE', tier: 'F', timecode: '30:21', seconds: 1821,
                 tech: { nozzleTemp: '230-260 °C', bedTemp: '90-110 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '60 °C for 4 hours',
                     deepDive: 'High-density polyethylene. Severe thermal contraction causes parts to rip off beds and split layers.' },
-                en: { summary: 'Recycled jug plastic.', pros: ['Ubiquitous material'], cons: ['Absolute worst printing behavior', 'Warps and splits'], useCases: ['Extruder purge material only'], tags: ['Unprintable', 'Recycled'] },
-                no: { summary: 'Melkekartong-plast.', pros: ['Mye brukt plast'], cons: ['Forferdelig å printe', 'Sprekker i lagene'], useCases: ['Kun til rensing av dyse'], tags: ['Uprintbar', 'Resirkulert'] }
+                en: { summary: 'Recycled jug plastic.', pros: ['Ubiquitous material'], cons: ['Absolute worst printing behavior', 'Warps and splits'], useCases: ['Extruder purge material only'], tags: ['Cheap'] },
+                no: { summary: 'Melkekartong-plast.', pros: ['Mye brukt plast'], cons: ['Forferdelig å printe', 'Sprekker i lagene'], useCases: ['Kun til rensing av dyse'], tags: ['Billig'] }
             },
             {
                 id: 'pom', name: 'POM / Delrin / Acetal', tier: 'F', timecode: '30:49', seconds: 1849,
                 tech: { nozzleTemp: '210-230 °C', bedTemp: '100-120 °C', enclosure: 'Required (Ventilated)', hardenedNozzle: 'No', drying: '80 °C for 4 hours',
                     deepDive: 'Polyoxymethylene. Zero bed adhesion. Overheating decomposes it into hazardous carcinogenic formaldehyde gas.' },
-                en: { summary: 'Common CNC stock plastic.', pros: ['Low friction'], cons: ['Zero bed adhesion', 'Degrades into toxic formaldehyde gas'], useCases: ['CNC machining instead of 3D printing'], tags: ['Toxic gas', 'No bed adhesion'] },
-                no: { summary: 'CNC-plast i filamentform.', pros: ['Lav friksjon'], cons: ['Null vedheft', 'Avgir kreftfremkallende gass'], useCases: ['Fresing i stedet for printing'], tags: ['Giftig gass', 'Ingen vedheft'] }
+                en: { summary: 'Common CNC stock plastic.', pros: ['Low friction'], cons: ['Zero bed adhesion', 'Degrades into toxic formaldehyde gas'], useCases: ['CNC machining instead of 3D printing'], tags: ['Stiff'] },
+                no: { summary: 'CNC-plast i filamentform.', pros: ['Lav friksjon'], cons: ['Null vedheft', 'Avgir kreftfremkallende gass'], useCases: ['Fresing i stedet for printing'], tags: ['Stiv'] }
             },
             {
                 id: 'pvdf', name: 'PVDF / Kynar', tier: 'F', timecode: '31:57', seconds: 1917,
                 tech: { nozzleTemp: '240-260 °C', bedTemp: '80-100 °C', enclosure: 'Required (Fume Hood)', hardenedNozzle: 'No', drying: '80 °C for 4 hours',
                     deepDive: 'Fluoropolymer. Overheating releases lethal hydrofluoric acid and hydrogen cyanide gas that dissolves bone tissue.' },
-                en: { summary: 'Teflon-adjacent chemical polymer.', pros: ['High chemical and heat resistance'], cons: ['Decomposes into lethal hydrofluoric acid gas'], useCases: ['Extreme hazardous risk - avoid'], tags: ['Lethal fumes', 'Chemical resistant'] },
-                no: { summary: 'Teflon-lignende plast.', pros: ['Super kjemikaliebestandig'], cons: ['Avgir dødelig flussyre og giftgass ved overoppheting'], useCases: ['Sikkerhetsrisiko - unngå'], tags: ['Dødelig gass', 'Kjemikalier'] }
+                en: { summary: 'Teflon-adjacent chemical polymer.', pros: ['High chemical and heat resistance'], cons: ['Decomposes into lethal hydrofluoric acid gas'], useCases: ['Extreme hazardous risk - avoid'], tags: ['Chemical resistant', 'Heat resistant'] },
+                no: { summary: 'Teflon-lignende plast.', pros: ['Super kjemikaliebestandig'], cons: ['Avgir dødelig flussyre og giftgass ved overoppheting'], useCases: ['Sikkerhetsrisiko - unngå'], tags: ['Kjemikalier', 'Varmebestandig'] }
             },
             {
                 id: 'ultem-9085', name: 'ULTEM 9085', tier: 'F', timecode: '38:11', seconds: 2291,
                 tech: { nozzleTemp: '370-400 °C', bedTemp: '130-150 °C', enclosure: 'Required', hardenedNozzle: 'No', drying: '140 °C for 6 hours',
                     deepDive: 'Lower grade PEI variant beaten in every mechanical aspect by ULTEM 1010 at the exact same price point.' },
-                en: { summary: 'Inferior grade PEI.', pros: ['Industrial strength'], cons: ['Beaten by ULTEM 1010 in every metric at same price'], useCases: ['Avoid (use ULTEM 1010)'], tags: ['Expensive', 'Outdated'] },
-                no: { summary: 'Lavere grad av ULTEM.', pros: ['Industriell plast'], cons: ['Dårligere enn ULTEM 1010 på alt til samme pris'], useCases: ['Bruk ULTEM 1010 i stedet'], tags: ['Dyr', 'Utdatert'] }
+                en: { summary: 'Inferior grade PEI.', pros: ['Industrial strength'], cons: ['Beaten by ULTEM 1010 in every metric at same price'], useCases: ['Avoid (use ULTEM 1010)'], tags: ['Superpolymer', 'Heat resistant'] },
+                no: { summary: 'Lavere grad av ULTEM.', pros: ['Industriell plast'], cons: ['Dårligere enn ULTEM 1010 på alt til samme pris'], useCases: ['Bruk ULTEM 1010 i stedet'], tags: ['Superpolymer', 'Varmebestandig'] }
             },
             {
                 id: 'tpi', name: 'TPI / Kapton', tier: 'F', timecode: '39:39', seconds: 2379,
                 tech: { nozzleTemp: '430-460 °C', bedTemp: '210-230 °C', enclosure: 'Required (240 °C chamber)', hardenedNozzle: 'No', drying: '180 °C for 6 hours',
                     deepDive: 'Thermoplastic polyimide. Highest heat deflection temperature (250°C), but requires temperature higher than a baking oven.' },
-                en: { summary: 'Kapton tape in filament form.', pros: ['Highest heat resistance possible (250C glass transition)'], cons: ['Requires 450C nozzle and 240C chamber'], useCases: ['Impossible on non-industrial hardware'], tags: ['Extreme temp', 'Industrial'] },
-                no: { summary: 'Kapton-tape som filament.', pros: ['Høyest varmebestandighet (250°C)'], cons: ['Krever 450°C dyse og 240°C kammer'], useCases: ['Umulig på forbrukerutstyr'], tags: ['Uoppnåelig temp', 'Industriell'] }
+                en: { summary: 'Kapton tape in filament form.', pros: ['Highest heat resistance possible (250C glass transition)'], cons: ['Requires 450C nozzle and 240C chamber'], useCases: ['Impossible on non-industrial hardware'], tags: ['Superpolymer', 'Heat resistant'] },
+                no: { summary: 'Kapton-tape som filament.', pros: ['Høyest varmebestandighet (250°C)'], cons: ['Krever 450°C dyse og 240°C kammer'], useCases: ['Umulig på forbrukerutstyr'], tags: ['Superpolymer', 'Varmebestandig'] }
             },
 
             // Special (2)
@@ -822,15 +858,15 @@
                 id: 'pvb', name: 'PVB', tier: 'Special', timecode: '14:10', seconds: 850,
                 tech: { nozzleTemp: '200-220 °C', bedTemp: '60-75 °C', enclosure: 'No', hardenedNozzle: 'No', drying: '50 °C for 4 hours',
                     deepDive: 'Polyvinyl butyral. Dissolves in isopropyl alcohol, enabling safe vapor smoothing without hazardous acetone.' },
-                en: { summary: 'Polyvinyl butyral. Smoothable with isopropyl alcohol vapor.', pros: ['Vapor smoothable with standard isopropyl alcohol', 'High clarity'], cons: ['Fuses on spool in humid air', 'Weaker than PETG'], useCases: ['Transparent lamps', 'Smooth visual models'], tags: ['Vapor smoothing', 'Transparent', 'Hygroscopic'] },
-                no: { summary: 'Polyvinyl butyral. Glattes med isopropanol.', pros: ['Kan glattes med isopropanoldamp', 'Optisk klar overflate'], cons: ['Smelter sammen på spolen ved fukt', 'Svakere enn PETG'], useCases: ['Gjennomsiktige lamper', 'Glattede figurer'], tags: ['Dampsmelting', 'Gjennomsiktig', 'Fuktfølsom'] }
+                en: { summary: 'Polyvinyl butyral. Smoothable with isopropyl alcohol vapor.', pros: ['Vapor smoothable with standard isopropyl alcohol', 'High clarity'], cons: ['Fuses on spool in humid air', 'Weaker than PETG'], useCases: ['Transparent lamps', 'Smooth visual models'], tags: ['Easy to print'] },
+                no: { summary: 'Polyvinyl butyral. Glattes med isopropanol.', pros: ['Kan glattes med isopropanoldamp', 'Optisk klar overflate'], cons: ['Smelter sammen på spolen ved fukt', 'Svakere enn PETG'], useCases: ['Gjennomsiktige lamper', 'Glattede figurer'], tags: ['Enkel å printe'] }
             },
             {
                 id: 'chocolate', name: 'Chocolate', tier: 'Special', timecode: '24:42', seconds: 1482,
                 tech: { nozzleTemp: '32-34 °C', bedTemp: '15-20 °C (Chilled)', enclosure: 'No', hardenedNozzle: 'No (Food grade syringe)', drying: 'Store in cool dry pantry',
                     deepDive: 'Edible thermoplastic printed via syringe extruder. Disqualified from main tier list due to non-spooled format.' },
-                en: { summary: '100% edible plant-based thermoplastic printed via syringe.', pros: ['Delicious', '100% biodegradable', 'Prints at 33°C'], cons: ['Non-spooled format', 'Melts in hand', 'Zero structural strength'], useCases: ['Edible decorations', 'Confectionery design'], tags: ['Edible', 'Food grade', 'Disqualified'] },
-                no: { summary: '100% spiselig plante-termoplast printet fra sprøyte.', pros: ['Deilig', '100% nedbrytbar', 'Printes ved 33°C'], cons: ['Ikke på spole', 'Smelter i hånden', 'Null bæreevne'], useCases: ['Spiselig pynt', 'Konditordesign'], tags: ['Spiselig', 'Matgodkjent', 'Diskwalifisert'] }
+                en: { summary: '100% edible plant-based thermoplastic printed via syringe.', pros: ['Delicious', '100% biodegradable', 'Prints at 33°C'], cons: ['Non-spooled format', 'Melts in hand', 'Zero structural strength'], useCases: ['Edible decorations', 'Confectionery design'], tags: ['Low temp'] },
+                no: { summary: '100% spiselig plante-termoplast printet fra sprøyte.', pros: ['Deilig', '100% nedbrytbar', 'Printes ved 33°C'], cons: ['Ikke på spole', 'Smelter i hånden', 'Null bæreevne'], useCases: ['Spiselig pynt', 'Konditordesign'], tags: ['Low temp'] }
             }
         ];
 
@@ -843,15 +879,16 @@
             'Special': { color: 'text-pink-400', border: 'border-pink-500/30', badgeBg: 'bg-pink-500 text-white' }
         };
 
-        // App State
+        // State
         let currentLang = 'en';
         let activeTier = 'all';
         let searchQuery = '';
+        let selectedProperties = [];
         let autoplayEnabled = false;
         let exportScopeMode = 'filtered';
         let hoverTimeout = null;
 
-        // DOM Elements
+        // DOM
         const searchInput = document.getElementById('searchInput');
         const clearSearchBtn = document.getElementById('clearSearch');
         const tierContainer = document.getElementById('tierContainer');
@@ -868,11 +905,14 @@
         const modalExternalYtLink = document.getElementById('modalExternalYtLink');
 
         const exportModal = document.getElementById('exportModal');
+        const filterModal = document.getElementById('filterModal');
+        const filterActiveBadge = document.getElementById('filterActiveBadge');
 
         function init() {
             setupLanguage();
             setupAutoplay();
             setupModals();
+            setupPropertyFilterModal();
             setupExport();
             updateUIStrings();
             renderFilaments();
@@ -941,7 +981,6 @@
             closeModal.addEventListener('click', hideModal);
             detailModal.addEventListener('click', (e) => { if (e.target === detailModal) hideModal(); });
 
-            // Tech specs accordion
             const toggleBtn = document.getElementById('toggleTechSpecsBtn');
             const content = document.getElementById('techSpecsContent');
             const chevron = document.getElementById('techSpecsChevron');
@@ -952,6 +991,62 @@
             });
 
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideModal(); });
+        }
+
+        function setupPropertyFilterModal() {
+            const openBtn = document.getElementById('openFilterModalBtn');
+            const closeBtn = document.getElementById('closeFilterModal');
+            const clearBtn = document.getElementById('clearPropertyFiltersBtn');
+            const applyBtn = document.getElementById('applyPropertyFiltersBtn');
+            const container = document.getElementById('propertyChipsContainer');
+
+            openBtn.addEventListener('click', () => {
+                renderPropertyChips();
+                filterModal.classList.remove('opacity-0', 'pointer-events-none');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                filterModal.classList.add('opacity-0', 'pointer-events-none');
+            });
+
+            clearBtn.addEventListener('click', () => {
+                selectedProperties = [];
+                renderPropertyChips();
+            });
+
+            applyBtn.addEventListener('click', () => {
+                filterModal.classList.add('opacity-0', 'pointer-events-none');
+                filterActiveBadge.classList.toggle('hidden', selectedProperties.length === 0);
+                renderFilaments();
+            });
+        }
+
+        function renderPropertyChips() {
+            const container = document.getElementById('propertyChipsContainer');
+            container.innerHTML = availableProperties.map(prop => {
+                const isSelected = selectedProperties.includes(prop);
+                return `
+                    <button class="chip-btn px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
+                        isSelected 
+                            ? 'bg-cyan-950/80 border-cyan-500 text-cyan-300' 
+                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }" data-prop="${prop}">
+                        ${prop}
+                    </button>
+                `;
+            }).join('');
+
+            container.querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const prop = btn.dataset.prop;
+                    if (selectedProperties.includes(prop)) {
+                        selectedProperties = selectedProperties.filter(p => p !== prop);
+                    } else {
+                        selectedProperties.push(prop);
+                    }
+                    renderPropertyChips();
+                });
+            });
         }
 
         function setupExport() {
@@ -1020,6 +1115,8 @@
             document.getElementById('uiExportModalTitle').innerText = strings.exportModalTitle;
             document.getElementById('uiExportModalDesc').innerText = strings.exportModalDesc;
             document.getElementById('uiExportScopeLabel').innerText = strings.exportScopeLabel;
+            document.getElementById('uiPropertyFilterTitle').innerText = strings.propertyFilterTitle;
+            document.getElementById('uiPropertyFilterDesc').innerText = strings.propertyFilterDesc;
 
             document.getElementById('countAll').innerText = filaments.length;
         }
@@ -1027,6 +1124,8 @@
         function resetFilters() {
             activeTier = 'all';
             searchQuery = '';
+            selectedProperties = [];
+            filterActiveBadge.classList.add('hidden');
             searchInput.value = '';
             clearSearchBtn.classList.add('hidden');
             document.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-500'));
@@ -1037,7 +1136,16 @@
         function filterFilaments() {
             return filaments.filter(f => {
                 if (activeTier !== 'all' && f.tier !== activeTier) return false;
+                
                 const langData = f[currentLang] || f['en'];
+                const enTags = f['en'].tags;
+
+                // Check selected properties filter
+                if (selectedProperties.length > 0) {
+                    const hasAllProperties = selectedProperties.every(prop => enTags.includes(prop) || langData.tags.includes(prop));
+                    if (!hasAllProperties) return false;
+                }
+
                 if (searchQuery) {
                     const nameM = f.name.toLowerCase().includes(searchQuery);
                     const sumM = langData.summary.toLowerCase().includes(searchQuery);
@@ -1092,7 +1200,6 @@
 
             tierContainer.innerHTML = html;
 
-            // Attach card events
             document.querySelectorAll('.spool-card').forEach(card => {
                 const id = card.dataset.id;
                 const item = filaments.find(f => f.id === id);
@@ -1193,7 +1300,6 @@
                 </svg>
             `;
 
-            // Embedded video with autoplay check
             const autoParam = autoplayEnabled ? '&autoplay=1' : '';
             modalYtIframe.src = `https://www.youtube-nocookie.com/embed/weeG9yOp3i4?start=${item.seconds}${autoParam}`;
             modalExternalYtLink.href = `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`;
@@ -1202,7 +1308,6 @@
             document.getElementById('modalPros').innerHTML = langData.pros.map(p => `<li>+ ${p}</li>`).join('');
             document.getElementById('modalCons').innerHTML = langData.cons.map(c => `<li>- ${c}</li>`).join('');
 
-            // Tech specs
             document.getElementById('techNozzleTemp').innerText = item.tech.nozzleTemp;
             document.getElementById('techBedTemp').innerText = item.tech.bedTemp;
             document.getElementById('techEnclosure').innerText = item.tech.enclosure;
@@ -1233,7 +1338,7 @@
                 const str = JSON.stringify(dataToExport, null, 2);
                 downloadFile(str, '3d_filaments_tierlist.json', 'application/json');
             } else if (format === 'csv') {
-                let csv = 'ID,Name,Tier,Timecode,Summary,BestUseCases,Pros,Cons,NozzleTemp,BedTemp\n';
+                let csv = '\uFEFFID,Name,Tier,Timecode,Summary,BestUseCases,Pros,Cons,NozzleTemp,BedTemp\n';
                 dataToExport.forEach(item => {
                     const lang = item[currentLang] || item['en'];
                     csv += `"${item.id}","${item.name}","${item.tier}","${item.timecode}","${lang.summary.replace(/"/g, '""')}","${lang.useCases.join('; ')}","${lang.pros.join('; ')}","${lang.cons.join('; ')}","${item.tech.nozzleTemp}","${item.tech.bedTemp}"\n`;
@@ -1244,11 +1349,11 @@
                 dataToExport.forEach(item => {
                     const lang = item[currentLang] || item['en'];
                     md += `## ${item.name} (Tier ${item.tier}) - @${item.timecode}\n`;
-                    md += `**Summary:** ${lang.summary}\n\n`;
-                    md += `**Best Use Cases:**\n${lang.useCases.map(u => `- ${u}`).join('\n')}\n\n`;
-                    md += `**Pros:**\n${lang.pros.map(p => `- ${p}`).join('\n')}\n\n`;
-                    md += `**Cons:**\n${lang.cons.map(c => `- ${c}`).join('\n')}\n\n`;
-                    md += `**Technical Parameters:** Nozzle: ${item.tech.nozzleTemp} | Bed: ${item.tech.bedTemp}\n\n---\n\n`;
+                    md += `Summary: ${lang.summary}\n\n`;
+                    md += `Best Use Cases:\n${lang.useCases.map(u => `- ${u}`).join('\n')}\n\n`;
+                    md += `Pros:\n${lang.pros.map(p => `- ${p}`).join('\n')}\n\n`;
+                    md += `Cons:\n${lang.cons.map(c => `- ${c}`).join('\n')}\n\n`;
+                    md += `Technical Parameters: Nozzle: ${item.tech.nozzleTemp} | Bed: ${item.tech.bedTemp}\n\n---\n\n`;
                 });
                 downloadFile(md, '3d_filaments_tierlist.md', 'text/markdown');
             }
