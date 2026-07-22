@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Filament Tier List & Material Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tierS: '#eab308',
+                        tierA: '#a855f7',
+                        tierB: '#3b82f6',
+                        tierC: '#10b981',
+                        tierF: '#ef4444',
+                        tierSpec: '#ec4899'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .spool-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .spool-card:hover {
+            transform: translateY(-3px);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            
+            <!-- Top Bar: Title, Credit, Language Switcher -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-gradient-to-br from-amber-500 to-red-600 rounded-xl shadow-lg shadow-amber-500/10">
+                            <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke-width="2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v6m0 6v6m9-9h-6m-6 0H3"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold tracking-tight text-white" id="uiTitle">3D Filament Tier List</h1>
+                            <p class="text-xs text-slate-400" id="uiSubtitle">Interactive guide based on testing by Zack Freedman</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Language Switcher -->
+                    <div class="flex lg:hidden items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+                        <button id="langEnMobile" class="px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white">EN</button>
+                        <button id="langNoMobile" class="px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white">NO</button>
+                    </div>
+                </div>
+
+                <!-- Center Credit & Link to Video -->
+                <div class="flex flex-wrap items-center gap-3 text-xs bg-slate-950/80 px-3.5 py-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-400" id="uiCredit">Original video & testing by Zack Freedman</span>
+                    <a href="https://youtu.be/weeG9yOp3i4" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-1.5 text-red-400 hover:text-red-300 font-semibold transition bg-red-950/40 hover:bg-red-900/50 px-2.5 py-1 rounded-md border border-red-800/40">
+                        <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                        <span id="uiWatchFull">Watch full video on YouTube</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Language Switcher -->
+                <div class="hidden lg:flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+                    <button id="langEnDesktop" class="px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white">English</button>
+                    <button id="langNoDesktop" class="px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white">Norsk</button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" 
+                        placeholder="Search name, property (e.g. UV, heat, stiff, flex)..." 
+                        class="w-full pl-10 pr-10 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                    <button id="clearSearch" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tier Filter Buttons -->
+            <div class="flex items-center gap-2 mt-4 overflow-x-auto pb-1 text-xs">
+                <span class="text-slate-400 font-medium mr-1 hidden sm:inline shrink-0" id="uiTierLabel">Tier:</span>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition ring-2 ring-cyan-500" data-tier="all">
+                    <span id="uiAllLabel">All</span> (<span id="countAll">0</span>)
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition" data-tier="S">
+                    S-Tier
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-purple-500/30 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 transition" data-tier="A">
+                    A-Tier
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition" data-tier="B">
+                    B-Tier
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition" data-tier="C">
+                    C-Tier
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-rose-500/30 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition" data-tier="F">
+                    F-Tier
+                </button>
+                <button class="tier-filter-btn shrink-0 px-3 py-1.5 rounded-md font-medium border border-pink-500/30 text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 transition" data-tier="Special">
+                    Special
+                </button>
+            </div>
+
+            <!-- Tags Filter Container -->
+            <div id="tagContainer" class="flex items-center gap-1.5 mt-2 overflow-x-auto pb-1 text-xs">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-6 pb-2 border-b border-slate-800">
+            <span id="resultsCount">Showing all filaments</span>
+            <span class="text-slate-500 hidden sm:inline" id="uiClickInfo">Click any spool to view details and watch video segment</span>
+        </div>
+
+        <!-- Tier Containers -->
+        <div id="tierContainer" class="space-y-8">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyState" class="hidden text-center py-16 px-4">
+            <div class="w-12 h-12 mx-auto mb-3 text-slate-600">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-medium text-slate-300" id="uiEmptyTitle">No filaments found</h3>
+            <p class="text-xs text-slate-500 mt-1" id="uiEmptyDesc">Try a different search query or reset filters.</p>
+            <button id="resetSearchBtn" class="mt-4 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-md transition">
+                Reset all filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal for Filament Details & Video Segment -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
+            
+            <!-- Modal Header -->
+            <div class="p-5 border-b border-slate-800 flex items-start justify-between bg-slate-900/80" id="modalHeader">
+                <div class="flex items-center gap-4">
+                    <div id="modalSpoolIcon" class="w-12 h-12 rounded-xl flex items-center justify-center border shadow-inner shrink-0">
+                        <!-- Icon -->
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span id="modalTierBadge" class="px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider"></span>
+                            <span id="modalTimecode" class="text-xs text-slate-400 font-mono"></span>
+                        </div>
+                        <h2 id="modalTitle" class="text-xl font-bold text-white"></h2>
+                    </div>
+                </div>
+                <button id="closeModal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm">
+                
+                <!-- Best Use Cases -->
+                <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80">
+                    <h3 id="uiBestUseLabel" class="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Best Use Cases
+                    </h3>
+                    <ul id="modalUseCases" class="list-disc list-inside text-slate-300 space-y-1"></ul>
+                </div>
+
+                <!-- Pros & Cons Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Pros -->
+                    <div class="bg-emerald-950/20 border border-emerald-800/30 rounded-xl p-4">
+                        <h3 id="uiProsLabel" class="text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Pros
+                        </h3>
+                        <ul id="modalPros" class="space-y-2 text-slate-300"></ul>
+                    </div>
+
+                    <!-- Cons -->
+                    <div class="bg-rose-950/20 border border-rose-800/30 rounded-xl p-4">
+                        <h3 id="uiConsLabel" class="text-xs font-semibold uppercase tracking-wider text-rose-400 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Cons
+                        </h3>
+                        <ul id="modalCons" class="space-y-2 text-slate-300"></ul>
+                    </div>
+                </div>
+
+                <!-- Video Player Container with exact timestamp embed -->
+                <div class="bg-slate-950 rounded-xl p-3 border border-slate-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                            <span id="uiVideoClipTitle">Zack Freedman's Test Clip</span>
+                        </span>
+                        <a id="modalExternalYtLink" href="#" target="_blank" rel="noopener noreferrer" 
+                           class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition">
+                            <span id="uiOpenInYt">Open on YouTube at timestamp</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-slate-900 border border-slate-800">
+                        <iframe id="modalYtIframe" class="w-full h-full" src="" title="YouTube Video Player" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <h3 id="uiTagsLabel" class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Tags & Properties</h3>
+                    <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+                <button id="closeModalBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data and Application Script -->
+    <script>
+        const uiText = {
+            en: {
+                title: "3D Filament Tier List",
+                subtitle: "Interactive guide based on testing by Zack Freedman",
+                credit: "Original video & testing by Zack Freedman",
+                watchFull: "Watch full video on YouTube",
+                searchPlaceholder: "Search name, property (e.g. UV, heat, stiff, flex)...",
+                tierLabel: "Tier:",
+                allLabel: "All",
+                clickInfo: "Click any spool to view details and watch video segment",
+                showingCount: (count, total) => `Showing ${count} of ${total} filaments`,
+                emptyTitle: "No filaments found",
+                emptyDesc: "Try a different search query or reset filters.",
+                resetBtn: "Reset all filters",
+                bestUseLabel: "Best Use Cases",
+                prosLabel: "Pros",
+                consLabel: "Cons",
+                tagsLabel: "Tags & Properties",
+                videoClipTitle: "Zack Freedman's Test Segment",
+                openInYt: "Open on YouTube at timestamp",
+                closeBtn: "Close",
+                tierLabels: {
+                    'S': 'S-Tier (Top Choices)',
+                    'A': 'A-Tier (Excellent Options)',
+                    'B': 'B-Tier (Good for Specific Needs)',
+                    'C': 'C-Tier (Niche / Difficult)',
+                    'F': 'F-Tier (Not Recommended)',
+                    'Special': 'Special Category'
+                }
+            },
+            no: {
+                title: "3D Filament Tier List",
+                subtitle: "Interaktiv materialguide basert på Zack Freedmans testing",
+                credit: "Opprinnelig video og testing av Zack Freedman",
+                watchFull: "Se hele videoen på YouTube",
+                searchPlaceholder: "Søk på navn, egenskap (f.eks. UV, varme, stiv, fleksibel)...",
+                tierLabel: "Nivå:",
+                allLabel: "Alle",
+                clickInfo: "Klikk på en spole for detaljer og videoklipp fra testen",
+                showingCount: (count, total) => `Viser ${count} av ${total} filamenter`,
+                emptyTitle: "Ingen filamenter funnet",
+                emptyDesc: "Prøv et annet søkeord eller tilbakestill filtrene.",
+                resetBtn: "Tilbakestill alle filter",
+                bestUseLabel: "Beste bruksområder",
+                prosLabel: "Fordeler",
+                consLabel: "Ulemper",
+                tagsLabel: "Tagger og nøkkelegenskaper",
+                videoClipTitle: "Zack Freedmans testsegment",
+                openInYt: "Åpne på YouTube ved tidsstempel",
+                closeBtn: "Lukk",
+                tierLabels: {
+                    'S': 'S-Tier (Beste valg)',
+                    'A': 'A-Tier (Fremragende valgalternativer)',
+                    'B': 'B-Tier (Gode til sine bruksområder)',
+                    'C': 'C-Tier (Krevende / Nisje)',
+                    'F': 'F-Tier (Frarådes)',
+                    'Special': 'Spesialkategori'
+                }
+            }
+        };
+
+        const filaments = [
+            // S-Tier
+            {
+                id: 'pctg',
+                name: 'PCTG',
+                tier: 'S',
+                timecode: '11:59',
+                seconds: 719,
+                en: {
+                    summary: 'Extremely durable alternative to PETG with incredible layer adhesion and low warping.',
+                    pros: ['Extremely tough and impact resistant', 'Fantastic layer adhesion in all orientations', 'Minimal warping during printing', 'Absorbs water 3x slower than PETG'],
+                    cons: ['Expensive', 'Hard to source on the market', 'Supports can be difficult to remove'],
+                    useCases: ['Functional prototypes taking heavy abuse', 'High-stress mechanical parts'],
+                    tags: ['Durable', 'Easy to print', 'Chemical resistant', 'High strength']
+                },
+                no: {
+                    summary: 'Ekstremt slitesterkt alternativ til PETG med ekstrem lagvedheft og lite warping.',
+                    pros: ['Ekstremt slitesterkt og slagfast', 'Fantastisk lagvedheft i alle retninger', 'Minimal vridning (warping) under print', 'Absorberer fukt fjerdeparten så raskt som PETG'],
+                    cons: ['Dyrere enn PETG', 'Vanskelig å få tak i på markedet', 'Støttestrukturer sitter godt fast'],
+                    useCases: ['Funksjonelle prototyper som tåler hard behandling', 'Mekaniske deler med høye styrkekrav'],
+                    tags: ['Slitesterk', 'Enkel å printe', 'Kjemikalier', 'Høy styrke']
+                }
+            },
+            {
+                id: 'gf-pa',
+                name: 'Glass-Filled Nylon (GF-PA)',
+                tier: 'S',
+                timecode: '19:42',
+                seconds: 1182,
+                en: {
+                    summary: 'Industrial nylon reinforced with glass fibers. Viable alternative to machined metal.',
+                    pros: ['Massively stiffer and tougher than neat nylon', 'High temperature resistance', 'Drastically reduced warping', 'Excellent wear and impact resistance'],
+                    cons: ['Highly abrasive on brass nozzles (requires hardened tip)', 'Expensive', 'Requires high print temperatures'],
+                    useCases: ['Heavy-duty tool housings', 'Alternative to machined aluminum'],
+                    tags: ['Glass fiber', 'Stiff', 'Heat resistant', 'Durable']
+                },
+                no: {
+                    summary: 'Industriell nylon forsterket med glassfiber. Et alternativ til metall.',
+                    pros: ['Massivt stivere og tøffere enn ren nylon', 'Høy temperaturbestandighet', 'Mye mindre vridning enn ren nylon', 'God slitasjestyrke'],
+                    cons: ['Sliter kraftig på vanlige dyser (krever herdet dyse)', 'Høy pris', 'Krever høye utskriftstemperaturer'],
+                    useCases: ['Heavy-duty verktøy og hus', 'Erstatning for maskinert aluminium'],
+                    tags: ['Glassfiber', 'Stiv', 'Varmebestandig', 'Slitesterk']
+                }
+            },
+            {
+                id: 'tough-pla',
+                name: 'Tough PLA / PLA+',
+                tier: 'S',
+                timecode: '07:35',
+                seconds: 455,
+                en: {
+                    summary: 'Upgraded PLA alloyed with PBT for enhanced impact resistance.',
+                    pros: ['As easy to print as standard PLA', 'Resists sharp impacts without shattering', 'Handles higher temperatures than standard PLA', 'Great mechanical strength'],
+                    cons: ['Slightly more expensive than PLA', 'Still softens under direct heat'],
+                    useCases: ['Everyday functional prints', 'Light-duty functional prototypes'],
+                    tags: ['Easy to print', 'Impact resistant', 'Stiff']
+                },
+                no: {
+                    summary: 'Oppgradert PLA blandet med seigere plasttyper som PBT.',
+                    pros: ['Like enkel å printe som standard PLA', 'Knekker ikke uventet ved støt', 'Tåler høyere temperaturer enn PLA', 'Gode mekaniske egenskaper'],
+                    cons: ['Litt dyrere enn standard PLA', 'Mykner fortsatt ved høye temperaturer'],
+                    useCases: ['Hverdagsprints med krav til styrke', 'Lette funksjonelle prototyper'],
+                    tags: ['Enkel å printe', 'Slagfast', 'Stiv']
+                }
+            },
+            {
+                id: 'cf-pla',
+                name: 'Carbon Fiber PLA (CF-PLA)',
+                tier: 'S',
+                timecode: '04:50',
+                seconds: 290,
+                en: {
+                    summary: 'PLA blended with chopped carbon fibers. Delivers crisp detail and matte finish.',
+                    pros: ['Extremely stiff', 'Gorgeous matte finish that hides layer lines', 'Tight dimensional accuracy with low thermal shrinkage'],
+                    cons: ['More brittle than neat PLA', 'Requires hardened steel nozzle'],
+                    useCases: ['Precision models', 'Stiffened visual prototypes'],
+                    tags: ['Carbon fiber', 'Stiff', 'Matte finish']
+                },
+                no: {
+                    summary: 'PLA forsterket med hakkede karbonfibre. Flott estetikk.',
+                    pros: ['Ekstremt stivt', 'Flott matt overflate som skjuler laglinjer', 'Veldig presise dimensjoner med minimal krymping'],
+                    cons: ['Mer sprøtt ved støt enn vanlig PLA', 'Krever herdet stål-dyse pga. slitasje'],
+                    useCases: ['Presisjonsmodeller', 'Visuelle utstillingsmodeller med avstivning'],
+                    tags: ['Karbonfiber', 'Stiv', 'Matt overflate']
+                }
+            },
+            {
+                id: 'hs-pla',
+                name: 'High-Speed PLA',
+                tier: 'S',
+                timecode: '08:47',
+                seconds: 527,
+                en: {
+                    summary: 'Low-viscosity PLA designed for ultra-fast extrusion speed.',
+                    pros: ['Melts quickly at lower temperatures', 'Allows extreme printing speeds (300+ mm/s)', 'Saves significant print time'],
+                    cons: ['Softens easily in warm environments'],
+                    useCases: ['Rapid prototyping', 'Time-sensitive prints'],
+                    tags: ['High speed', 'Easy to print']
+                },
+                no: {
+                    summary: 'Lavviskositets-PLA designet for mateverk i superhastighet.',
+                    pros: ['Smelter raskt ved lavere temperatur', 'Tillater ekstremt høye printhastigheter (300+ mm/s)', 'Reduserer printtid betraktelig'],
+                    cons: ['Mykner lett i varmt klima/miljø'],
+                    useCases: ['Hurtig prototyping', 'Raske utskrifter når tiden er knapp'],
+                    tags: ['Høy hastighet', 'Enkel å printe']
+                }
+            },
+            {
+                id: 'cf-petg',
+                name: 'Carbon Fiber PETG (CF-PETG)',
+                tier: 'S',
+                timecode: '11:24',
+                seconds: 684,
+                en: {
+                    summary: 'Blends PETG toughness with carbon fiber rigidity for smooth performance.',
+                    pros: ['Eliminates PETG sagging on overhangs', 'Great dimensional stability', 'Beautiful matte surface'],
+                    cons: ['Requires hardened nozzle', 'Reduced flexibility compared to neat PETG'],
+                    useCases: ['Stiff functional prototypes', 'Mechanical components'],
+                    tags: ['Carbon fiber', 'Durable', 'Stiff']
+                },
+                no: {
+                    summary: 'Kombinerer seigheten fra PETG med stivheten fra karbonfiber.',
+                    pros: ['Eliminerer PETG sin tendens til å sige på overheng', 'Veldig god dimensjonsstabilitet', 'Vakker matt overflate'],
+                    cons: ['Krever herdet dyse', 'Noe redusert fleksibilitet sammenlignet med ren PETG'],
+                    useCases: ['Stive funksjonelle prototyper', 'Mekaniske deler'],
+                    tags: ['Karbonfiber', 'Slitesterk', 'Stiv']
+                }
+            },
+            {
+                id: 'tpu-99d',
+                name: 'Hard TPU (99D)',
+                tier: 'S',
+                timecode: '25:34',
+                seconds: 1534,
+                en: {
+                    summary: 'Indestructible hard flexible polymer for maximum abuse.',
+                    pros: ['Virtually impossible to shatter or break', 'Perfect layer bonding', 'Great chemical and wear resistance'],
+                    cons: ['Inflexible for a TPU (skateboard wheel hardness)', 'Requires thorough drying before use'],
+                    useCases: ['Combat robots', 'Tactical gear', 'High-impact structural parts'],
+                    tags: ['Durable', 'Indestructible', 'Impact resistant']
+                },
+                no: {
+                    summary: 'Ekstremt hard fleksibel plast. Nesten uødeleggelig.',
+                    pros: ['Nærmest umulig å ødelegge eller knekke', 'Perfekt lagvedheft', 'God kjemikalie- og slitasjebestandighet'],
+                    cons: ['Nesten ufleksibelt (hard som rullebretthjul)', 'Må være helt tørt før utskrift'],
+                    useCases: ['Kamproboter', 'Taktisk utstyr', 'Deler under ekstrem påkjenning'],
+                    tags: ['Slitesterk', 'Uødeleggelig', 'Slagfast']
+                }
+            },
+
+            // A-Tier
+            {
+                id: 'pla',
+                name: 'Standard PLA',
+                tier: 'A',
+                timecode: '02:51',
+                seconds: 171,
+                en: {
+                    summary: 'The king of 3D printing. Inexpensive, stiff, and easy to print anywhere.',
+                    pros: ['Extremely easy to print', 'Cheap and widely available in countless colors', 'High tensile strength and stiffness', 'Great bridging and overhangs'],
+                    cons: ['Poor heat tolerance (softens in cars or hot days)', 'Degrades under UV sunlight', 'Shatters on hard impact'],
+                    useCases: ['Decorative models', 'Concept models', 'Indoor visual prototypes'],
+                    tags: ['Easy to print', 'Cheap', 'Stiff']
+                },
+                no: {
+                    summary: 'Kongen av 3D-printing. Billig, enkelt og tilgjengelig overalt.',
+                    pros: ['Ekstremt enkelt å printe', 'Billig og finnes i uendelige farger', 'Stivt med høy strekkfasthet', 'God på overheng og bruer'],
+                    cons: ['Dårlig varmebestandighet (mykner i sol/bil)', 'Tåler ikke UV-lys over tid', 'Sprøtt ved harde støt'],
+                    useCases: ['Dekorasjoner', 'Konseptmodeller', 'Prototyper for innendørs bruk'],
+                    tags: ['Enkel å printe', 'Billig', 'Stiv']
+                }
+            },
+            {
+                id: 'petg',
+                name: 'PETG',
+                tier: 'A',
+                timecode: '10:29',
+                seconds: 629,
+                en: {
+                    summary: 'Versatile workhorse material with better impact resistance than PLA.',
+                    pros: ['Higher heat and impact tolerance than PLA', 'Good chemical resistance', 'Low coefficient of friction and slight flex'],
+                    cons: ['Prone to stringing', 'Sags on bridges and overhangs', 'Difficult support removal'],
+                    useCases: ['Functional indoor and outdoor prints', 'Enclosures and containers'],
+                    tags: ['Durable', 'Chemical resistant', 'Versatile']
+                },
+                no: {
+                    summary: 'Allsidig arbeidshest som tåler mer bank enn PLA.',
+                    pros: ['Tåler mer varme og støt enn PLA', 'God kjemikaliebestandighet', 'Lav friksjon og noe fleksibilitet'],
+                    cons: ['Tendens til tråding (stringing)', 'Siger på overheng', 'Vanskelige støttestrukturer'],
+                    useCases: ['Funksjonelle innendørs/utendørs deler', 'Beholdere og beskyttelse'],
+                    tags: ['Slitesterk', 'Kjemikalier', 'Allsidig']
+                }
+            },
+            {
+                id: 'cf-pet',
+                name: 'Carbon Fiber PET (CF-PET)',
+                tier: 'A',
+                timecode: '13:35',
+                seconds: 815,
+                en: {
+                    summary: 'High-performance engineering filament easier to handle than CF-Nylon.',
+                    pros: ['Very stiff and strong', 'Much easier to print than carbon-nylon', 'Good heat resistance'],
+                    cons: ['Expensive spool cost', 'Requires enclosure and hardened nozzle'],
+                    useCases: ['Structural components', 'Robotic arms'],
+                    tags: ['Carbon fiber', 'Stiff', 'Heat resistant']
+                },
+                no: {
+                    summary: 'Høyytelsesmateriale som er enklere å printe enn karbon-nylon.',
+                    pros: ['Svært stivt og sterkt', 'Enklere å printe enn karbonfiber-nylon', 'God varmebestandighet'],
+                    cons: ['Dyr filament', 'Krever kapslet printer og herdet dyse'],
+                    useCases: ['Strukturelle komponenter', 'Mekaniske armer'],
+                    tags: ['Karbonfiber', 'Stiv', 'Varmebestandig']
+                }
+            },
+            {
+                id: 'asa',
+                name: 'ASA',
+                tier: 'A',
+                timecode: '15:39',
+                seconds: 939,
+                en: {
+                    summary: 'Superior alternative to ABS with outstanding UV and weather resistance.',
+                    pros: ['Full UV and weather resistance for outdoor use', 'Handles temperatures up to boiling point', 'Handsome matte finish'],
+                    cons: ['Prone to warping without an enclosure', 'Emits fumes during printing'],
+                    useCases: ['Outdoor fixtures', 'Automotive parts', 'Solar exposure items'],
+                    tags: ['UV resistant', 'Heat resistant', 'Durable']
+                },
+                no: {
+                    summary: 'Det beste valget for utendørsdeler. Forbedret utgave av ABS.',
+                    pros: ['Fullstendig UV- og værbestandig', 'Tåler temperaturer opp mot kokepunktet', 'Flott matt overflate'],
+                    cons: ['Kan vri seg (warping) uten kabinett', 'Avgir gasser under print'],
+                    useCases: ['Utendørsutstyr', 'Bildeler', 'Gjenstander i direkte sollys'],
+                    tags: ['UV-resistent', 'Varmebestandig', 'Slitesterk']
+                }
+            },
+            {
+                id: 'cf-pc',
+                name: 'Carbon Fiber Polycarbonate (CF-PC)',
+                tier: 'A',
+                timecode: '21:54',
+                seconds: 1314,
+                en: {
+                    summary: 'Record-setting stiffness for heavy structural loads.',
+                    pros: ['Extreme stiffness and load capacity', 'Resists heavy loads without flexing', 'Surprisingly affordable for a high-end composite'],
+                    cons: ['Very stiff filament can stall extruder drives', 'Requires high temperature hotend'],
+                    useCases: ['Heavy load structural components'],
+                    tags: ['Carbon fiber', 'Extreme stiffness', 'High strength']
+                },
+                no: {
+                    summary: 'Rekordsettende stivhet og styrke for tunge belastninger.',
+                    pros: ['Ekstrem stivhet og bæreevne', 'Tåler hundrevis av kilo uten flexing', 'Relativt rimelig til supermateriale å være'],
+                    cons: ['Velsig stivt filament som kan stoppe mateverket', 'Krever høytemperatur-hotend'],
+                    useCases: ['Komponenter under tung mekanisk belastning'],
+                    tags: ['Karbonfiber', 'Ekstrem stivhet', 'Høy styrke']
+                }
+            },
+            {
+                id: 'pc-pbt',
+                name: 'PC-PBT',
+                tier: 'A',
+                timecode: '23:41',
+                seconds: 1421,
+                en: {
+                    summary: 'Polycarbonate alloy that maintains toughness far below freezing.',
+                    pros: ['Does not turn brittle in sub-zero cold', 'Low warping and clean surface finish', 'One of the easiest PC filaments to print'],
+                    cons: ['Limited availability on the market'],
+                    useCases: ['Arctic and cold weather gear', 'Impact resistant housings'],
+                    tags: ['Cold resistant', 'Impact resistant', 'Durable']
+                },
+                no: {
+                    summary: 'Polykarbonat-legering som beholder seigheten i ekstrem kulde.',
+                    pros: ['Knekker ikke selv langt under frysepunktet', 'Svært lav vridning og fin overflate', 'Lett å printe til PC å være'],
+                    cons: ['Vanskelig å få tak i'],
+                    useCases: ['Utstyr til bruk i arktisk/kaldt klima', 'Støtsikre deler'],
+                    tags: ['Kuldebestandig', 'Slagfast', 'Slitesterk']
+                }
+            },
+            {
+                id: 'sebs',
+                name: 'SEBS',
+                tier: 'A',
+                timecode: '27:35',
+                seconds: 1655,
+                en: {
+                    summary: 'Styrene-enhanced TPE offering smooth prints and stretchy flex.',
+                    pros: ['Genuinely flexible and stretchy', 'Smooth, premium surface quality', 'Prints much cleaner than standard TPE'],
+                    cons: ['Hygroscopic', 'Emits styrene fumes', 'Low softening temperature'],
+                    useCases: ['Grips, seals, soft ergonomic parts'],
+                    tags: ['Flexible', 'Stretchy', 'Smooth finish']
+                },
+                no: {
+                    summary: 'Forbedret TPE-variant som gir fantastisk fleksible resultater.',
+                    pros: ['Gjennomførbar fleksibilitet og tøyelighet', 'Veldig jevn og myk overflate', 'Printes renere enn vanlige TPEer'],
+                    cons: ['Suger fuktighet', 'Avgir styrengasser', 'Lave mykningstemperaturer'],
+                    useCases: ['Grep, pakninger, myke ergonomiske deler'],
+                    tags: ['Fleksibel', 'Tøyelig', 'Myk overflate']
+                }
+            },
+            {
+                id: 'pec',
+                name: 'PEC',
+                tier: 'A',
+                timecode: '35:02',
+                seconds: 2102,
+                en: {
+                    summary: 'Sister material to PEEK. Nearly as strong, but significantly easier to print.',
+                    pros: ['Extreme strength and heat resistance', 'Significantly easier to succeed with than PEEK'],
+                    cons: ['Expensive spool cost', 'Requires high temperature setup'],
+                    useCases: ['Demanding industrial environments'],
+                    tags: ['Superpolymer', 'Heat resistant', 'High strength']
+                },
+                no: {
+                    summary: 'Lillesøsteren til PEEK. Nesten like sterk, men mye enklere å printe.',
+                    pros: ['Ekstrem styrke og varmebestandighet', 'Betydelig enklere å printe enn PEEK'],
+                    cons: ['Dyr filament', 'Krever høytemperaturutstyr'],
+                    useCases: ['Krevende industrielle miljøer'],
+                    tags: ['Superpolymer', 'Varmebestandig', 'Høy styrke']
+                }
+            },
+            {
+                id: 'ultem-1010',
+                name: 'ULTEM 1010 (PEI)',
+                tier: 'A',
+                timecode: '38:04',
+                seconds: 2284,
+                en: {
+                    summary: 'Industrial powerhouse with extreme thermal, chemical, and radiation resistance.',
+                    pros: ['Withstands extreme heat, radiation, and flame', 'Exceptional tensile strength and rigidity', 'Great dimensional stability'],
+                    cons: ['Requires specialized industrial printer (425C nozzle, 160C bed)', 'Very expensive'],
+                    useCases: ['Aerospace, automotive, medical sterilization'],
+                    tags: ['Superpolymer', 'Heat resistant', 'Chemical resistant']
+                },
+                no: {
+                    summary: 'Gigachad-materiale med ekstrem temperatur- og kjemikalieresistens.',
+                    pros: ['Tåler ekstrem varme, kjemikalier og stråling', 'Kjempehøy strekkfasthet og stivhet', 'Høy dimensjonsstabilitet'],
+                    cons: ['Krever industriell printer (425C hotend, 160C bed)', 'Veldig dyrt'],
+                    useCases: ['Romfart, bilindustri, medisinsk utstyr'],
+                    tags: ['Superpolymer', 'Varmebestandig', 'Kjemikalier']
+                }
+            },
+
+            // B-Tier
+            {
+                id: 'silk-pla',
+                name: 'Silk PLA',
+                tier: 'B',
+                timecode: '03:59',
+                seconds: 239,
+                en: {
+                    summary: 'High-gloss metallic finish ideal for display pieces.',
+                    pros: ['Vibrant metallic shiny appearance', 'Very easy support removal'],
+                    cons: ['Reduced layer adhesion and strength', 'Swells in hotend during idle'],
+                    useCases: ['Display models, figures, decorative objects'],
+                    tags: ['Aesthetic', 'Shiny', 'Brittle']
+                },
+                no: {
+                    summary: 'Eksplosivt skinnende og metallisk look for utstillingsmodeller.',
+                    pros: ['Utrolig estetisk og skinnende overflate', 'Veldig enkle støttestrukturer å fjerne'],
+                    cons: ['Svakere lagvedheft', 'Sveller opp i dysen under oppvarming'],
+                    useCases: ['Pynt, figurer, utstillingsmodeller'],
+                    tags: ['Estetisk', 'Skinnende', 'Svak']
+                }
+            },
+            {
+                id: 'wood-pla',
+                name: 'Wood PLA',
+                tier: 'B',
+                timecode: '06:29',
+                seconds: 389,
+                en: {
+                    summary: 'PLA infused with real wood fiber or sawdust.',
+                    pros: ['Authentic wood texture and smell', 'Can be sanded, stained, and varnished'],
+                    cons: ['Mechanically weak', 'Prone to nozzle clogs', 'Absorbs moisture quickly'],
+                    useCases: ['Furniture props, artistic ornaments'],
+                    tags: ['Aesthetic', 'Wood finish', 'Hygroscopic']
+                },
+                no: {
+                    summary: 'PLA blandet med trepulver eller trefibre.',
+                    pros: ['Føles og lukter som ekte tre', 'Kan pusses, beises og lakkes for trefinish'],
+                    cons: ['Mekanisk svakt', 'Tetter lett dyser', 'Absorberer fuktighet veldig raskt'],
+                    useCases: ['Møbelrekvisitter, kunst, dekorasjon'],
+                    tags: ['Estetisk', 'Tre-finish', 'Fuktfølsom']
+                }
+            },
+            {
+                id: 'matte-pla',
+                name: 'Matte PLA',
+                tier: 'B',
+                timecode: '08:12',
+                seconds: 492,
+                en: {
+                    summary: 'PLA blended with plant pulp for a soft satin surface.',
+                    pros: ['Soft satin finish that hides layer lines', 'Can be easily sanded, painted, and carved'],
+                    cons: ['Absorbs moisture quickly', 'Higher risk of extruder grinding'],
+                    useCases: ['Prototypes meant for post-processing and painting'],
+                    tags: ['Matte finish', 'Sandable']
+                },
+                no: {
+                    summary: 'PLA med trefiber- eller plantemasse for myk satinoverflate.',
+                    pros: ['Flott myk overflate som skjuler laglinjer', 'Kan pusses, males og skjæres i'],
+                    cons: ['Absorberer fuktighet raskere', 'Mer tilbøyelig til å tette ekstruderen'],
+                    useCases: ['Prototyper som skal etterbehandles/males'],
+                    tags: ['Matt overflate', 'Kan pusses']
+                }
+            },
+            {
+                id: 'flex-pla',
+                name: 'Flex PLA / PCL',
+                tier: 'B',
+                timecode: '09:34',
+                seconds: 574,
+                en: {
+                    summary: 'Ultra low-temperature polymer (softens at 60C / prints at 100C).',
+                    pros: ['Melts at just 100°C', 'Can be remolded with a hairdryer directly on body'],
+                    cons: ['Tricky low-temp print settings', 'Cannot withstand ambient heat'],
+                    useCases: ['Custom fitting prosthetics and splints'],
+                    tags: ['Low temp', 'Moldable']
+                },
+                no: {
+                    summary: 'Lavtemperaturs-plast som kan formes for hånd i varmt vann.',
+                    pros: ['Smelter ved kun 100°C', 'Kan formes med hårføner direkte på kroppen'],
+                    cons: ['Vanskelig å printe rent', 'Tåler overhodet ikke varme i bruk'],
+                    useCases: ['Tilpassede proteser, formbare skinner'],
+                    tags: ['Lav temperatur', 'Formbar']
+                }
+            },
+            {
+                id: 'pet',
+                name: 'PET / bPET',
+                tier: 'B',
+                timecode: '12:54',
+                seconds: 774,
+                en: {
+                    summary: 'Bottle-grade un-modified polyester. Stiffer and glossier than PETG.',
+                    pros: ['Stiffer and more heat resistant than PETG', 'High optical clarity'],
+                    cons: ['Destructive bed adhesion to glass/PEI', 'Sags easily on overhangs'],
+                    useCases: ['Stiff clear containers, heat resistant parts'],
+                    tags: ['Stiff', 'Heat resistant']
+                },
+                no: {
+                    summary: 'Sammensetning uten glykol. Stivere og tøffere enn PETG.',
+                    pros: ['Høy varmebestandighet og stivhet', 'Svært klar i overflaten'],
+                    cons: ['Kan ødelegge byggeplater pga. for sterk vedheft', 'Siger lett på overheng'],
+                    useCases: ['Stive beholdere og varmebestandige komponenter'],
+                    tags: ['Stiv', 'Varmebestandig']
+                }
+            },
+            {
+                id: 'hips',
+                name: 'HIPS',
+                tier: 'B',
+                timecode: '16:27',
+                seconds: 987,
+                en: {
+                    summary: 'High impact polystyrene. Commonly used as d-limonene soluble support.',
+                    pros: ['Dissolves in d-limonene solvent', 'Lightweight and impact resistant'],
+                    cons: ['Prone to thermal warping'],
+                    useCases: ['Dissolvable support for ABS/ASA', 'Wearables and cosplay props'],
+                    tags: ['Soluble support', 'Lightweight']
+                },
+                no: {
+                    summary: 'Slagfast polystyren. Ofte brukt som støttemateriale for ABS.',
+                    pros: ['Oppløselig i limonene (sitronolje)', 'Lav vekt og god slagfasthet'],
+                    cons: ['Tendens til vridning (warping)'],
+                    useCases: ['Støttemateriale for ABS/ASA', 'Wearables og cosplay-rekvisitter'],
+                    tags: ['Løselig støtte', 'Lav vekt']
+                }
+            },
+            {
+                id: 'pa6-nylon',
+                name: 'PA6 Nylon',
+                tier: 'B',
+                timecode: '17:06',
+                seconds: 1026,
+                en: {
+                    summary: 'Most common nylon variant. Extremely tough with self-lubricating friction.',
+                    pros: ['Nearly indestructible layer bonds', 'Low friction coefficient for gears'],
+                    cons: ['Aggressively hygroscopic (must print from dry box)', 'Severe warping without heated chamber'],
+                    useCases: ['Gears, bushings, high-impact mechanisms'],
+                    tags: ['Durable', 'Nylon', 'Low friction']
+                },
+                no: {
+                    summary: 'Den mest populære nylonvarianten. Ekstremt seig.',
+                    pros: ['Ekstremt slitesterkt og nesten uknuselig', 'Lav friksjon (perfekt for tannhjul)'],
+                    cons: ['Suger til seg vann ekstremt raskt', 'Vrir seg voldsomt under print uten varmt kabinett'],
+                    useCases: ['Tannhjul, glideflater, mekaniske belastninger'],
+                    tags: ['Slitesterk', 'Nylon', 'Lav friksjon']
+                }
+            },
+            {
+                id: 'pa12-nylon',
+                name: 'PA12 Nylon',
+                tier: 'B',
+                timecode: '18:16',
+                seconds: 1096,
+                en: {
+                    summary: 'Stiffer nylon variant preferred for precision structural parts.',
+                    pros: ['Stiffer than PA6', 'Slightly lower moisture absorption'],
+                    cons: ['Extreme warping force', 'Requires active heated chamber and high temps'],
+                    useCases: ['RC vehicles, machine tools, precision housings'],
+                    tags: ['Nylon', 'Stiff', 'Precision']
+                },
+                no: {
+                    summary: 'Stivere nylonvariant for presisjonsoppgaver.',
+                    pros: ['Stivere enn PA6', 'Høy temperaturbestandighet'],
+                    cons: ['Vrir seg ennå mer enn PA6', 'Krever varmt kabinett og høy dyse-temp'],
+                    useCases: ['Radiostyrte biler, maskinverktøy, presisjonskomponenter'],
+                    tags: ['Nylon', 'Stiv', 'Høy presisjon']
+                }
+            },
+            {
+                id: 'pa6-cf',
+                name: 'Carbon Fiber PA6 (PA6-CF)',
+                tier: 'B',
+                timecode: '18:58',
+                seconds: 1138,
+                en: {
+                    summary: 'Carbon reinforced nylon that warps less than neat nylon.',
+                    pros: ['Stiffer than neat nylon', 'Significantly reduced warping'],
+                    cons: ['Requires fire-breathing hotend and drive motor', 'Loses low friction property'],
+                    useCases: ['Stiff heavy-duty mechanical mounts'],
+                    tags: ['Carbon fiber', 'Nylon', 'Stiff']
+                },
+                no: {
+                    summary: 'Karbonforsterket nylon som vrir seg mindre under print.',
+                    pros: ['Stivere enn ren nylon', 'Mye mindre vridning under utskrift'],
+                    cons: ['Krever veldig kraftig mateverk og hotend', 'Tap av lav friksjon'],
+                    useCases: ['Strukturelle verktøydeler'],
+                    tags: ['Karbonfiber', 'Nylon', 'Stiv']
+                }
+            },
+            {
+                id: 'pc',
+                name: 'Polycarbonate (PC)',
+                tier: 'B',
+                timecode: '21:10',
+                seconds: 1270,
+                en: {
+                    summary: 'Bulletproof toughness with high heat resistance.',
+                    pros: ['Among the toughest and stiffest non-composite plastics', 'Withstands up to 150°C'],
+                    cons: ['Slow print speeds required', 'Highly hygroscopic', 'Prone to severe warping'],
+                    useCases: ['Heavy impact armor, high-stress parts'],
+                    tags: ['Impact resistant', 'Heat resistant', 'High strength']
+                },
+                no: {
+                    summary: 'Skuddsikkert seigt materiale. Ekstremt sterkt.',
+                    pros: ['Noe av det tøffeste og mest slagfaste du kan printe', 'Tåler opp mot 150°C'],
+                    cons: ['Sakte utskrift', 'Suger vann tørst', 'Ofte overdimensjonert for vanlige behov'],
+                    useCases: ['Deler under voldsom mekanisk påkjenning'],
+                    tags: ['Slagfast', 'Varmebestandig', 'Høy styrke']
+                }
+            },
+            {
+                id: 'tpu-90d',
+                name: 'Medium TPU (90D)',
+                tier: 'B',
+                timecode: '26:11',
+                seconds: 1571,
+                en: {
+                    summary: 'Semi-flexible TPU with balanced stiffness for hinges and bumpers.',
+                    pros: ['Great balance between flexibility and rigidity', 'Highly durable'],
+                    cons: ['Tricky on tall thin prints'],
+                    useCases: ['Bumpers, hinges, semi-rigid protection'],
+                    tags: ['Semi-flexible', 'Durable']
+                },
+                no: {
+                    summary: 'Semifleksibel TPU med god balanse.',
+                    pros: ['God balanse mellom stivhet og fleksibilitet', 'Slitesterk'],
+                    cons: ['Vanskelig å printe på høye, tynne objekter'],
+                    useCases: ['Støtfangere, hengsler, beskyttelsesdeksler'],
+                    tags: ['Semifleksibel', 'Slitesterk']
+                }
+            },
+            {
+                id: 'gf-pp',
+                name: 'Glass-Filled Polypropylene (GF-PP)',
+                tier: 'B',
+                timecode: '29:12',
+                seconds: 1752,
+                en: {
+                    summary: 'Lightweight glass reinforced polypropylene for industrial machinery.',
+                    pros: ['Exceptionally tough and lightweight', 'Chemical immune', 'All-weather durability'],
+                    cons: ['Severe bed adhesion challenges', 'Requires direct drive and hardened nozzle'],
+                    useCases: ['All-weather machinery parts, lightweight rugged housings'],
+                    tags: ['Glass fiber', 'Lightweight', 'Durable']
+                },
+                no: {
+                    summary: 'Glassfylt polypropylen. Ekstremt lett og slitesterkt.',
+                    pros: ['Enormt slitesterkt', 'Veldig lav vekt', 'Tåler all slags vær'],
+                    cons: ['Ekstremt vanskelig bedvedheft', 'Krever herdet dyse'],
+                    useCases: ['Industrielt utstyr og allværsutstyr'],
+                    tags: ['Glassfiber', 'Lav vekt', 'Slitesterk']
+                }
+            },
+            {
+                id: 'psu',
+                name: 'PSU',
+                tier: 'B',
+                timecode: '36:23',
+                seconds: 2183,
+                en: {
+                    summary: 'High-temp superpolymer that holds strength up to 187C.',
+                    pros: ['Maintains structural strength at extreme temps', 'Sterilizably autoclavable like medical steel'],
+                    cons: ['Demanding print parameters'],
+                    useCases: ['Medical equipment, sterilizable research tools'],
+                    tags: ['Superpolymer', 'Sterilizable', 'Heat resistant']
+                },
+                no: {
+                    summary: 'Superpolymer som beholder styrken opp mot 187°C.',
+                    pros: ['Tåler ekstrem varme uten å deformeres', 'Kan steriliseres som kirurgisk stål'],
+                    cons: ['Krevende utskriftsparametere'],
+                    useCases: ['Medisinsk utstyr, autoklaverbare komponenter'],
+                    tags: ['Superpolymer', 'Steriliserbar', 'Varmebestandig']
+                }
+            },
+
+            // C-Tier
+            {
+                id: 'abs',
+                name: 'ABS',
+                tier: 'C',
+                timecode: '14:50',
+                seconds: 890,
+                en: {
+                    summary: 'Legacy consumer plastic largely surpassed by ASA.',
+                    pros: ['Cheap, heat resistant, acetone vapor smoothable'],
+                    cons: ['Warps severely without enclosure', 'Emits strong unpleasant styrene fumes'],
+                    useCases: ['Vapor-smoothed visual parts, heat resistant enclosures'],
+                    tags: ['Cheap', 'Heat resistant', 'Fumes']
+                },
+                no: {
+                    summary: 'Klassikeren som har tapt terreng til ASA.',
+                    pros: ['Billig, varmebestandig og lett å acetonglatte'],
+                    cons: ['Vrir seg (warping) voldsomt', 'Lukter og avgir giftige gasser'],
+                    useCases: ['Acetonglattededeler, utendørskomponenter (med kabinett)'],
+                    tags: ['Billig', 'Varmebestandig', 'Giftige gasser']
+                }
+            },
+            {
+                id: 'pa12-cf',
+                name: 'Carbon Fiber PA12 (PA12-CF)',
+                tier: 'C',
+                timecode: '18:58',
+                seconds: 1138,
+                en: {
+                    summary: 'Stiff carbon composite with PA12 base.',
+                    pros: ['High rigidity and dimensional stability'],
+                    cons: ['Very expensive with marginal benefits over PA6-CF'],
+                    useCases: ['Precision engineering mounts'],
+                    tags: ['Carbon fiber', 'Nylon', 'Expensive']
+                },
+                no: {
+                    summary: 'Karbonforsterket PA12.',
+                    pros: ['Høy stivhet og dimensjonsstabilitet'],
+                    cons: ['Dyr og krevende å printe uten at resultatene forsvarer prisen'],
+                    useCases: ['Spesialiserte presisjonsdeler'],
+                    tags: ['Karbonfiber', 'Nylon', 'Dyrt']
+                }
+            },
+            {
+                id: 'petg-nylon',
+                name: 'PETG / Nylon Blends',
+                tier: 'C',
+                timecode: '20:34',
+                seconds: 1234,
+                en: {
+                    summary: 'Attempted alloy combining PETG and Nylon properties.',
+                    pros: ['Slight boost in nylon-like toughness'],
+                    cons: ['Combines the bed peeling tendencies of both materials'],
+                    useCases: ['Rarely recommended over pure PETG or Nylon'],
+                    tags: ['Alloy', 'Bad bed adhesion']
+                },
+                no: {
+                    summary: 'Forsøk på å blande PETG og Nylon.',
+                    pros: ['Litt av nylons styrke'],
+                    cons: ['Arver bedvedheftsproblemene til begge materialer'],
+                    useCases: ['Sjeldent anbefalt'],
+                    tags: ['Legering', 'Vanskelig vedheft']
+                }
+            },
+            {
+                id: 'pmma',
+                name: 'PMMA / Acrylic',
+                tier: 'C',
+                timecode: '22:36',
+                seconds: 1356,
+                en: {
+                    summary: 'Plexiglass in filament form with supreme optical clarity.',
+                    pros: ['Incomparable optical clarity', 'Great UV resistance'],
+                    cons: ['Extremely brittle', 'Terrible bed and layer adhesion'],
+                    useCases: ['Lenses, transparent light pipes'],
+                    tags: ['Clear', 'Brittle']
+                },
+                no: {
+                    summary: 'Pleksiglass i filamentform.',
+                    pros: ['Krystallklar optikk, UV-bestandig'],
+                    cons: ['Ekstremt sprøtt', 'Elendig lagvedheft og bedvedheft'],
+                    useCases: ['Lykter, gjennomsiktige linser'],
+                    tags: ['Optisk klar', 'Sprø']
+                }
+            },
+            {
+                id: 'tpu-88d',
+                name: 'Soft TPU (88D)',
+                tier: 'C',
+                timecode: '26:34',
+                seconds: 1594,
+                en: {
+                    summary: 'Very soft floppy flexible filament.',
+                    pros: ['Highly flexible'],
+                    cons: ['Prone to wrapping around drive gears', 'Uncomfortable as wearable due to sweat'],
+                    useCases: ['Soft gaskets, vibration dampeners'],
+                    tags: ['Flexible', 'Drive gear jams']
+                },
+                no: {
+                    summary: 'Myk og floppy TPU.',
+                    pros: ['Veldig fleksibelt'],
+                    cons: ['Tetter lett mateverk', 'Føles svett mot huden som wearable'],
+                    useCases: ['Myke pakninger, vibrasjonsdempere'],
+                    tags: ['Fleksibel', 'Vanskelig mateverk']
+                }
+            },
+            {
+                id: 'obc',
+                name: 'OBC',
+                tier: 'C',
+                timecode: '29:48',
+                seconds: 1788,
+                en: {
+                    summary: 'Olefin block copolymer for semi-flexible parts.',
+                    pros: ['Semi-flexible with lower warping than PP'],
+                    cons: ['Extremely difficult bed adhesion requiring special build surface'],
+                    useCases: ['Chemical resistant dampeners'],
+                    tags: ['Semi-flexible', 'Poor bed adhesion']
+                },
+                no: {
+                    summary: 'Olefin blokk-kopolymer.',
+                    pros: ['Semifleksibelt, lavere vridning enn PP'],
+                    cons: ['Nesten umulig å holde fast på byggeplaten'],
+                    useCases: ['Spesialtilpassede kjemikaliedempere'],
+                    tags: ['Semifleksibel', 'Vanskelig vedheft']
+                }
+            },
+            {
+                id: 'peek',
+                name: 'PEEK',
+                tier: 'C',
+                timecode: '33:20',
+                seconds: 2000,
+                en: {
+                    summary: 'Pinnacle superpolymer steel alternative.',
+                    pros: ['Unmatched strength, thermal, and chemical resistance'],
+                    cons: ['Costs $700/kg', 'Requires 400C nozzle and 140C active heated chamber'],
+                    useCases: ['Aerospace, missiles, extreme engineering'],
+                    tags: ['Superpolymer', 'Extreme cost', 'Heat resistant']
+                },
+                no: {
+                    summary: 'Kongen av superpolymerer. Stål-erstatning.',
+                    pros: ['Nærmest utrolige mekaniske, termiske og kjemiske egenskaper'],
+                    cons: ['Koster $700/kg', 'Krever 400°C hotend og 140°C oppvarmet kabinett'],
+                    useCases: ['Romfart, raketter, ekstremiljøer'],
+                    tags: ['Superpolymer', 'Ekstrem pris', 'Varmebestandig']
+                }
+            },
+            {
+                id: 'pps',
+                name: 'PPS',
+                tier: 'C',
+                timecode: '35:43',
+                seconds: 2143,
+                en: {
+                    summary: 'Undisputed champion of chemical immunity.',
+                    pros: ['Nothing under 200°C can react with or dissolve it'],
+                    cons: ['Expensive ($200/kg)'],
+                    useCases: ['Chemical processing, boiling acid environments'],
+                    tags: ['Chemical resistant', 'Heat resistant']
+                },
+                no: {
+                    summary: 'Ubestridt mester i kjemikalieresistens.',
+                    pros: ['Ingenting på jorden kan oppløse det under 200°C'],
+                    cons: ['Dyr ($200/kg)'],
+                    useCases: ['Deler som senkes i kokende syre/kjemikalier'],
+                    tags: ['Kjemikalier', 'Varmebestandig']
+                }
+            },
+            {
+                id: 'super-cf',
+                name: 'Super Polymer Composites',
+                tier: 'C',
+                timecode: '37:23',
+                seconds: 2243,
+                en: {
+                    summary: 'Carbon/glass filled PEEK and PEI variants.',
+                    pros: ['Reduces warping on high-temp superpolymers'],
+                    cons: ['Destroys expensive high-temp nozzles'],
+                    useCases: ['Specialized ultra-grade industrial parts'],
+                    tags: ['Superpolymer', 'Carbon fiber']
+                },
+                no: {
+                    summary: 'Karbon/glassfylte superpolymerer.',
+                    pros: ['Mindre vridning enn ren PEEK/PEI'],
+                    cons: ['Sliter ut dyre spesialdyser lynraskt'],
+                    useCases: ['Spesialisert industriell produksjon'],
+                    tags: ['Superpolymer', 'Karbonfiber']
+                }
+            },
+
+            // F-Tier
+            {
+                id: 'metal-pla',
+                name: 'Metal Composite PLA',
+                tier: 'F',
+                timecode: '05:45',
+                seconds: 345,
+                en: {
+                    summary: 'PLA infused with metal powder.',
+                    pros: ['Heavy weight feel, can take a patina'],
+                    cons: ['Mechanically weaker than neat PLA', 'Crazy expensive per gram', 'Abrasive'],
+                    useCases: ['None recommended (use paint or internal weights instead)'],
+                    tags: ['Metal powder', 'Brittle', 'Expensive']
+                },
+                no: {
+                    summary: 'PLA blandet med metallpulver.',
+                    pros: ['Tung og fin vektfølelse, kan poleres'],
+                    cons: ['Mekanisk svakere enn PLA', 'Svindyrt per gram', 'Sliter på dyser'],
+                    useCases: ['Ingen reelle (bruk heller maling eller vekter)'],
+                    tags: ['Metallpulver', 'Sprø', 'Dyr']
+                }
+            },
+            {
+                id: 'tpe',
+                name: 'Standard TPE',
+                tier: 'F',
+                timecode: '27:07',
+                seconds: 1627,
+                en: {
+                    summary: 'Legacy flexible elastomer.',
+                    pros: ['Stretchy'],
+                    cons: ['Squashes flat in drive gears, yields messy prints'],
+                    useCases: ['Avoid (use SEBS instead)'],
+                    tags: ['Flexible', 'Unstable print']
+                },
+                no: {
+                    summary: 'Gammeldags fleksibelt elastomer.',
+                    pros: ['Tøyelig'],
+                    cons: ['Klemmes flat i matingshjulene', 'Girmessy utskrifter'],
+                    useCases: ['Ingen (Bruk SEBS i stedet)'],
+                    tags: ['Fleksibel', 'Ustabil utskrift']
+                }
+            },
+            {
+                id: 'pp',
+                name: 'Standard Polypropylene (PP)',
+                tier: 'F',
+                timecode: '28:15',
+                seconds: 1695,
+                en: {
+                    summary: 'Neat polypropylene filament.',
+                    pros: ['High living hinge fatigue resistance'],
+                    cons: ['Worst bed adhesion imaginable, warps aggressively'],
+                    useCases: ['Avoid (use Glass-Filled PP instead)'],
+                    tags: ['Extreme warping', 'Poor bed adhesion']
+                },
+                no: {
+                    summary: 'Ren polypropylen.',
+                    pros: ['Tåler bøyning uendelig uten å knekke'],
+                    cons: ['Ekstremt dårlig bedvedheft', 'Vrir seg voldsomt'],
+                    useCases: ['Ingen (Bruk GF-PP i stedet)'],
+                    tags: ['Ekstrem vridning', 'Dårlig vedheft']
+                }
+            },
+            {
+                id: 'hdpe',
+                name: 'HDPE',
+                tier: 'F',
+                timecode: '30:21',
+                seconds: 1821,
+                en: {
+                    summary: 'Recycled jug plastic.',
+                    pros: ['Ubiquitous material'],
+                    cons: ['Absolute worst printing behavior. Warps, splits, and fails'],
+                    useCases: ['Extruder purge material only'],
+                    tags: ['Unprintable', 'Recycled']
+                },
+                no: {
+                    summary: 'Melkekartong-plast.',
+                    pros: ['Mye brukt i resirkulering'],
+                    cons: ['Det verste filamentet å printe. Vrir seg og sprekker'],
+                    useCases: ['Kun rensing av ekstruderen'],
+                    tags: ['Uprintbar', 'Resirkulert']
+                }
+            },
+            {
+                id: 'pom',
+                name: 'POM / Delrin / Acetal',
+                tier: 'F',
+                timecode: '30:49',
+                seconds: 1849,
+                en: {
+                    summary: 'Common CNC stock plastic.',
+                    pros: ['Low friction coefficient'],
+                    cons: ['Zero bed adhesion', 'Degrades into toxic carcinogenic formaldehyde gas when overheated'],
+                    useCases: ['CNC machining instead of 3D printing'],
+                    tags: ['Toxic gas', 'No bed adhesion']
+                },
+                no: {
+                    summary: 'Kjent CNC-plast i filamentform.',
+                    pros: ['Lav friksjon, stivt'],
+                    cons: ['Null bedvedheft', 'Avgir kreftfremkallende formaldehydgass om det blir for varmt'],
+                    useCases: ['Fresing i stedet for printing'],
+                    tags: ['Giftig gass', 'Ingen vedheft']
+                }
+            },
+            {
+                id: 'pvdf',
+                name: 'PVDF / Kynar',
+                tier: 'F',
+                timecode: '31:57',
+                seconds: 1917,
+                en: {
+                    summary: 'Teflon-adjacent chemical polymer.',
+                    pros: ['High chemical and heat resistance'],
+                    cons: ['Decomposes into lethal hydrofluoric acid and hydrogen cyanide if overheated'],
+                    useCases: ['Extreme hazardous risk - avoid'],
+                    tags: ['Lethal fumes', 'Chemical resistant']
+                },
+                no: {
+                    summary: 'Teflon-lignende plast.',
+                    pros: ['Super kjemikalie- og varmebestandig'],
+                    cons: ['Dersom hotenden blir for varm avgir den dødelig flussyre og hydrogencyanid'],
+                    useCases: ['Sikkerhetsrisiko – unngå'],
+                    tags: ['Dødelig gass', 'Kjemikalier']
+                }
+            },
+            {
+                id: 'ultem-9085',
+                name: 'ULTEM 9085',
+                tier: 'F',
+                timecode: '38:11',
+                seconds: 2291,
+                en: {
+                    summary: 'Inferior grade PEI.',
+                    pros: ['Industrial strength'],
+                    cons: ['Beaten by ULTEM 1010 in every metric at the same price'],
+                    useCases: ['Avoid (use ULTEM 1010)'],
+                    tags: ['Expensive', 'Outdated']
+                },
+                no: {
+                    summary: 'Lavere grad av ULTEM.',
+                    pros: ['Industriell plast'],
+                    cons: ['Dårligere enn ULTEM 1010 på alt, men koster like mye'],
+                    useCases: ['Ingen (Bruk ULTEM 1010)'],
+                    tags: ['Dyr', 'Utdatert']
+                }
+            },
+            {
+                id: 'tpi',
+                name: 'TPI / Kapton',
+                tier: 'F',
+                timecode: '39:39',
+                seconds: 2379,
+                en: {
+                    summary: 'Kapton tape in filament form.',
+                    pros: ['Highest heat resistance possible (250C glass transition)'],
+                    cons: ['Requires 450C hotend and 240C chamber (hotter than baking oven)'],
+                    useCases: ['Impossible on non-industrial hardware'],
+                    tags: ['Extreme temp', 'Industrial']
+                },
+                no: {
+                    summary: 'Kapton-tape i filamentform.',
+                    pros: ['Mest varmebestandige filamentet som finnes (250°C glassovergang)'],
+                    cons: ['Krever 450°C hotend og 240°C kammer (varmere enn stekeovn)'],
+                    useCases: ['Umulig på forbrukerutstyr'],
+                    tags: ['Uoppnåelig temp', 'Industriell']
+                }
+            },
+
+            // Special
+            {
+                id: 'pvb',
+                name: 'PVB',
+                tier: 'Special',
+                timecode: '14:10',
+                seconds: 850,
+                en: {
+                    summary: 'Polyvinyl butyral. Smoothable with isopropyl alcohol vapor.',
+                    pros: ['Vapor smoothable with standard isopropyl alcohol', 'High clarity surface'],
+                    cons: ['Fuses on spool in humid/alcohol air', 'Mechanically weaker than PETG'],
+                    useCases: ['Transparent decorative lamps, smooth models'],
+                    tags: ['Vapor smoothing', 'Transparent', 'Hygroscopic']
+                },
+                no: {
+                    summary: 'Polyvinyl butyral. Kan glattes med isopropanoldamp.',
+                    pros: ['Kan glattes med isopropanol til en krystallklar/glatt overflate'],
+                    cons: ['Smelter sammen på spolen i fuktig luft', 'Svakere enn PETG'],
+                    useCases: ['Gjennomsiktige dekorative gjenstander, lamper'],
+                    tags: ['Dampsmelting', 'Gjennomsiktig', 'Fuktfølsom']
+                }
+            }
+        ];
+
+        const tierConfig = {
+            'S': { color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', badgeBg: 'bg-amber-500 text-slate-950' },
+            'A': { color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30', badgeBg: 'bg-purple-500 text-white' },
+            'B': { color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', badgeBg: 'bg-blue-500 text-white' },
+            'C': { color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', badgeBg: 'bg-emerald-500 text-slate-950' },
+            'F': { color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', badgeBg: 'bg-rose-500 text-white' },
+            'Special': { color: 'text-pink-400', bg: 'bg-pink-500/10', border: 'border-pink-500/30', badgeBg: 'bg-pink-500 text-white' }
+        };
+
+        let currentLang = 'en';
+        let activeTier = 'all';
+        let activeTag = null;
+        let searchQuery = '';
+
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const tagContainer = document.getElementById('tagContainer');
+        const tierContainer = document.getElementById('tierContainer');
+        const emptyState = document.getElementById('emptyState');
+        const resultsCount = document.getElementById('resultsCount');
+        const resetSearchBtn = document.getElementById('resetSearchBtn');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalCard = document.getElementById('modalCard');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const closeModal = document.getElementById('closeModal');
+        const modalYtIframe = document.getElementById('modalYtIframe');
+        const modalExternalYtLink = document.getElementById('modalExternalYtLink');
+
+        function init() {
+            setupLanguageSwitchers();
+            updateUIStrings();
+            renderTags();
+            updateCounts();
+            renderFilaments();
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                clearSearchBtn.classList.toggle('hidden', searchQuery === '');
+                renderFilaments();
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                renderFilaments();
+            });
+
+            resetSearchBtn.addEventListener('click', resetFilters);
+
+            document.querySelectorAll('.tier-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-500'));
+                    btn.classList.add('ring-2', 'ring-cyan-500');
+                    activeTier = btn.dataset.tier;
+                    renderFilaments();
+                });
+            });
+
+            closeModalBtn.addEventListener('click', hideModal);
+            closeModal.addEventListener('click', hideModal);
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) hideModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') hideModal();
+            });
+        }
+
+        function setupLanguageSwitchers() {
+            const btnEnMob = document.getElementById('langEnMobile');
+            const btnNoMob = document.getElementById('langNoMobile');
+            const btnEnDesk = document.getElementById('langEnDesktop');
+            const btnNoDesk = document.getElementById('langNoDesktop');
+
+            const setLang = (lang) => {
+                currentLang = lang;
+                if (lang === 'en') {
+                    btnEnMob.className = 'px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white';
+                    btnNoMob.className = 'px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
+                    btnEnDesk.className = 'px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white';
+                    btnNoDesk.className = 'px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
+                } else {
+                    btnEnMob.className = 'px-2 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
+                    btnNoMob.className = 'px-2 py-1 rounded font-semibold transition bg-cyan-600 text-white';
+                    btnEnDesk.className = 'px-2.5 py-1 rounded font-semibold transition text-slate-400 hover:text-white';
+                    btnNoDesk.className = 'px-2.5 py-1 rounded font-semibold transition bg-cyan-600 text-white';
+                }
+                updateUIStrings();
+                renderTags();
+                renderFilaments();
+            };
+
+            btnEnMob.addEventListener('click', () => setLang('en'));
+            btnNoMob.addEventListener('click', () => setLang('no'));
+            btnEnDesk.addEventListener('click', () => setLang('en'));
+            btnNoDesk.addEventListener('click', () => setLang('no'));
+        }
+
+        function updateUIStrings() {
+            const strings = uiText[currentLang];
+            document.getElementById('uiTitle').innerText = strings.title;
+            document.getElementById('uiSubtitle').innerText = strings.subtitle;
+            document.getElementById('uiCredit').innerText = strings.credit;
+            document.getElementById('uiWatchFull').innerText = strings.watchFull;
+            document.getElementById('searchInput').placeholder = strings.searchPlaceholder;
+            document.getElementById('uiTierLabel').innerText = strings.tierLabel;
+            document.getElementById('uiAllLabel').innerText = strings.allLabel;
+            document.getElementById('uiClickInfo').innerText = strings.clickInfo;
+            document.getElementById('uiEmptyTitle').innerText = strings.emptyTitle;
+            document.getElementById('uiEmptyDesc').innerText = strings.emptyDesc;
+            document.getElementById('resetSearchBtn').innerText = strings.resetBtn;
+
+            document.getElementById('uiBestUseLabel').innerText = strings.bestUseLabel;
+            document.getElementById('uiProsLabel').innerText = strings.prosLabel;
+            document.getElementById('uiConsLabel').innerText = strings.consLabel;
+            document.getElementById('uiTagsLabel').innerText = strings.tagsLabel;
+            document.getElementById('uiVideoClipTitle').innerText = strings.videoClipTitle;
+            document.getElementById('uiOpenInYt').innerText = strings.openInYt;
+            document.getElementById('closeModalBtn').innerText = strings.closeBtn;
+        }
+
+        function getAllTags() {
+            const tagsSet = new Set();
+            filaments.forEach(f => f[currentLang].tags.forEach(t => tagsSet.add(t)));
+            return Array.from(tagsSet).sort();
+        }
+
+        function renderTags() {
+            const tags = getAllTags();
+            tagContainer.innerHTML = tags.map(tag => `
+                <button class="tag-pill px-2.5 py-1 rounded-full border border-slate-800 bg-slate-900 text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition whitespace-nowrap ${activeTag === tag ? 'border-cyan-500 text-cyan-400 bg-cyan-950/40' : ''}" data-tag="${tag}">
+                    #${tag}
+                </button>
+            `).join('');
+
+            document.querySelectorAll('.tag-pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tag = btn.dataset.tag;
+                    activeTag = activeTag === tag ? null : tag;
+                    renderTags();
+                    renderFilaments();
+                });
+            });
+        }
+
+        function updateCounts() {
+            document.getElementById('countAll').innerText = filaments.length;
+        }
+
+        function resetFilters() {
+            activeTier = 'all';
+            activeTag = null;
+            searchQuery = '';
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            
+            document.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('ring-2', 'ring-cyan-500'));
+            document.querySelector('[data-tier="all"]').classList.add('ring-2', 'ring-cyan-500');
+
+            renderTags();
+            renderFilaments();
+        }
+
+        function filterFilaments() {
+            return filaments.filter(f => {
+                if (activeTier !== 'all' && f.tier !== activeTier) return false;
+
+                const data = f[currentLang];
+
+                if (activeTag && !data.tags.includes(activeTag)) return false;
+
+                if (searchQuery) {
+                    const matchName = f.name.toLowerCase().includes(searchQuery);
+                    const matchSummary = data.summary.toLowerCase().includes(searchQuery);
+                    const matchTags = data.tags.some(t => t.toLowerCase().includes(searchQuery));
+                    const matchPros = data.pros.some(p => p.toLowerCase().includes(searchQuery));
+                    const matchCons = data.cons.some(c => c.toLowerCase().includes(searchQuery));
+                    const matchUse = data.useCases.some(u => u.toLowerCase().includes(searchQuery));
+                    return matchName || matchSummary || matchTags || matchPros || matchCons || matchUse;
+                }
+
+                return true;
+            });
+        }
+
+        function renderFilaments() {
+            const filtered = filterFilaments();
+            const strings = uiText[currentLang];
+            
+            resultsCount.innerText = strings.showingCount(filtered.length, filaments.length);
+
+            if (filtered.length === 0) {
+                tierContainer.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            const tiersOrder = ['S', 'A', 'B', 'C', 'F', 'Special'];
+            let html = '';
+
+            tiersOrder.forEach(tierKey => {
+                const tierItems = filtered.filter(item => item.tier === tierKey);
+                if (tierItems.length === 0) return;
+
+                const config = tierConfig[tierKey];
+                const labelText = strings.tierLabels[tierKey];
+
+                html += `
+                    <section class="space-y-3">
+                        <div class="flex items-center gap-3 pb-2 border-b border-slate-800">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${config.badgeBg}">
+                                Tier ${tierKey}
+                            </span>
+                            <h2 class="text-sm font-semibold text-slate-300">${labelText}</h2>
+                            <span class="text-xs text-slate-500 ml-auto">(${tierItems.length})</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            ${tierItems.map(item => createCardHTML(item, config)).join('')}
+                        </div>
+                    </section>
+                `;
+            });
+
+            tierContainer.innerHTML = html;
+
+            document.querySelectorAll('.spool-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = card.dataset.id;
+                    const item = filaments.find(f => f.id === id);
+                    if (item) showModal(item);
+                });
+            });
+        }
+
+        function createCardHTML(item, config) {
+            const data = item[currentLang];
+            return `
+                <div class="spool-card group cursor-pointer bg-slate-900/60 hover:bg-slate-900 border ${config.border} rounded-xl p-4 flex flex-col justify-between shadow-lg relative overflow-hidden" data-id="${item.id}">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full pointer-events-none"></div>
+
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-slate-950 flex items-center justify-center border border-slate-800 group-hover:border-slate-700 transition shrink-0">
+                                <svg class="w-6 h-6 ${config.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="8" stroke-width="1.5"/>
+                                    <circle cx="12" cy="12" r="3" stroke-width="1.5"/>
+                                    <path stroke-linecap="round" stroke-width="1.5" d="M12 4v4m0 8v4"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1">
+                                <svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                                </svg>
+                                ${item.timecode}
+                            </span>
+                        </div>
+
+                        <h3 class="font-bold text-white group-hover:${config.color} transition text-base mb-1">${item.name}</h3>
+                        <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">${data.summary}</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1 pt-2 border-t border-slate-800/60">
+                        ${data.tags.slice(0, 2).map(tag => `
+                            <span class="text-[10px] bg-slate-950 text-slate-400 px-2 py-0.5 rounded border border-slate-800">
+                                #${tag}
+                            </span>
+                        `).join('')}
+                        ${data.tags.length > 2 ? `<span class="text-[10px] text-slate-500 self-center">+${data.tags.length - 2}</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showModal(item) {
+            const config = tierConfig[item.tier];
+            const data = item[currentLang];
+
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalTimecode').innerText = `@ ${item.timecode}`;
+            
+            const badge = document.getElementById('modalTierBadge');
+            badge.innerText = `Tier ${item.tier}`;
+            badge.className = `px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${config.badgeBg}`;
+
+            const spoolIcon = document.getElementById('modalSpoolIcon');
+            spoolIcon.className = `w-12 h-12 rounded-xl flex items-center justify-center border ${config.border} bg-slate-950 shadow-inner`;
+            spoolIcon.innerHTML = `
+                <svg class="w-8 h-8 ${config.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="3" stroke-width="1.5"/>
+                    <path stroke-linecap="round" stroke-width="1.5" d="M12 4v4m0 8v4"/>
+                </svg>
+            `;
+
+            const embedUrl = `https://www.youtube-nocookie.com/embed/weeG9yOp3i4?start=${item.seconds}&autoplay=1`;
+            const directYtUrl = `https://youtu.be/weeG9yOp3i4?t=${item.seconds}`;
+            
+            modalYtIframe.src = embedUrl;
+            modalExternalYtLink.href = directYtUrl;
+
+            document.getElementById('modalUseCases').innerHTML = data.useCases.map(u => `<li>${u}</li>`).join('');
+
+            document.getElementById('modalPros').innerHTML = data.pros.map(p => `
+                <li class="flex items-start gap-2 text-xs">
+                    <svg class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>${p}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('modalCons').innerHTML = data.cons.map(c => `
+                <li class="flex items-start gap-2 text-xs">
+                    <svg class="w-4 h-4 text-rose-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <span>${c}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('modalTags').innerHTML = data.tags.map(t => `
+                <span class="px-2.5 py-1 bg-slate-950 border border-slate-800 text-slate-300 rounded-lg text-xs">
+                    #${t}
+                </span>
+            `).join('');
+
+            detailModal.classList.remove('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-95');
+            modalCard.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            detailModal.classList.add('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
+            document.body.style.overflow = '';
+            modalYtIframe.src = '';
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
